@@ -1,0 +1,100 @@
+
+@import "tailwindcss";
+
+
+@theme {
+    --color-mainColor: #E1EB58;
+    --color-secondColor:#F3F3F3;
+
+   --color-textcolor: #404040;
+    --color-gray:#838181;
+    --color-border:#B6B6B6;
+    --color-gold:#AAA51E;
+    --font-display:"Playfair Display"; 
+    --font-abhaya:"Abhaya Libre Medium";
+
+    --color-white:#FFFFFF;
+
+ 
+    --font-inria:"Inria Serif";
+    --font-inter:"Inter sans-serif";
+    --color-secandaryText:#AEADAD;
+    --color-ternaryText:#666666;
+    --color-loginText:#9F9B1B;
+    /* cart page */
+    --color-cart: #4A4A4A;
+    --color-textColor:#3F3F3F;
+    --color-productBorder: #D4D4D4;
+    --color-inputColor:#C0BEBE;
+/* admin page */
+--color-productTitle:#AAA51E;
+
+
+   
+
+}
+*{
+    text-transform: capitalize;
+    
+}
+html {
+  scroll-behavior: smooth;
+}
+
+
+.fontInter{
+  font-family: 'Inter', sans-serif;
+  
+  
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0.5; 
+}
+
+    
+
+
+    
+
+
+/* ! cart page */
+.no-arrows::-webkit-inner-spin-button,
+.no-arrows::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.no-arrows {
+  -moz-appearance: textfield; 
+}
+/* !admin page */
+/* إخفاء السهم الافتراضي */
+.custom-select {
+    -webkit-appearance: none; /* Chrome, Safari, Opera */
+    -moz-appearance: none; /* Firefox */
+    appearance: none; /* جميع المتصفحات الحديثة */
+    padding-right: 2rem; /* نترك مساحة للسهم الجديد */
+  }
+  
+  /* إضافة السهم الجديد */
+  .custom-select + i {
+    pointer-events: none; /* تعطيل التفاعل مع الأيقونة */
+  }
+  
+  /* تخصيص الأيقونة (الحجم واللون) */
+  .custom-select + i {
+    font-size: 1.2rem; /* زيادة حجم السهم */
+    color: #888; /* تغيير اللون */
+    transition: color 0.3s; /* إضافة تأثير للتغيير عند التفاعل */
+  }
+  
+  /* تغيير اللون عند التفاعل مع الـ select */
+  .custom-select:focus + i {
+    color: #333; /* تغيير اللون عند التركيز */
+  }
+
+  /* .hidden{
+    display: none;
+  } */
+
+  
