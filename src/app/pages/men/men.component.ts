@@ -54,11 +54,18 @@ export class MenComponent {
     this.loadProducts();
   }
 
-  display(text: string) {
+display(text: string) {
+  if (this.subCategory === text) {
+    // لو ضغط على نفس النوع → احذف الفلتر
+    this.subCategory = '';
+  } else {
+    // لو ضغط على نوع مختلف → حدده
     this.subCategory = text;
-    this.currentPage = 1;
-    this.loadProducts();
   }
+
+  this.currentPage = 1;
+  this.loadProducts();
+}
 
   loadProducts() {
     this.isLoading = true; 

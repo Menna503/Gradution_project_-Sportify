@@ -46,15 +46,20 @@ export class WomenComponent implements OnInit {
   updateFilters(filterData: { sort: string; brand: string }) {
     this.sort = filterData.sort;
     this.brand = filterData.brand;
-    this.currentPage = 1; // إعادة تعيين الصفحة عند تغيير الفلاتر
+    this.currentPage = 1; 
     this.loadProducts();
   }
 
-  display(text: string) {
+display(text: string) {
+  if (this.subCategory === text) {
+    this.subCategory = '';
+  } else {
     this.subCategory = text;
-    this.currentPage = 1; // إعادة تعيين الصفحة عند تغيير الفئة الفرعية
-    this.loadProducts();
   }
+  this.currentPage = 1;
+  this.loadProducts();
+}
+
 
   loadProducts() {
     this.isLoading = true; 
