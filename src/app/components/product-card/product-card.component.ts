@@ -2,11 +2,14 @@ import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FavoritesService } from '../../services/favorites/favorites.service';
+import { HeaderComponent } from '../header/header.component';
+import { FooterComponent } from '../footer/footer.component';
 import { CartService } from '../../services/products/cart.service';
+import { ProductService } from '../../services/products/product.service';
 
 @Component({
   selector: 'app-product-card',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, HeaderComponent, FooterComponent],
   standalone: true,
   templateUrl: './product-card.component.html',
   styleUrls: ['./product-card.component.css'],
@@ -19,8 +22,9 @@ export class ProductCardComponent {
 
   selectedColor: string = '';
   selectedSize: string = '';
-
   isAdded: boolean = false;
+
+  showLoginPrompt: boolean = false; // 🟢 ده الجديد
 
   constructor(
     private router: Router,
@@ -31,7 +35,6 @@ export class ProductCardComponent {
 
   ngOnInit() {
     this.selectedSize = this.data.size_range[0];
-
     this.checkCurrentRoute();
     this.checkIfFavorite();
   }
@@ -80,25 +83,31 @@ export class ProductCardComponent {
   }
 
   addToCart() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.showLoginPrompt = true; // 👈 يظهر المودال
+      return;
+    }
+
     this.cartService.addToCart(this.data._id, 1, this.selectedSize).subscribe(
       (response) => {
         console.log('Product added successfully:', response);
-
         this.isAdded = true;
-
         setTimeout(() => {
           this.isAdded = false;
         }, 1000);
       },
       (error) => {
-        this.router.navigate(['/login']);
         console.error('Error adding product:', error);
       }
     );
+  }
+
+  navigateToLogin() {
+    this.router.navigate(['/login']);
   }
   handleImageError(event: Event) {
   const imgElement = event.target as HTMLImageElement;
   imgElement.src = 'assets/images/image.png'; 
 }
-
 }
