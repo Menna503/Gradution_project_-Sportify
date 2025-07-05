@@ -1,0 +1,142 @@
+<div class="w-full text-textColor">
+
+    <!-- tracking no -->
+    <div class="pb-4">
+       <span class="font-display font-bold text-xl"> Tracking No.  : </span>
+      <span class="font-inter font-bold text-gold">#32688665</span>
+   </div>
+
+   <hr class="w-full  border border-gray-200">
+
+   <!-- order status and data -->
+   <div class="flex justify-between pr-10 my-5 font-display">
+   
+    <!-- left part -->
+     <div class="flex  flex-col gap-4">
+        <h2 class="font-inter">Your Order is in</h2>
+        <span class="font-bold text-4xl text-gold">Processing</span>
+        <p class="text-ternaryText font-inter">It was placed on 27 Aug 2025 , Sunday</p>
+     </div>
+     
+
+    
+        <!-- line -->
+       <div class="w-px h-auto bg-gray-300 mx-4"></div>
+
+       <!-- right part -->
+     <div class="flex flex-col gap-3">
+     <div *ngFor="let detail of userDetails" class="flex gap-3">
+        <span class="font-bold">{{ detail.label }} : </span>
+        <span class="font-inter">{{ detail.value }}</span>
+    </div>
+   </div>
+   </div>
+  
+   <hr class="w-full  border border-gray-200">
+
+
+   <div class="my-10 flex flex-col gap-15">    
+    <span class="font-bold text-xl font-display">Order Tracking </span>
+    <div class="flex justify-center items-center gap-10">
+        <ul class="steps font-inter font-bold">
+            <li class="step step-neutral w-50">Order Placed</li>
+            <li class="step step-neutral w-50">Processing</li>
+            <li class="step  w-50">Shipped</li>
+            <li class="step w-50">Delivered</li>
+        </ul>
+    </div>
+  </div>
+
+     <hr class="w-full  border border-gray-200">
+
+ <div class="my-10 flex flex-col gap-15">    
+    <span class="font-bold text-xl font-display">Item List</span>
+    <div class="flex justify-center items-center gap-20">
+      <div class="overflow-x-auto rounded-box border border-base-content/4 bg-base-100">
+            <table class="table w-full" >
+                <!-- head -->
+                <thead class="bg-gray-200">
+                <tr>
+                    <th >No.</th>
+                    <th>Item Image</th>
+                    <th>Item Name</th>
+                    <th>Base Price</th>
+                    <th>Size</th>
+                    <th>Color</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- row 1 -->
+                <tr>
+                    <th>1</th>
+                    <td>
+                        <div class="mask mask-squircle h-12 w-12">
+                            <img
+                            src="https://img.daisyui.com/images/profile/demo/2@94.webp"
+                            alt="Avatar Tailwind CSS Component" />
+                        </div>
+                    </td>
+                    <td>Hodes N33 </td>
+                    <td>$ 200</td>
+                    <td>XL</td>
+                    <td>Red</td>
+                    <td>2</td>
+                    <td>$ 400</td>
+                      
+                </tr>
+                <!-- row 2 -->
+                 <tr>
+                    <th>2</th>
+                    <td>
+                        <div class="mask mask-squircle h-12 w-12">
+                            <img
+                            src="https://img.daisyui.com/images/profile/demo/2@94.webp"
+                            alt="Avatar Tailwind CSS Component" />
+                        </div>
+                    </td>
+                    <td>Hodes N33 </td>
+                    <td>$ 200</td>
+                    <td>XL</td>
+                    <td>Red</td>
+                    <td>2</td>
+                    <td>$ 400</td>
+                      
+                </tr>
+                <!-- row 3 -->
+                <tr>
+                    <th>3</th>
+                    <td>
+                        <div class="mask mask-squircle h-12 w-12">
+                            <img
+                            src="https://img.daisyui.com/images/profile/demo/2@94.webp"
+                            alt="Avatar Tailwind CSS Component" />
+                        </div>
+                    </td>
+                    <td>Hodes N33 </td>
+                    <td>$ 200</td>
+                    <td>XL</td>
+                    <td>Red</td>
+                    <td>2</td>
+                    <td>$ 400</td>
+                      
+                </tr>
+                </tbody>
+                 <tfoot class="bg-gray-200">
+                    <tr>
+                        <th>Total</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>$2300.00</th>
+                    </tr>
+                    </tfoot>
+            </table>
+            </div>
+    </div>
+  </div>
+</div>

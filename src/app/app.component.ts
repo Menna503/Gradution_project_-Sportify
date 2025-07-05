@@ -23,6 +23,7 @@ import { CartPageComponent } from './pages/cart-page/cart-page.component';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
+import { ProfileComponent } from './pages/profile/profile.component';
 
 @Component({
   selector: 'app-root',
@@ -50,7 +51,8 @@ import { CommonModule } from '@angular/common';
     SigninComponent,
     CartComponent,
     CartPageComponent,
-    ProductDetailsComponent
+    ProductDetailsComponent,
+    ProfileComponent
   ],
 
 

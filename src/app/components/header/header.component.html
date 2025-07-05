@@ -16,7 +16,7 @@
     @if(token){
   <div class="flex gap-4 items-center">
   <!-- Favorite -->
-  <a [routerLink]="['/fav']" class="relative flex items-center justify-center w-[23px] h-[23px]">
+  <a [routerLink]="['/fav']" routerLinkActive="active-icon"  class="relative flex items-center justify-center w-[23px] h-[23px]">
     <i 
       class="fa-heart text-xl transition-all duration-300"
       [ngClass]="{
@@ -37,17 +37,17 @@
     <img src="assets/icons/cart.svg" class="w-[23px]" />
     <span
       [hidden]="cartItemCount === 0"
-      class="absolute -top-3 -right-3 w-5 h-5 bg-mainColor text-textColor text-xs flex items-center justify-center rounded-full border border-textColor z-[9999]"
+      
+      class="absolute -top-3 -right-3 w-5 h-5  bg-mainColor text-textColor text-xs flex items-center justify-center rounded-full border border-textColor z-[9999]"
     >
       {{ cartItemCount }}
     </span>
   </a>
 
   <!-- Profile -->
-  <i
-    class="fa-regular fa-user relative text-ternaryText cursor-pointer"
-    (click)="getProfile()"
-  ></i>
+<a [routerLink]="'/profile'" routerLinkActive="active-icon" >
+  <i class="fa-regular fa-user relative cursor-pointer text-ternaryText"></i>
+</a>
 </div>
 
     } @else {

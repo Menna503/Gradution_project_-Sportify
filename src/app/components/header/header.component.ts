@@ -49,10 +49,10 @@ export class HeaderComponent {
     this.show = this.show === 'hidden' ? 'block' : 'hidden';
   }
   
-  getProfile(){
+  // getProfile(){
  
-  this.ishidden=!this.ishidden
-  }
+  // this.ishidden=!this.ishidden
+  // }
 
   logout(){
     this.authService.signout();

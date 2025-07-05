@@ -1,0 +1,20 @@
+<app-header></app-header>
+
+<div class="flex">
+  <!-- Sidebar -->
+  <aside class="menu font-display border-r border-gray-300 text-lg ml-5 bg-white text-base-content min-h-screen w-60 p-4">
+    <h1 class="text-3xl font-bold py-3">My Account</h1>
+    <hr class="w-full mb-3 border border-gray-200">
+    <li routerLinkActive="active-icon"><a [routerLink]="'order-tracking'">Order Tracking</a></li>
+    <li routerLinkActive="active-icon"><a [routerLink]="'all-orders'">All Orders</a></li>
+    <li routerLinkActive="active-icon"><a [routerLink]="'personal-info'">Personal Info</a></li>
+    <li><a>Log Out</a></li>
+  </aside>
+
+  <!--content area -->
+  <div class="flex-1 px-10 py-8">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+<app-footer></app-footer>
