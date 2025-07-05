@@ -19,13 +19,13 @@ import { ConfirmPaymentComponent } from './pages/confirm-payment/confirm-payment
 import { AdminAddProductComponent } from './components/admin-add-product/admin-add-product.component';
 import { AdminEditProductComponent } from './components/admin-edit-product/admin-edit-product.component';
 import { AllProductsComponent } from './pages/all-products/all-products.component';
-
+import { NoAuthGuard } from './services/auth/authGaurd/no-auth.guard';
 
 export const routes: Routes = [
     {path:'',redirectTo:'home',pathMatch:'full'},
     {path:'home' , component:HomeComponent },
-    {path:'login' ,component:SigninComponent},
-    {path:'signup' ,component:SignupPageComponent},
+    // {path:'login' ,component:SigninComponent},
+    // {path:'signup' ,component:SignupPageComponent},
     {path:'fav' ,component:FavComponent ,canActivate:[GuardService]},
     {path:'products',component:AllProductsComponent},
     {path:'men' ,component:MenComponent},
@@ -42,7 +42,18 @@ export const routes: Routes = [
      { path: 'admin', component: AdminAddProductComponent, canActivate: [GuardService] },
      { path: 'admin-edit/:id', component: AdminEditProductComponent },
        { path: 'error', component: ErrorComponent },
-     { path: '**', redirectTo: 'error' },
+{
+  path: 'login',
+  component: SigninComponent,
+  canActivate: [NoAuthGuard]
+},
+{
+  path: 'signup',
+  component: SignupPageComponent,
+  canActivate: [NoAuthGuard]
+}
+
+
 
 ];
 @NgModule({

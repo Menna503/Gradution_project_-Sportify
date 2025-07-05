@@ -99,4 +99,9 @@ export class ProductCardComponent {
       }
     );
   }
+  handleImageError(event: Event) {
+  const imgElement = event.target as HTMLImageElement;
+  imgElement.src = 'assets/images/image.png'; 
+}
+
 }
