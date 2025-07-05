@@ -86,32 +86,76 @@
             'visibility-hidden opacity-0': !(signUpPage.get('password')?.invalid && (signUpPage.get('password')?.dirty || signUpPage.get('password')?.touched || submitted))
           }">
               <small class="text-red-600 text-[11px]" *ngIf="signUpPage.get('password')?.errors?.['required']">password is required</small>
-              <small class="text-red-600 text-[11px]" *ngIf="signUpPage.get('password')?.errors?.['minlength']">you should write password structure</small>
+              <small class="text-red-600 text-[11px]" *ngIf="signUpPage.get('password')?.errors?.['minlength']">Password must be at least 8 characters long</small>
             </div>
-            <div class="relative">
-            <input [type]="isvisble2?'text': 'password'" name="" id="" formControlName="passwordConfirm" placeholder="confirmPassword" class="block rounded-[0.4vw] p-2 border-1 border-secandaryText w-full focus:outline-none"
-            [ngClass]="{
-                'border-red-500 ring-2 ring-red-300': signUpPage.get('confirmPassword')?.invalid && (signUpPage.get('confirmPassword')?.dirty || signUpPage.get('confirmPassword')?.touched)
-                    }">
-                    <i class="absolute right-3 bottom-3.5"
-                  [ngClass]="isvisble2?'fa fa-eye': 'fa fa-eye-slash'"
-                  (click)="toggleEye2()"></i>
-                  </div>
-            <div class="mb-3 h-[17px] transition-all duration-300"
-            [ngClass]="{
-              'visibility-visible opacity-100': signUpPage.get('confirmPassword')?.invalid && (signUpPage.get('confirmPassword')?.dirty || signUpPage.get('confirmPassword')?.touched || submitted),
-              'visibility-hidden opacity-0': !(signUpPage.get('confirmPassword')?.invalid && (signUpPage.get('confirmPassword')?.dirty || signUpPage.get('confirmPassword')?.touched || submitted))
-            }">
-                <small class="text-red-600 text-[11px]" *ngIf="signUpPage.get('confirmPassword')?.errors?.['required']">confirmPassword is required</small>
-                <small class="text-red-600 text-[11px]" *ngIf="signUpPage.errors?.['passwordsDoNotMatch'] && submitted">password do not match</small>
-              </div>
+            
+ <div class="relative">
+  <input [type]="isvisble2 ? 'text' : 'password'" 
+         formControlName="passwordConfirm" 
+         placeholder="Confirm Password"
+         class="block rounded-[0.4vw] p-2 border-1 border-secandaryText w-full focus:outline-none"
+         [ngClass]="{
+           'border-red-500 ring-2 ring-red-300': signUpPage.get('passwordConfirm')?.invalid && 
+                                                  (signUpPage.get('passwordConfirm')?.dirty || 
+                                                   signUpPage.get('passwordConfirm')?.touched)
+         }">
+  <i class="absolute right-3 bottom-3.5"
+     [ngClass]="isvisble2 ? 'fa fa-eye' : 'fa fa-eye-slash'"
+     (click)="toggleEye2()"></i>
+</div>
+
+<div class="mb-3 h-[17px] transition-all duration-300"
+     [ngClass]="{
+       'visibility-visible opacity-100': signUpPage.get('passwordConfirm')?.invalid &&
+                                          (signUpPage.get('passwordConfirm')?.dirty || 
+                                           signUpPage.get('passwordConfirm')?.touched || 
+                                           submitted),
+       'visibility-hidden opacity-0': !(signUpPage.get('passwordConfirm')?.invalid &&
+                                         (signUpPage.get('passwordConfirm')?.dirty || 
+                                          signUpPage.get('passwordConfirm')?.touched || 
+                                          submitted))
+     }">
+  <small class="text-red-600 text-[11px]"
+       *ngIf="signUpPage.get('passwordConfirm')?.errors?.['required'] &&
+              (signUpPage.get('passwordConfirm')?.value?.length === 0)">
+  Confirm password is required
+</small>
+
+<small class="text-red-600 text-[11px]"
+       *ngIf="!signUpPage.get('passwordConfirm')?.errors?.['required'] &&
+              signUpPage.get('passwordConfirm')?.errors?.['passwordsDoNotMatch'] &&
+              signUpPage.get('passwordConfirm')?.value?.length > 0">
+  Passwords do not match
+</small>
+
+</div>
+
 
               
-      
-            <button type="submit" class="bg-mainColor w-full rounded-[0.4vw] p-2 mb-4 cursor-pointer  duration-300 hover:-translate-y-2 " > Sign Up</button>
-            <div *ngIf="errorMsg">
+<!--       
+            <button type="submit" class="bg-mainColor w-full rounded-[0.4vw] p-2 mb-4 cursor-pointer  duration-300 hover:-translate-y-2 " > 
+              Sign Up</button> -->
+              <button 
+  type="submit" 
+  class="bg-mainColor w-full rounded-[0.4vw] p-2 mb-4 cursor-pointer duration-300 hover:-translate-y-2 flex justify-center items-center"
+  [disabled]="isLoading"
+>
+  <ng-container *ngIf="!isLoading; else loading">
+    Sign Up
+  </ng-container>
+  <ng-template #loading>
+    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor"
+            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
+      </path>
+    </svg>
+  </ng-template>
+</button>
+
+            <!-- <div *ngIf="errorMsg">
               <small class="text-red-600 text-[10px]">{{errorMsg}}</small>
-            </div>
+            </div> -->
       </form>
     
   
