@@ -2,17 +2,14 @@ import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FavoritesService } from '../../services/favorites/favorites.service';
-import { HeaderComponent } from '../header/header.component';
-import { FooterComponent } from '../footer/footer.component';
 import { CartService } from '../../services/products/cart.service';
-import { ProductService } from '../../services/products/product.service';
 
 @Component({
   selector: 'app-product-card',
-  imports: [CommonModule, RouterModule, HeaderComponent, FooterComponent],
-  standalone: true, 
+  imports: [CommonModule, RouterModule],
+  standalone: true,
   templateUrl: './product-card.component.html',
-  styleUrls: ['./product-card.component.css']
+  styleUrls: ['./product-card.component.css'],
 })
 export class ProductCardComponent {
   isHiddenPage: boolean = false;
@@ -46,7 +43,7 @@ export class ProductCardComponent {
       currentUrl.includes('supplements') ||
       this.data.category?.name == 'supplement' ||
       this.data.category?.name == 'equipment';
-  }
+  }
 
   checkIfFavorite() {
     this.favoritesService.getfavourite().subscribe({
