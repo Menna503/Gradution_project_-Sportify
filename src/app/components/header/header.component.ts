@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { CartService } from '../../services/products/cart.service';
 import { AuthService } from '../../services/auth/authservice/auth.service';
 import { Router } from '@angular/router';
+import { FavoritesService } from '../../services/products/favorites.service';
 
 @Component({
   selector: 'app-header',
@@ -20,7 +21,11 @@ export class HeaderComponent {
    data:any;
  
  cartItemCount: number = 0;
-  constructor(private authService:AuthService ,private router:Router,private cartService: CartService)
+ favoriteItemCount: number = 0;
+
+  constructor(private authService:AuthService ,private router:Router,
+    private cartService: CartService,  private favoritesService: FavoritesService
+)
   {
     this.token=localStorage.getItem('token');
      console.log(this.token);
@@ -35,7 +40,9 @@ export class HeaderComponent {
         console.log('Updated cart count:', count); 
         this.cartItemCount = count;
       });
-    
+    this.favoritesService.favoriteCount$.subscribe(count => {
+  this.favoriteItemCount = count;
+});
   }
 
   toggel() {
