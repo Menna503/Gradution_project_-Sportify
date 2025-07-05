@@ -1,13 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
-import { ReviewcardComponent } from '../../components/reviewcard/reviewcard.component';
-import { CartComponent } from '../../components/cart/cart.component';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { ProductService } from '../../services/products/product.service';
-import { MenCollectionComponent } from '../../components/image-collection/men-collection.component';
 import {
   FormControl,
   FormGroup,
@@ -27,10 +23,8 @@ import { LoadingComponent } from '../../components/loading/loading.component';
   imports: [
     HeaderComponent,
     FooterComponent,
-    ReviewcardComponent,
     ReactiveFormsModule,
     FormsModule,
-    CartComponent,
     CommonModule,
     RouterModule,
     LoadingComponent,
@@ -214,6 +208,7 @@ export class ProductDetailsComponent implements OnInit {
     }
   }
   selectSize(size: string) {
+    console.log(size);
     this.selectedSize = size;
   }
 
@@ -251,9 +246,10 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   addToCart() {
+    console.log(this.products);
     if (
-      this.products?.data?.category?.name === 'equipment' ||
-      this.products?.data?.category?.name === 'supplement'
+      this.products?.data?.product?.category?.name === 'equipment' ||
+      this.products?.data?.product?.category?.name === 'supplement'
     ) {
       console.log('Nosize');
       this.selectedSize = 'Nosize';
@@ -270,7 +266,11 @@ export class ProductDetailsComponent implements OnInit {
       };
 
       this.cartService
-        .addToCart(this.products?.data?.product?._id, this.quantity, this.selectedSize)
+        .addToCart(
+          this.products?.data?.product?._id,
+          this.quantity,
+          this.selectedSize
+        )
         .subscribe(
           (response) => {
             console.log('Product added to cart:', response);
