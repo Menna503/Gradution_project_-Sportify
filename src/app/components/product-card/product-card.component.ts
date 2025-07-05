@@ -9,7 +9,7 @@ import { ProductService } from '../../services/products/product.service';
 
 @Component({
   selector: 'app-product-card',
-  imports: [CommonModule, RouterModule, HeaderComponent, FooterComponent],
+  imports: [CommonModule, RouterModule],
   standalone: true,
   templateUrl: './product-card.component.html',
   styleUrls: ['./product-card.component.css'],
