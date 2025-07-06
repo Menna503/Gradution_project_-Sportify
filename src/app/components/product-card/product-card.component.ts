@@ -59,28 +59,35 @@ export class ProductCardComponent {
     });
   }
 
-  toggleFav() {
-    if (!this.isFav) {
-      this.favoritesService.addFavorite(this.data).subscribe({
-        next: () => {
-          console.log(`${this.data.id} is added`);
-          this.isFav = true;
-        },
-        error: (err) => console.error('Error while adding to favorites:', err),
-      });
-    } else {
-      this.favoritesService.removeFavorite(this.data.id).subscribe({
-        next: () => {
-          console.log(`${this.data.id} is removed`);
-          this.isFav = false;
-          this.removedFromFavorites.emit(this.data.id);
-        },
-        error: (err) => {
-          console.log(err);
-        },
-      });
-    }
+toggleFav() {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    this.showLoginPrompt = true; // ✅ نفس الرسالة اللي بتظهر في addToCart
+    return;
   }
+
+  if (!this.isFav) {
+    this.favoritesService.addFavorite(this.data).subscribe({
+      next: () => {
+        console.log(`${this.data.id} is added`);
+        this.isFav = true;
+      },
+      error: (err) => console.error('Error while adding to favorites:', err),
+    });
+  } else {
+    this.favoritesService.removeFavorite(this.data.id).subscribe({
+      next: () => {
+        console.log(`${this.data.id} is removed`);
+        this.isFav = false;
+        this.removedFromFavorites.emit(this.data.id);
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  }
+}
+
 
   addToCart() {
     const token = localStorage.getItem('token');
