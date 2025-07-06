@@ -29,26 +29,40 @@ export class CheckOutComponent {
         private router: Router
       ) {}
     
-      ngOnInit() {
-       
-        this.cartSub = this.cartService.cartItems$.subscribe((updatedCart) => {
-          this.cartProducts = updatedCart;
-          
-          this.cdr.detectChanges(); 
-          if (this.cartProducts.length === 0) {
-            console.log('Cart is empty!');
-          }
-        }
-      );
-        this.authservice.getuser(this.user_id).subscribe({
-          
-         next:(data:any)=>{this.cartProducts = data.data.user.cart ,console.log(this.cartProducts)},
-         
-          error: (err) => console.log(err),
-          complete: () => console.log('completed')
-        });
+ngOnInit() {
+  // ⬅️ اقرأ الاسم من localStorage
+  const userString = localStorage.getItem('user');
+  if (userString) {
+    try {
+      const user = JSON.parse(userString);
+      if (user?.name) {
+        this.Form.get('name')?.setValue(user.name);
       }
-    
+    } catch (e) {
+      console.error('Invalid user JSON:', e);
+    }
+  }
+
+  // ⬅️ اشترك في تحديثات سلة الشراء
+  this.cartSub = this.cartService.cartItems$.subscribe((updatedCart) => {
+    this.cartProducts = updatedCart;
+    this.cdr.detectChanges();
+    if (this.cartProducts.length === 0) {
+      console.log('Cart is empty!');
+    }
+  });
+
+  // ⬅️ تحميل بيانات المستخدم من الـ API
+  this.authservice.getuser(this.user_id).subscribe({
+    next: (data: any) => {
+      this.cartProducts = data.data.user.cart;
+    },
+    error: (err) => console.log(err),
+    complete: () => console.log('completed')
+  });
+}
+
+
       get total(): number {
         const storedTotal = localStorage.getItem('totalPrice');
         return storedTotal ? Number(storedTotal) : 0;
