@@ -12,14 +12,15 @@ import { FavoritesService } from '../../services/favorites/favorites.service';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   fname:string |null='' ;
   email:string |null='';
   show:string='hidden'
   ishidden:boolean=false;
    token:string|null=null;
    data:any;
- 
+ showLoginPrompt: boolean = false;
+
  cartItemCount: number = 0;
  favoriteItemCount: number = 0;
 
@@ -65,4 +66,27 @@ export class HeaderComponent {
   isAdmin(): boolean {
     return localStorage.getItem('role') === 'admin';
   }
+
+navigateToLogin() {
+  this.router.navigate(['/login']);
+}
+checkLoginBeforeNavigate(category: string, event: Event) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    event.preventDefault();
+    this.showLoginPrompt = true;
+    return;
+  }
+
+  // ✅ مش لازم نستخدم router.navigate هنا
+  this.show = 'hidden';
+}
+
+
+
+goHome() {
+    console.log('Navigating to home...');
+    this.router.navigate(['/home']);
+  }
+
 }
