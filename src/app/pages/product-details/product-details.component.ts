@@ -59,7 +59,10 @@ export class ProductDetailsComponent implements OnInit {
   Form = new FormGroup({
     // user: new FormControl(null, [Validators.required, Validators.minLength(3)]),
     // reviewerEmail: new FormControl(null, [Validators.required, Validators.email]), // تم الحذف
-    review: new FormControl(null, [Validators.required, Validators.minLength(3)]),
+    review: new FormControl(null, [
+      Validators.required,
+      Validators.minLength(3),
+    ]),
     rating: new FormControl(null, [Validators.required]),
   });
 
@@ -207,90 +210,92 @@ export class ProductDetailsComponent implements OnInit {
     return this.Form.controls['rating'].valid;
   }
 
-//  submit() {
-//   this.submitted = true;
+  //  submit() {
+  //   this.submitted = true;
 
-//   if (this.Form.valid) {
-//     const productId = this.ID;
-//     const newReview = {
-//       review: this.Form.get('review')?.value,
-//       rating: this.Form.get('rating')?.value,
-//     };
+  //   if (this.Form.valid) {
+  //     const productId = this.ID;
+  //     const newReview = {
+  //       review: this.Form.get('review')?.value,
+  //       rating: this.Form.get('rating')?.value,
+  //     };
 
-//     this.productService.addNewReview(productId, newReview).subscribe({
-//       next: (response: any) => {
-//         this.myEvent.emit(newReview);
-//         this.reviews.unshift(response.data);
-//         this.Form.reset();
-//         this.submitted = false;
-//         this.loadReviews();
-//         this.toastr.success('Review added successfully!', 'Success');
-//       },
-//       error: (err) => {
-//         console.error('Review submission error:', err);
+  //     this.productService.addNewReview(productId, newReview).subscribe({
+  //       next: (response: any) => {
+  //         this.myEvent.emit(newReview);
+  //         this.reviews.unshift(response.data);
+  //         this.Form.reset();
+  //         this.submitted = false;
+  //         this.loadReviews();
+  //         this.toastr.success('Review added successfully!', 'Success');
+  //       },
+  //       error: (err) => {
+  //         console.error('Review submission error:', err);
 
-//         const errorMessage =
-//           err?.error?.message ||  // لو الباك بيرجع { message: "..." }
-//           err?.error?.error ||    // لو الباك بيرجع { error: "..." }
-//           err?.error?.errors?.[0]?.msg || // لو في array من الأخطاء
-//           err?.message ||          // Fallback من Angular
-//           'Error adding review.';  // رسالة عامة
+  //         const errorMessage =
+  //           err?.error?.message ||  // لو الباك بيرجع { message: "..." }
+  //           err?.error?.error ||    // لو الباك بيرجع { error: "..." }
+  //           err?.error?.errors?.[0]?.msg || // لو في array من الأخطاء
+  //           err?.message ||          // Fallback من Angular
+  //           'Error adding review.';  // رسالة عامة
 
-//         this.toastr.error(errorMessage, 'Error');
-//       },
-//     });
-//   } else {
-//     this.Form.markAllAsTouched();
-//   }
-// }
-submit() {
-  this.submitted = true;
+  //         this.toastr.error(errorMessage, 'Error');
+  //       },
+  //     });
+  //   } else {
+  //     this.Form.markAllAsTouched();
+  //   }
+  // }
+  submit() {
+    this.submitted = true;
 
-  if (this.Form.valid) {
-    const productId = this.ID;
-    const newReview = {
-      review: this.Form.get('review')?.value,
-      rating: this.Form.get('rating')?.value,
-    };
+    if (this.Form.valid) {
+      const productId = this.ID;
+      const newReview = {
+        review: this.Form.get('review')?.value,
+        rating: this.Form.get('rating')?.value,
+      };
 
-    this.productService.addNewReview(productId, newReview).subscribe({
-      next: (response: any) => {
-        this.myEvent.emit(newReview);
-        this.reviews.unshift(response.data);
-        this.Form.reset();
-        this.submitted = false;
-        this.loadReviews();
-        this.toastr.success('Review added successfully!', 'Success');
-      },
-error: (err) => {
-  // console.error('🔴 Review submission error:', err);
-  // console.log('🔴 Full error object:', err?.error);
+      this.productService.addNewReview(productId, newReview).subscribe({
+        next: (response: any) => {
+          this.myEvent.emit(newReview);
+          this.reviews.unshift(response.data);
+          this.Form.reset();
+          this.submitted = false;
+          this.loadReviews();
+          this.toastr.success('Review added successfully!', 'Success');
+        },
+        error: (err) => {
+          // console.error('🔴 Review submission error:', err);
+          // console.log('🔴 Full error object:', err?.error);
 
-  let errorMessage = 'You already reviewed this product';
+          let errorMessage = 'You already reviewed this product';
 
-  if (err?.error) {
-    if (typeof err.error === 'string') {
-      errorMessage = err.error;
-    } else if (err.error.message) {
-      errorMessage = err.error.message;
-    } else if (err.error.error) {
-      errorMessage = err.error.error;
-    } else if (Array.isArray(err.error.errors) && err.error.errors[0]?.msg) {
-      errorMessage = err.error.errors[0].msg;
+          if (err?.error) {
+            if (typeof err.error === 'string') {
+              errorMessage = err.error;
+            } else if (err.error.message) {
+              errorMessage = err.error.message;
+            } else if (err.error.error) {
+              errorMessage = err.error.error;
+            } else if (
+              Array.isArray(err.error.errors) &&
+              err.error.errors[0]?.msg
+            ) {
+              errorMessage = err.error.errors[0].msg;
+            }
+          }
+
+          this.toastr.error(errorMessage, 'error');
+          this.Form.reset();
+
+          this.submitted = false;
+        },
+      });
+    } else {
+      this.Form.markAllAsTouched();
     }
   }
-
-  this.toastr.error(errorMessage, 'error');
- this.Form.reset();  
-
-  this.submitted = false;}
-
-    });
-  } else {
-    this.Form.markAllAsTouched();
-  }
-}
-
 
   isAdmin(): boolean {
     return localStorage.getItem('role') === 'admin';

@@ -107,23 +107,19 @@ export class ProductCardComponent {
     this.router.navigate(['/login']);
   }
   handleImageError(event: Event) {
-  const imgElement = event.target as HTMLImageElement;
-  imgElement.src = 'assets/images/image.png'; 
-}
-onImageClick(event?: MouseEvent) {
-  event?.stopPropagation();
-  event?.preventDefault();
-
-  const token = localStorage.getItem('token');
-  if (!token) {
-    this.showLoginPrompt = true;
-    return;
+    const imgElement = event.target as HTMLImageElement;
+    imgElement.src = 'assets/images/image.png';
   }
+  onImageClick(event?: MouseEvent) {
+    event?.stopPropagation();
+    event?.preventDefault();
 
-  this.router.navigate(['/product', this.data._id]);
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.showLoginPrompt = true;
+      return;
+    }
+
+    this.router.navigate(['/product', this.data._id]);
+  }
 }
-
-
-
-}
-

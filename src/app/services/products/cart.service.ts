@@ -1,17 +1,20 @@
+import {
+  HttpClient,
+  HttpHeaders,
+  HttpErrorResponse,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, BehaviorSubject, throwError } from 'rxjs';
-import { HttpParams, HttpErrorResponse } from '@angular/common/http';
-import { tap } from 'rxjs/operators';
-import { map, catchError } from 'rxjs/operators';
-import { AuthService } from '../auth/authservice/auth.service';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
-import { CartUpdate } from '../../components/cart/cart.component';
+import { AuthService } from '../auth/authservice/auth.service';
+
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
   private apiUrl = 'http://127.0.0.1:8000/cart';
+
   private cartItems = new BehaviorSubject<any[]>([]);
   cartItems$ = this.cartItems.asObservable();
 
@@ -22,7 +25,18 @@ export class CartService {
     private http: HttpClient,
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) {
+    this.loadCartFromStorage();
+  }
+
+  private loadCartFromStorage(): void {
+    const storedCart = localStorage.getItem('cart');
+    if (storedCart) {
+      const cart = JSON.parse(storedCart);
+      this.cartItems.next(cart);
+      this.cartCount.next(cart.length);
+    }
+  }
 
   private getHeaders() {
     const token = localStorage.getItem('token');
@@ -40,8 +54,17 @@ export class CartService {
     this.router.navigate(['/error'], {
       state: { errorMessage },
     });
-
     return throwError(() => new Error(errorMessage));
+  }
+
+  private updateCartState(updatedCart: any[]): void {
+    localStorage.setItem('cart', JSON.stringify(updatedCart));
+    this.cartItems.next(updatedCart);
+    this.cartCount.next(updatedCart.length);
+  }
+
+  setCart(cart: any[]): void {
+    this.updateCartState(cart);
   }
 
   addToCart(
@@ -51,12 +74,9 @@ export class CartService {
   ): Observable<any> {
     const body = { products: [{ productId, quantity, size }] };
     return this.http.post(`${this.apiUrl}`, body, this.getHeaders()).pipe(
-      tap((response: any) => {
-        if (response && response.data && response.data.cart) {
-          const updatedCart = response.data.cart;
-          localStorage.setItem('cart', JSON.stringify(response.data.cart));
-          this.cartItems.next(response.data.cart);
-          this.cartCount.next(updatedCart.length);
+      tap((res: any) => {
+        if (res?.data?.cart) {
+          this.updateCartState(res.data.cart);
         }
       }),
       catchError((error) => this.handleError(error))
@@ -68,24 +88,27 @@ export class CartService {
     quantity: number,
     currentSize: string
   ): Observable<any> {
-    const body = {
-      updates: [
-        {
-          productId,
-          quantity,
-          currentSize,
-        },
-      ],
-    };
-
-    return this.http.patch(`${this.apiUrl}`, body, this.getHeaders());
+    const body = { updates: [{ productId, quantity, currentSize }] };
+    return this.http.patch(`${this.apiUrl}`, body, this.getHeaders()).pipe(
+      tap((res: any) => {
+        if (res?.data?.cart) {
+          this.updateCartState(res.data.cart);
+        }
+      }),
+      catchError((error) => this.handleError(error))
+    );
   }
 
-  getCartProducts(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}`, this.getHeaders()).pipe(
-      tap((response: any) => {
-        if (response && response.data) {
-          this.cartItems.next(response.data);
+  updateSize(
+    productId: string,
+    currentSize: string,
+    newSize: string
+  ): Observable<any> {
+    const body = { updates: [{ productId, currentSize, newSize }] };
+    return this.http.patch(`${this.apiUrl}`, body, this.getHeaders()).pipe(
+      tap((res: any) => {
+        if (res?.data?.cart) {
+          this.updateCartState(res.data.cart);
         }
       }),
       catchError((error) => this.handleError(error))
@@ -93,82 +116,54 @@ export class CartService {
   }
 
   removeFromCart(productId: string, size: string): Observable<any> {
-    const url = `${this.apiUrl}`;
     const body = { productId, size };
-    console.log(body);
     return this.http
-      .request('DELETE', url, {
+      .request('DELETE', this.apiUrl, {
         headers: this.getHeaders().headers,
         body,
       })
       .pipe(
-        tap((response: any) => {
-          if (response && response.data && response.data.cart) {
-            const updatedCart = response.data.cart;
-            localStorage.setItem('cart', JSON.stringify(updatedCart));
-            this.cartItems.next(updatedCart);
-            this.cartCount.next(updatedCart.length);
+        tap((res: any) => {
+          if (res?.data?.cart) {
+            this.updateCartState(res.data.cart);
           }
-        })
+        }),
+        catchError((error) => this.handleError(error))
       );
   }
-  updateSize(
-    productId: string,
-    currentSize: string,
-    newSize: string
-  ): Observable<any> {
-    const headers = this.authService.getAuthHeaders();
-    const body = {
-      updates: [
-        {
-          productId,
-          currentSize,
-          newSize,
-        },
-      ],
-    };
 
-    return this.http.patch(`${this.apiUrl}`, body, { headers }).pipe(
-      tap((response: any) => {
-        if (response?.data?.cart) {
-          const updatedCart = response.data.cart;
-          localStorage.setItem('cart', JSON.stringify(updatedCart));
-          this.cartItems.next(updatedCart);
-          this.cartCount.next(updatedCart.length);
+  getCartProducts(): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl, this.getHeaders()).pipe(
+      tap((res: any) => {
+        if (res?.data) {
+          this.updateCartState(res.data);
         }
       }),
       catchError((error) => this.handleError(error))
     );
   }
 
-  clearCart() {
+  updateCart(updates: any[]): Observable<any> {
+    const body = { updates };
+    return this.http.patch(`${this.apiUrl}`, body, this.getHeaders()).pipe(
+      tap((res: any) => {
+        if (res?.data?.cart) {
+          this.updateCartState(res.data.cart);
+        }
+      }),
+      catchError((error) => this.handleError(error))
+    );
+  }
+
+  clearCart(): void {
     localStorage.removeItem('cart');
+    this.cartItems.next([]);
     this.cartCount.next(0);
   }
-  Checkout() {
-    const headers = this.authService.getAuthHeaders();
-    return this.http.post(`${this.apiUrl}/checkout`, {}, { headers });
-  }
 
-  updateCart(updates: CartUpdate[]): Observable<any> {
-    const token = localStorage.getItem('token');
-    const headers = {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    };
-
-    const body = { updates };
-
-    return this.http.patch(`${this.apiUrl}`, body, { headers }).pipe(
-      tap((response: any) => {
-        if (response?.data?.cart) {
-          const updatedCart = response.data.cart;
-          localStorage.setItem('cart', JSON.stringify(updatedCart));
-          this.cartItems.next(updatedCart);
-          this.cartCount.next(updatedCart.length);
-        }
-      }),
-      catchError((error) => this.handleError(error))
-    );
+  checkout(): Observable<any> {
+    return this.http
+      .post(`${this.apiUrl}/checkout`, {}, this.getHeaders())
+      .pipe(catchError((error) => this.handleError(error)));
   }
 }
