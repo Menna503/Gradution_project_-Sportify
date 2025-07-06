@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { CartService } from '../../services/products/cart.service';
 import { AuthService } from '../../services/auth/authservice/auth.service';
 import { Router } from '@angular/router';
-import { FavoritesService } from '../../services/products/favorites.service';
+import { FavoritesService } from '../../services/favorites/favorites.service';
 
 @Component({
   selector: 'app-header',
