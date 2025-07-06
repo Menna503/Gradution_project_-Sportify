@@ -1,120 +1,266 @@
 <app-header></app-header>
 
-<div class="bg-secondColor gap-16 lg:gap-0 h-1/2 w-full grid grid-cols-1 lg:grid-cols-3 ps-10 pr-10 pb-10 pt-5">
-    <div class="col-span-1 lg:col-span-2  ms-0 lg:ms-24 ">
-        <form [formGroup]="Form" (ngSubmit)="submit()" class="h-auto lg:m-5 mt-12 lg:mt-5 justify-items-center shadow-md place-items-center bg-white rounded-lg mx-auto pt-10 pb-15 " >
+<div
+  class="bg-secondColor gap-16 lg:gap-0 h-1/2 w-full grid grid-cols-1 lg:grid-cols-3 ps-10 pr-10 pb-10 pt-5"
+>
+  <div class="col-span-1 lg:col-span-2 ms-0 lg:ms-24">
+    <form
+      [formGroup]="Form"
+      (ngSubmit)="submit()"
+      class="h-auto lg:m-5 mt-12 lg:mt-5 shadow-md bg-white rounded-lg mx-auto pt-10 pb-15 px-10"
+    >
+      <div
+        class="flex flex-col mx-auto w-full gap-6 justify-center items-center"
+      >
+        <div class="flex justify-center mb-4">
+          <img src="assets/images/checkout.svg" class="w-4/5 lg:w-3/4" />
+        </div>
 
-            <div class="font-display flex flex-col mx-auto w-full gap-7 justify-center items-center ">
-              <div class="flex justify-center">
-                 <img src="assets/images/checkout.svg" class="w-4/5 lg:w-3/4">
-              </div>
+        <!-- Full Name -->
+        <div class="form-group w-full md:w-3/4">
+          <label class="text-lg text-[#7F7F7F] ms-1">Full Name</label>
+          <input
+            type="text"
+            formControlName="name"
+            class="text-lg rounded-lg border p-4 w-full h-12 mt-2 focus:outline-none"
+            [ngClass]="{
+              'border-red-500':
+                Form.controls['name'].invalid &&
+                (Form.controls['name'].touched || submitted),
+              'border-[#ababab]': !(
+                Form.controls['name'].invalid &&
+                (Form.controls['name'].touched || submitted)
+              )
+            }"
+            placeholder="John Doe"
+          />
+          <p
+            *ngIf="
+              Form.controls['name'].invalid &&
+              (Form.controls['name'].touched || submitted)
+            "
+            class="text-red-600 text-sm mt-1"
+          >
+            Full Name is required and must be at least 3 characters.
+          </p>
+        </div>
 
-             
-                <div class="form-group w-full px-9 md:w-3/4 lg:px-0 ">
-                  <label class="text-lg text-[#7F7F7F] ms-1">Full Name</label>
-                  <input type="text" formControlName="name" value="Form.get('name')?.value" class=" text-lg font-abhaya rounded-lg border focus:border-gold  focus:outline-none border-solid border-[#ababab] p-4 text-textcolor w-full h-12 mt-2 " placeholder="Johnathan D. Mercer" >
-                  <div class="h-2 mt-1">
-                    @if(Form.get('name')?.value && !NameValid ){
-                      <span class="text-sm text-left  text-red-600">
-                        Name Should be more than 3 characters
-                      </span>
-                    }
-                    @if(!Form.get('name')?.value && submitted  ){
-                     <span class="text-sm text-left text-red-600">
-                      Name is required!
-                      </span>
-                    }
-                  </div>
-                
-                </div>
+        <!-- Email -->
+        <div class="form-group w-full md:w-3/4">
+          <label class="text-lg text-[#7F7F7F] ms-1">Email</label>
+          <input
+            type="email"
+            formControlName="email"
+            class="text-lg rounded-lg border p-4 w-full h-12 mt-2 focus:outline-none"
+            [ngClass]="{
+              'border-red-500':
+                Form.controls['email'].invalid &&
+                (Form.controls['email'].touched || submitted),
+              'border-[#ababab]': !(
+                Form.controls['email'].invalid &&
+                (Form.controls['email'].touched || submitted)
+              )
+            }"
+            placeholder="example@gmail.com"
+          />
+          <p
+            *ngIf="
+              Form.controls['email'].invalid &&
+              (Form.controls['email'].touched || submitted)
+            "
+            class="text-red-600 text-sm mt-1"
+          >
+            Please enter a valid email.
+          </p>
+        </div>
 
-                
+        <!-- Phone -->
+        <div class="form-group w-full md:w-3/4">
+          <label class="text-lg text-[#7F7F7F] ms-1">Phone Number</label>
+          <input
+            type="text"
+            formControlName="phone"
+            class="text-lg rounded-lg border p-4 w-full h-12 mt-2 focus:outline-none"
+            [ngClass]="{
+              'border-red-500':
+                Form.controls['phone'].invalid &&
+                (Form.controls['phone'].touched || submitted),
+              'border-[#ababab]': !(
+                Form.controls['phone'].invalid &&
+                (Form.controls['phone'].touched || submitted)
+              )
+            }"
+            placeholder="01036584922"
+          />
+          <p
+            *ngIf="
+              Form.controls['phone'].invalid &&
+              (Form.controls['phone'].touched || submitted)
+            "
+            class="text-red-600 text-sm mt-1"
+          >
+            Phone number is required.
+          </p>
+        </div>
 
-                <div class="form-group w-full px-9 md:w-3/4 lg:px-0  ">
-                  <label   class="text-lg text-[#7F7F7F] ms-1">Email</label>
-                  <input  type="email" formControlName="email" class="text-lg font-abhaya rounded-lg border border-solid focus:border-gold  focus:outline-none border-[#ababab] p-4 text-textcolor w-full h-12 mt-2 "placeholder="example@gmail.com">
-                  <div class="h-2 mt-1">
-                    @if(Form.get('email')?.value && !EmailValid ){
-                      <span class="text-sm text-left  text-red-600">
-                        Email Is Invalid
-                      </span>
-                    }
-                    @if(!Form.get('email')?.value && submitted  ){
-                     <span class="text-sm text-left text-red-600">
-                      Email is required!
-                      </span>
-                    }
-                  </div>
-                </div> 
+        <!-- Address -->
+        <div class="form-group w-full md:w-3/4">
+          <label class="text-lg text-[#7F7F7F] ms-1">Address</label>
+          <input
+            type="text"
+            formControlName="address"
+            class="text-lg rounded-lg border p-4 w-full h-12 mt-2 focus:outline-none"
+            [ngClass]="{
+              'border-red-500':
+                Form.controls['address'].invalid &&
+                (Form.controls['address'].touched || submitted),
+              'border-[#ababab]': !(
+                Form.controls['address'].invalid &&
+                (Form.controls['address'].touched || submitted)
+              )
+            }"
+            placeholder="742 Evergreen Terrace"
+          />
+          <p
+            *ngIf="
+              Form.controls['address'].invalid &&
+              (Form.controls['address'].touched || submitted)
+            "
+            class="text-red-600 text-sm mt-1"
+          >
+            Address is required and must be between 3 and 100 characters.
+          </p>
+        </div>
 
-                 <div class="form-group w-full px-9 md:w-3/4 lg:px-0">
-                    <label class="text-lg text-[#7F7F7F] ms-1">Address</label>
-                    <input type="text"  formControlName="address" class="text-lg font-abhaya rounded-lg border border-solid focus:border-gold  focus:outline-none border-[#ababab] p-4 text-textcolor w-full h-12 mt-2 "placeholder="Alex Johnson 742 Evergreen Terrace Springfield, IL 62704 USA">
-                    <div class="h-2 mt-1">
-                      @if(Form.get('address')?.value && !AddressValid){
-                        <span class="text-sm text-left  text-red-600">
-                          Address Is Invalid
-                        </span>
-                      }
-                      @if(!Form.get('address')?.value && submitted){
-                       <span class="text-sm text-left text-red-600">
-                        Address is required!
-                        </span>
-                      }
-                    </div>
-                  </div>  
-        
-                  <div class="form-group w-full px-9 md:w-3/4 lg:px-0">
-                    <label class="text-lg text-[#7F7F7F] ms-1">Phone Number</label>
-                    <input formControlName="phone" type="text" class="text-lg font-abhaya rounded-lg border border-solid focus:border-gold  focus:outline-none border-[#ababab] p-4 text-textcolor w-full h-12 mt-2 "placeholder="01036584922">
-                    <div class="h-2 mt-1">
-                      @if(Form.get('phone')?.value && !PhoneValid){
-                        <span class="text-sm text-left  text-red-600">
-                          Phone should be 11 numbers
-                        </span>
-                      }
-                      @if(!Form.get('phone')?.value && submitted  ){
-                       <span class="text-sm text-left text-red-600">
-                        Phone is required!
-                        </span>
-                      }
-                    </div>
-                  </div>  
-    
-                <div class="grid grid-cols-2 w-full px-8 pt-7 md:w-3/4 lg:px-0 gap-4 lg:mt-4">
-                  <button type="submit" class=" p-3 ps-5 pr-5 bg-mainColor w-full text-[#454545] text-xl font-semibold rounded-xl hover:bg-[#abb165] hover:text-black hover:cursor-pointer transition">
-                    submit
-                  </button>
+        <!-- City & Postal Code -->
+        <div class="grid grid-cols-2 gap-4 w-full md:w-3/4">
+          <div>
+            <label class="text-lg text-[#7F7F7F] ms-1">City</label>
+            <input
+              type="text"
+              formControlName="city"
+              class="text-lg rounded-lg border p-4 w-full h-12 mt-2 focus:outline-none"
+              [ngClass]="{
+                'border-red-500':
+                  Form.controls['city'].invalid &&
+                  (Form.controls['city'].touched || submitted),
+                'border-[#ababab]': !(
+                  Form.controls['city'].invalid &&
+                  (Form.controls['city'].touched || submitted)
+                )
+              }"
+            />
+            <p
+              *ngIf="
+                Form.controls['city'].invalid &&
+                (Form.controls['city'].touched || submitted)
+              "
+              class="text-red-600 text-sm mt-1"
+            >
+              City is required.
+            </p>
+          </div>
 
-                  <a  [routerLink]="['/cart']"> <button type="button" class="p-3 ps-5 pr-5 border border-[#454545] w-full text-[#454545] text-xl font-semibold rounded-xl hover:bg-[#2A2A2A] hover:text-white hover:cursor-pointer transition" >
-                    Cancel
-                  </button></a>
-                </div>
-                  
-            </div>
-        </form>
+          <div>
+            <label class="text-lg text-[#7F7F7F] ms-1">Postal Code</label>
+            <input
+              type="text"
+              formControlName="postalCode"
+              class="text-lg rounded-lg border p-4 w-full h-12 mt-2 focus:outline-none"
+              [ngClass]="{
+                'border-red-500':
+                  Form.controls['postalCode'].invalid &&
+                  (Form.controls['postalCode'].touched || submitted),
+                'border-[#ababab]': !(
+                  Form.controls['postalCode'].invalid &&
+                  (Form.controls['postalCode'].touched || submitted)
+                )
+              }"
+            />
+            <p
+              *ngIf="
+                Form.controls['postalCode'].invalid &&
+                (Form.controls['postalCode'].touched || submitted)
+              "
+              class="text-red-600 text-sm mt-1"
+            >
+              Postal code is required.
+            </p>
+          </div>
+        </div>
+
+        <!-- Country -->
+        <div class="form-group w-full md:w-3/4">
+          <label class="text-lg text-[#7F7F7F] ms-1">Country</label>
+          <input
+            type="text"
+            formControlName="country"
+            class="text-lg rounded-lg border p-4 w-full h-12 mt-2 focus:outline-none"
+            [ngClass]="{
+              'border-red-500':
+                Form.controls['country'].invalid &&
+                (Form.controls['country'].touched || submitted),
+              'border-[#ababab]': !(
+                Form.controls['country'].invalid &&
+                (Form.controls['country'].touched || submitted)
+              )
+            }"
+            placeholder="Egypt"
+          />
+          <p
+            *ngIf="
+              Form.controls['country'].invalid &&
+              (Form.controls['country'].touched || submitted)
+            "
+            class="text-red-600 text-sm mt-1"
+          >
+            Country is required.
+          </p>
+        </div>
+
+        <!-- Buttons -->
+        <div class="grid grid-cols-2 w-full md:w-3/4 gap-4 pt-7">
+          <button
+            type="submit"
+            [disabled]="Form.invalid"
+            class="p-3 bg-mainColor w-full text-[#454545] text-xl font-semibold rounded-xl hover:bg-[#abb165] hover:text-black disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Next
+          </button>
+
+          <a [routerLink]="['/cart']">
+            <button
+              type="button"
+              class="p-3 border border-[#454545] w-full text-[#454545] text-xl font-semibold rounded-xl hover:bg-[#2A2A2A] hover:text-white"
+            >
+              Cancel
+            </button>
+          </a>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Order Summary -->
+  <div
+    class="bg-white w-full md:col-span-1 p-4 md:p-6 mt-5 shadow-md rounded-2xl h-fit"
+  >
+    <h2 class="text-xl font-bold mb-4">Order Summary</h2>
+    <div class="flex justify-between">
+      <span>{{ cartProducts.length }} Items</span>
     </div>
-    
-    <div class="bg-white w-full md:col-span-1 p-4 md:p-6 mt-5 shadow-md rounded-2xl h-fit">
-      <h2 class="text-xl font-bold mb-4 font-inria text-cart">Order Summary</h2>
-      <div class="flex justify-between font-inria text-cart font-black">
-        <span>{{ cartProducts.length }} Items </span>
-      </div>
-      <div class="flex justify-between mt-2 font-inria text-cart font-bold">
-        <span>Total Price</span>
-        <span>${{ total }}</span>
-      </div>
-      <div class="flex justify-between mt-2 font-inria text-cart font-bold">
-        <span>Shipping</span>
-        <span>$16</span>
-      </div>
-      <div class="border-t mt-4 pt-4 flex justify-between text-ternaryText font-inria font-extrabold">
-        <span>Total (including taxes)</span>
-        <span>${{ total + 16 }}</span>
-      </div>
-      
-     
- </div>
+    <div class="flex justify-between mt-2">
+      <span>Total Price</span>
+      <span>${{ total }}</span>
+    </div>
+    <div class="flex justify-between mt-2">
+      <span>Shipping</span>
+      <span>$16</span>
+    </div>
+    <div class="border-t mt-4 pt-4 flex justify-between font-bold">
+      <span>Total (including taxes)</span>
+      <span>${{ total + 16 }}</span>
+    </div>
+  </div>
 </div>
-<app-footer></app-footer> 
-
+<app-footer></app-footer>
