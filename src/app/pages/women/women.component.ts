@@ -9,16 +9,27 @@ import { FilterComponent } from '../../components/filter/filter.component';
 import { ProductService } from '../../services/products/product.service';
 import { HttpClient } from '@angular/common/http';
 import { LoadingComponent } from "../../components/loading/loading.component";
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-women',
-  imports: [MenCollectionComponent, HeaderComponent, ProductCardComponent, CommonModule, PaginationComponent, FooterComponent, FilterComponent, LoadingComponent],
+  standalone: true,
+  imports: [
+    MenCollectionComponent,
+    HeaderComponent,
+    ProductCardComponent,
+    CommonModule,
+    PaginationComponent,
+    FooterComponent,
+    FilterComponent,
+    LoadingComponent
+  ],
   templateUrl: './women.component.html',
   styleUrl: './women.component.css'
 })
 export class WomenComponent implements OnInit {
   src = "assets/images/image_71.svg";
-  womenClothes: any[] = []; // تأكد من أنها مصفوفة فارغة في البداية
+  womenClothes: any[] = [];
   subCategory: string = '';
   sort: string = '';
   brand: string = '';
@@ -37,33 +48,64 @@ export class WomenComponent implements OnInit {
     { img: 'assets/icons/misery.svg', brandName: 'Mesery' }
   ];
 
-  constructor(private http: HttpClient, private productService: ProductService) {}
+  constructor(
+    private http: HttpClient,
+    private productService: ProductService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-    this.loadProducts();
+    this.route.queryParams.subscribe((params) => {
+      this.subCategory = params['subCategory'] || '';
+      this.brand = params['brand'] || '';
+      this.sort = params['sort'] || '';
+      this.currentPage = +params['page'] || 1;
+
+      this.loadProducts();
+    });
   }
 
   updateFilters(filterData: { sort: string; brand: string }) {
     this.sort = filterData.sort;
     this.brand = filterData.brand;
-    this.currentPage = 1; 
+    this.currentPage = 1;
+    this.updateQueryParams();
     this.loadProducts();
   }
 
-display(text: string) {
-  if (this.subCategory === text) {
-    this.subCategory = '';
-  } else {
-    this.subCategory = text;
+  display(text: string) {
+    this.subCategory = this.subCategory === text ? '' : text;
+    this.currentPage = 1;
+    this.updateQueryParams();
+    this.loadProducts();
   }
-  this.currentPage = 1;
-  this.loadProducts();
-}
 
+  changePage(page: number) {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.updateQueryParams();
+      this.loadProducts();
+    }
+  }
+
+  updateQueryParams() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        subCategory: this.subCategory || null,
+        brand: this.brand || null,
+        sort: this.sort || null,
+        page: this.currentPage !== 1 ? this.currentPage : null
+      },
+      queryParamsHandling: 'merge',
+    });
+  }
 
   loadProducts() {
-    this.isLoading = true; 
-    this.errorMessage = ''; 
+    this.isLoading = true;
+    this.errorMessage = '';
+
     const params = {
       gender: 'women',
       category: 'clothes',
@@ -73,7 +115,7 @@ display(text: string) {
     };
 
     const filteredParams = Object.fromEntries(
-      Object.entries(params).filter(([_, value]) => value !== undefined && value !== "")
+      Object.entries(params).filter(([_, value]) => value !== undefined && value !== '')
     );
 
     this.productService.getProduct(filteredParams, this.currentPage, this.itemsPerPage)
@@ -81,28 +123,18 @@ display(text: string) {
         next: (response) => {
           this.womenClothes = response.products;
           this.totalItems = response.total;
-          this.isLoading = false; // تعيين حالة التحميل إلى false عند نجاح الاستجابة
-          console.log("✅ API Response:", response);
+          this.isLoading = false;
         },
         error: (error) => {
-          this.isLoading = false; 
-          if (error.status === 500) {
-            this.errorMessage = 'no data found'; // Assign the specific 500 error message
-          } else {
-            this.errorMessage = 'An error occurred while loading products.'; // Generic error message
-          }
+          this.isLoading = false;
+          this.errorMessage = error.status === 500
+            ? 'no data found'
+            : 'An error occurred while loading products.';
         },
         complete: () => {
-          this.isLoading = false;  
+          this.isLoading = false;
         }
       });
-  }
-
-  changePage(page: number) {
-    if (page >= 1 && page <= this.totalPages) {
-      this.currentPage = page;
-      this.loadProducts();
-    }
   }
 
   get totalPages(): number {
