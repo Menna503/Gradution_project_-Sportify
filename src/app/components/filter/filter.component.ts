@@ -38,6 +38,20 @@ export class FilterComponent {
     this.selectedButton = text;
     this.hideBrand = text !== 'brand';
     this.hideBrice = text !== 'price';
-  }
+  } 
   
+  resetFilters() {
+  // رجع كل المتغيرات لقيمتها الأساسية
+  this.selectedIndex = null;
+  this.priceindex = null;
+  this.brand = '';
+  this.sort = '';
+  this.selectedButton = 'price';
+  this.hideBrand = true;
+  this.hideBrice = false;
+
+  // Emit reset filters للقومبوننت الأب
+  this.filterChanged.emit({ sort: '', brand: '' });
+}
+
 }

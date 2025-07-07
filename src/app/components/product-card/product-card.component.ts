@@ -9,10 +9,10 @@ import { ProductService } from '../../services/products/product.service';
 
 @Component({
   selector: 'app-product-card',
-  imports: [CommonModule, RouterModule, HeaderComponent, FooterComponent],
-  standalone: true, 
+  imports: [CommonModule, RouterModule],
+  standalone: true,
   templateUrl: './product-card.component.html',
-  styleUrls: ['./product-card.component.css']
+  styleUrls: ['./product-card.component.css'],
 })
 export class ProductCardComponent {
   isHiddenPage: boolean = false;
@@ -22,8 +22,9 @@ export class ProductCardComponent {
 
   selectedColor: string = '';
   selectedSize: string = '';
-
   isAdded: boolean = false;
+
+  showLoginPrompt: boolean = false; // 🟢 ده الجديد
 
   constructor(
     private router: Router,
@@ -34,7 +35,6 @@ export class ProductCardComponent {
 
   ngOnInit() {
     this.selectedSize = this.data.size_range[0];
-
     this.checkCurrentRoute();
     this.checkIfFavorite();
   }
@@ -46,7 +46,7 @@ export class ProductCardComponent {
       currentUrl.includes('supplements') ||
       this.data.category?.name == 'supplement' ||
       this.data.category?.name == 'equipment';
-  }
+  }
 
   checkIfFavorite() {
     this.favoritesService.getfavourite().subscribe({
@@ -59,49 +59,89 @@ export class ProductCardComponent {
     });
   }
 
-  toggleFav() {
-    if (!this.isFav) {
-      this.favoritesService.addFavorite(this.data).subscribe({
-        next: () => {
-          console.log(`${this.data.id} is added`);
-          this.isFav = true;
-        },
-        error: (err) => console.error('Error while adding to favorites:', err),
-      });
-    } else {
-      this.favoritesService.removeFavorite(this.data.id).subscribe({
-        next: () => {
-          console.log(`${this.data.id} is removed`);
-          this.isFav = false;
-          this.removedFromFavorites.emit(this.data.id);
-        },
-        error: (err) => {
-          console.log(err);
-        },
-      });
-    }
+toggleFav() {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    this.showLoginPrompt = true; // ✅ نفس الرسالة اللي بتظهر في addToCart
+    return;
   }
 
+  if (!this.isFav) {
+    this.favoritesService.addFavorite(this.data).subscribe({
+      next: () => {
+        console.log(`${this.data.id} is added`);
+        this.isFav = true;
+      },
+      error: (err) => console.error('Error while adding to favorites:', err),
+    });
+  } else {
+    this.favoritesService.removeFavorite(this.data.id).subscribe({
+      next: () => {
+        console.log(`${this.data.id} is removed`);
+        this.isFav = false;
+        this.removedFromFavorites.emit(this.data.id);
+      },
+      error: (err) => {
+        console.log(err);
+      },
+    });
+  }
+}
+
+
   addToCart() {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.showLoginPrompt = true; // 👈 يظهر المودال
+      return;
+    }
+
     this.cartService.addToCart(this.data._id, 1, this.selectedSize).subscribe(
       (response) => {
         console.log('Product added successfully:', response);
-
         this.isAdded = true;
-
         setTimeout(() => {
           this.isAdded = false;
         }, 1000);
       },
       (error) => {
-        this.router.navigate(['/login']);
         console.error('Error adding product:', error);
       }
     );
+  }
+
+  navigateToLogin() {
+    this.router.navigate(['/login']);
   }
   handleImageError(event: Event) {
   const imgElement = event.target as HTMLImageElement;
   imgElement.src = 'assets/images/image.png'; 
 }
+onImageClick(event?: MouseEvent) {
+  event?.stopPropagation();
+  event?.preventDefault();
+
+  const token = localStorage.getItem('token');
+  if (!token) {
+    this.showLoginPrompt = true;
+    return;
+  }
+
+  this.router.navigate(['/product', this.data._id]);
+}
+
+isOutOfStock(): boolean {
+  return this.data?.stock === 0;
+}
+
+
+getLowStockMessage(): string | null {
+  if (this.data?.stock > 0 && this.data?.stock <= 5) {
+    return `Hurry! Only ${this.data.stock} left in stock`;
+  }
+  return null;
+}
+
 
 }
+

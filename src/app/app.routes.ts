@@ -25,14 +25,18 @@ import { OrderTrackingComponent } from './pages/profile/order-tracking/order-tra
 import { AllOrdersComponent } from './pages/profile/all-orders/all-orders.component';
 import { PersonalInfoComponent } from './pages/profile/personal-info/personal-info.component';
 import { OrderDtailsComponent } from './pages/profile/all-orders/order-dtails/order-dtails.component';
+import { ConfirmOrderComponent } from './confirm-order/confirm-order.component';
+import { FailedPaymentComponent } from './failed-payment/failed-payment.component';
+import { ConfirmOrderGuard } from './guards/confirm-order.guard';
+
 
 export const routes: Routes = [
-    {path:'',redirectTo:'home',pathMatch:'full'},
-    {path:'home' , component:HomeComponent },
-    // {path:'login' ,component:SigninComponent},
-    // {path:'signup' ,component:SignupPageComponent},
-    {path:'fav' ,component:FavComponent ,canActivate:[GuardService]},
-    {path: 'profile',
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
+  // {path:'login' ,component:SigninComponent},
+  // {path:'signup' ,component:SignupPageComponent},
+  { path: 'fav', component: FavComponent, canActivate: [GuardService] },
+   {path: 'profile',
       component: ProfileComponent,
       canActivate: [GuardService],
       children: [
@@ -43,42 +47,63 @@ export const routes: Routes = [
         { path: '', redirectTo: 'order-tracking', pathMatch: 'full' }
       ]
     },
-     
-    {path:'products',component:AllProductsComponent},
-    {path:'men' ,component:MenComponent},
-    {path:'women' ,component:WomenComponent},
-    {path:'equipment',component:EquipmentComponent},
-    {path:'product/:id',component:ProductDetailsComponent,canActivate:[GuardService]},
-    {path:'payment',component:PaymentPageComponent,canActivate:[GuardService]},
-    {path:'checkout',component:CheckOutComponent,canActivate:[GuardService]},
-    {path:'shoes',component:ShoesComponent},
-    {path:'allProduct',component:AllProductsComponent},
-    {path:'supplements' ,component:SuplementsComponent},
-    { path: 'cart', component: CartPageComponent,canActivate:[GuardService] }, 
-    { path: 'confirmPayment', component: ConfirmPaymentComponent }, 
-     { path: 'admin', component: AdminAddProductComponent, canActivate: [GuardService] },
-     { path: 'admin-edit/:id', component: AdminEditProductComponent },
-       { path: 'error', component: ErrorComponent },
-{
-  path: 'login',
-  component: SigninComponent,
-  canActivate: [NoAuthGuard]
-},
-{
-  path: 'signup',
-  component: SignupPageComponent,
-  canActivate: [NoAuthGuard]
-}
-
-
+  { path: 'products', component: AllProductsComponent },
+  { path: 'men', component: MenComponent },
+  { path: 'women', component: WomenComponent },
+  { path: 'equipment', component: EquipmentComponent },
+  {
+    path: 'product/:id',
+    component: ProductDetailsComponent,
+    canActivate: [GuardService],
+  },
+  {
+    path: 'payment',
+    component: PaymentPageComponent,
+    canActivate: [GuardService],
+  },
+  {
+    path: 'checkout',
+    component: CheckOutComponent,
+    canActivate: [GuardService],
+  },
+  { path: 'shoes', component: ShoesComponent },
+  { path: 'allProduct', component: AllProductsComponent },
+  { path: 'supplements', component: SuplementsComponent },
+  { path: 'cart', component: CartPageComponent, canActivate: [GuardService] },
+  { path: 'confirmPayment', component: ConfirmPaymentComponent },
+  {
+    path: 'confirm-order',
+    component: ConfirmOrderComponent,
+    canActivate: [ConfirmOrderGuard],
+  },
+  { path: 'decline-order', component: FailedPaymentComponent },
+  {
+    path: 'admin',
+    component: AdminAddProductComponent,
+    canActivate: [GuardService],
+  },
+  { path: 'admin-edit/:id', component: AdminEditProductComponent },
+  { path: 'error', component: ErrorComponent },
+  {
+    path: 'login',
+    component: SigninComponent,
+    canActivate: [NoAuthGuard],
+  },
+  {
+    path: 'signup',
+    component: SignupPageComponent,
+    canActivate: [NoAuthGuard],
+  },
 
 ];
 @NgModule({
-    imports: [RouterModule.forRoot(routes, {
-        scrollPositionRestoration: 'enabled',  
-        anchorScrolling: 'enabled'            
-      })],
-      
-    exports: [RouterModule],
-  })
-  export class AppRoutingModule {}
+  imports: [
+    RouterModule.forRoot(routes, {
+      scrollPositionRestoration: 'enabled',
+      anchorScrolling: 'enabled',
+    }),
+  ],
+
+  exports: [RouterModule],
+})
+export class AppRoutingModule {}
