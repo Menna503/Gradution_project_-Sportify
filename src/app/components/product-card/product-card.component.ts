@@ -130,6 +130,12 @@ onImageClick(event?: MouseEvent) {
   this.router.navigate(['/product', this.data._id]);
 }
 
+isOutOfStock(): boolean {
+  return this.data?.stock === 0;
+}
+
+
+
 
 
 }

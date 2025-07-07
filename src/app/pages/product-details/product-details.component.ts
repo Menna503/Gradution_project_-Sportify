@@ -77,6 +77,7 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    
     this.isLoading = true;
 
     this.productService.getProductById(this.ID).subscribe({
@@ -367,4 +368,21 @@ error: (err) => {
     const imgElement = event.target as HTMLImageElement;
     imgElement.src = 'assets/images/image.png';
   }
+
+isOutOfStock(): boolean {
+  const product = this.products?.data?.product;
+
+  // لو المنتج من الملابس أو الأحذية، نستخدم stock_by_size
+  if (product?.category?.name === 'clothes' || product?.category?.name === 'shoes') {
+    const stockBySize = product?.stock_by_size;
+    if (!stockBySize) return false;
+
+    return Object.values(stockBySize).every(val => Number(val) === 0);
+  }
+
+  // لباقي المنتجات (equipment, supplement مثلاً)
+  return Number(product?.stock) === 0;
+}
+
+
 }
