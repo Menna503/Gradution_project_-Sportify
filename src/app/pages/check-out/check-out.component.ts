@@ -35,6 +35,8 @@ export class CheckOutComponent implements OnInit, OnDestroy {
   user_id: string = localStorage.getItem('UserId') || '';
   cartSub!: Subscription;
   submitted = false;
+  isLoading = false;
+
 
   constructor(
     private cartService: CartService,
@@ -160,6 +162,7 @@ export class CheckOutComponent implements OnInit, OnDestroy {
 
     if (this.Form.valid) {
       this.Form.markAllAsTouched();
+      this.isLoading = true;
 
       const shippingAddress = {
         address: this.Form.controls['address'].value,
@@ -172,11 +175,14 @@ export class CheckOutComponent implements OnInit, OnDestroy {
       localStorage.setItem('shippingAddress', JSON.stringify(shippingAddress));
       console.log('Shipping Address saved:', shippingAddress);
 
-      this.router.navigate(['/payment']);
-    } else {
-      console.log(
-        'Form is invalid. Please fill in all required fields correctly.'
-      );
-    }
+setTimeout(() => {
+      this.isLoading = false; 
+      this.router.navigate(['/payment']); 
+    }, 1000);
+  } else {
+    console.log('Form is invalid. Please fill in all required fields correctly.');
   }
+  }
+
+
 }

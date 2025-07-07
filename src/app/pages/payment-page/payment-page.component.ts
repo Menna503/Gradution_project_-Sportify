@@ -20,6 +20,8 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
   selectedMethod: 'cash' | 'visa' | null = null;
   cartSub!: Subscription;
   showCashConfirmation = false;
+isPlacingOrder = false;
+isRedirectingToStripe = false;
 
   constructor(
     private cartService: CartService,
@@ -58,10 +60,12 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
   }
 
   payCash(): void {
+     this.isPlacingOrder = true;
     const address = this.getShippingDetailsFromLocalStorage();
     if (!address) {
       this.toastr.error('Missing shipping details.', 'Error');
       this.router.navigate(['/decline-order']);
+      this.isPlacingOrder = false;
       return;
     }
 
@@ -75,6 +79,7 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
           this.clearCartData();
           this.toastr.success('Order placed successfully!', 'Success');
           this.showCashConfirmation = false;
+          this.isPlacingOrder = false;
           this.router.navigate(['/confirmPayment']);
         },
         error: (err) => {
@@ -82,6 +87,7 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
           console.log(err);
           this.toastr.error(`Order failed ${err.message}`, 'Error');
           this.showCashConfirmation = false;
+          this.isPlacingOrder = false;
           this.router.navigate(['/decline-order']);
         },
       });
@@ -92,9 +98,12 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
       this.router.navigate(['/']);
       return;
     }
+  this.isRedirectingToStripe = true;
 
     this.paymentService.checkout('visa').subscribe({
       next: (res) => {
+              this.isRedirectingToStripe = false;
+
         if (res.checkoutSessionUrl) {
           window.location.href = res.checkoutSessionUrl;
         } else {
@@ -104,6 +113,8 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
       },
       error: (err) => {
         console.error(err);
+              this.isRedirectingToStripe = false;
+
         this.toastr.error('Stripe Checkout failed.', 'Error');
         this.router.navigate(['/decline-order']);
       },
