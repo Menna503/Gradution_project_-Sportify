@@ -12,6 +12,7 @@ import { FavoritesService } from '../../services/favorites/favorites.service';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
+
 export class HeaderComponent implements OnInit {
   fname: string | null = '';
   email: string | null = '';
@@ -23,6 +24,7 @@ export class HeaderComponent implements OnInit {
 
   cartItemCount: number = 0;
   favoriteItemCount: number = 0;
+
 
   constructor(
     private authService: AuthService,

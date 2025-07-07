@@ -4,8 +4,9 @@ import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http
 import { map, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FavoritesService {
   private favUrl = "http://127.0.0.1:8000/favorites";
@@ -81,5 +82,6 @@ export class FavoritesService {
       .pipe(
         catchError((error) => this.handleError(error))
       );
+
   }
 }
