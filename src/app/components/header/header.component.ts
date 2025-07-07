@@ -26,8 +26,6 @@ export class HeaderComponent implements OnInit {
  favoriteItemCount: number = 0;
 
 
-  cartItemCount: number = 0;
-  favoriteItemCount: number = 0;
 
   constructor(
     private authService: AuthService,
