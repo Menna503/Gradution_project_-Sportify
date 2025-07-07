@@ -4,10 +4,39 @@ import { GlobalErrorHandler } from './services/error_handler/error-service.servi
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
+import { ProfileComponent } from './pages/profile/profile.component';
 
 @Component({
   selector: 'app-root',
-  providers: [{ provide: ErrorHandler, useClass: GlobalErrorHandler }],
+
+  providers: [
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
+  ],
+
+  imports: [
+    RouterOutlet,
+    CommonModule,
+    FavComponent,
+    PaymentPageComponent, 
+    CheckOutComponent,
+    HomeComponent,
+    MenComponent,
+    WomenComponent,
+    SuplementsComponent,
+    FooterComponent,
+    PartnersComponent, 
+    HeaderComponent,
+    ConfirmPaymentComponent,
+    PaginationComponent,
+    HttpClientModule,
+    SignupPageComponent,
+    SigninComponent,
+    CartComponent,
+    CartPageComponent,
+    ProductDetailsComponent,
+    ProfileComponent
+  ],
+
 
   imports: [RouterOutlet, CommonModule],
 

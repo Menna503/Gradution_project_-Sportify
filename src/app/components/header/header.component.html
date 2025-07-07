@@ -17,10 +17,12 @@
     </div>
 
     @if(token){
+
     <div class="flex gap-4 items-center">
       <!-- Favorite -->
       <a
         [routerLink]="['/fav']"
+          routerLinkActive="active-icon"
         class="relative flex items-center justify-center w-[23px] h-[23px]"
       >
         <i
@@ -53,12 +55,12 @@
         </span>
       </a>
 
-      <!-- Profile -->
-      <i
-        class="fa-regular fa-user relative text-ternaryText cursor-pointer"
-        (click)="getProfile()"
-      ></i>
+          <!-- Profile -->
+    <a [routerLink]="'/profile'" routerLinkActive="active-icon" >
+      <i class="fa-regular fa-user relative cursor-pointer text-ternaryText"></i>
+    </a>
     </div>
+
 
     } @else {
     <div class="flex gap-2 items-center">
@@ -81,30 +83,7 @@
     }
   </div>
 
-  <div
-    *ngIf="ishidden"
-    class="profile absolute top-15 right-2.5 bg-white drop-shadow-md w-80 h-70 transition-all duration-300 opacity-0 scale-95"
-    [ngClass]="{
-      'opacity-100 scale-100': ishidden,
-      'opacity-0 scale-50': !ishidden
-    }"
-  >
-    <img
-      src="assets/images/profile.svg"
-      alt="profile_pic"
-      class="m-auto mt-4"
-    />
-    <p class="text-center mt-1 text-xl">{{ fname }}</p>
-    <div class="flex items-center ml-7 mt-7">
-      <i class="fa-solid fa-envelope mr-2 text-xl text-mainColor"></i>
-      <p class="text-l capitalize">{{ email }}</p>
-    </div>
-    <div class="h-0.5 w-65 bg-[rgba(0,0,0,0.1)] m-auto mt-3"></div>
-    <div class="flex items-center ml-7 mt-7">
-      <i class="fa-solid fa-right-from-bracket mr-2 text-xl text-mainColor"></i>
-      <p class="text-l cursor-pointer" (click)="logout()">Logout</p>
-    </div>
-  </div>
+
 
   <!-- اللينكات -->
   <ul
@@ -341,7 +320,7 @@
       class="flex gap-4 hover:bg-mainColor p-2 rounded-md hover:text-black items-center"
     >
       <i class="fa-solid fa-right-from-bracket text-xl text-secandaryText"></i>
-      <p class="text-l cursor-pointer" (click)="logout()">Logout</p>
+      <p class="text-l cursor-pointer">Logout</p>
     </li>
     } @else{
     <li class="flex gap-2 items-center">

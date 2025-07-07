@@ -54,17 +54,19 @@ export class HeaderComponent implements OnInit {
     this.show = this.show === 'hidden' ? 'block' : 'hidden';
   }
 
-  getProfile() {
-    this.ishidden = !this.ishidden;
-  }
 
-  logout() {
-    this.authService.signout();
-    this.router.navigate(['/home'], { replaceUrl: true });
-    this.token = '';
-    this.ishidden = false;
-    localStorage.removeItem('cart');
-  }
+//   getProfile() {
+//     this.ishidden = !this.ishidden;
+//   }
+
+//   logout() {
+//     this.authService.signout();
+//     this.router.navigate(['/home'], { replaceUrl: true });
+//     this.token = '';
+//     this.ishidden = false;
+//     localStorage.removeItem('cart');
+//   }
+
 
   isAdmin(): boolean {
     return localStorage.getItem('role') === 'admin';

@@ -20,9 +20,15 @@ import { AdminAddProductComponent } from './components/admin-add-product/admin-a
 import { AdminEditProductComponent } from './components/admin-edit-product/admin-edit-product.component';
 import { AllProductsComponent } from './pages/all-products/all-products.component';
 import { NoAuthGuard } from './services/auth/authGaurd/no-auth.guard';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { OrderTrackingComponent } from './pages/profile/order-tracking/order-tracking.component';
+import { AllOrdersComponent } from './pages/profile/all-orders/all-orders.component';
+import { PersonalInfoComponent } from './pages/profile/personal-info/personal-info.component';
+import { OrderDtailsComponent } from './pages/profile/all-orders/order-dtails/order-dtails.component';
 import { ConfirmOrderComponent } from './confirm-order/confirm-order.component';
 import { FailedPaymentComponent } from './failed-payment/failed-payment.component';
 import { ConfirmOrderGuard } from './guards/confirm-order.guard';
+
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -30,6 +36,17 @@ export const routes: Routes = [
   // {path:'login' ,component:SigninComponent},
   // {path:'signup' ,component:SignupPageComponent},
   { path: 'fav', component: FavComponent, canActivate: [GuardService] },
+   {path: 'profile',
+      component: ProfileComponent,
+      canActivate: [GuardService],
+      children: [
+        { path: 'order-tracking', component: OrderTrackingComponent },
+        { path: 'all-orders', component: AllOrdersComponent },
+        { path: 'all-orders/:id', component: OrderDtailsComponent},
+        { path: 'personal-info', component: PersonalInfoComponent },
+        { path: '', redirectTo: 'order-tracking', pathMatch: 'full' }
+      ]
+    },
   { path: 'products', component: AllProductsComponent },
   { path: 'men', component: MenComponent },
   { path: 'women', component: WomenComponent },
@@ -77,6 +94,7 @@ export const routes: Routes = [
     component: SignupPageComponent,
     canActivate: [NoAuthGuard],
   },
+
 ];
 @NgModule({
   imports: [
