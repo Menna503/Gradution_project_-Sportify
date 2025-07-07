@@ -1,6 +1,18 @@
-<div class="bg-secondColor rounded-xl pb-4 capitalize mt-3 mb-3 h-auto w-fit">
+<div
+  class="bg-secondColor rounded-xl pb-4 capitalize mt-3 mb-3 h-auto w-fit transition-opacity"
+  [ngClass]="{ 'opacity-50': isOutOfStock() }"
+>
   <div class="flex justify-center my-5">
-    <div class="w-full h-[400px] cursor-pointer" (click)="onImageClick($event)">
+    <div class="w-full h-[400px] cursor-pointer relative" (click)="onImageClick($event)">
+      <!-- Badge "Out of Stock" -->
+      <span
+        *ngIf="isOutOfStock()"
+        class="absolute top-2 left-2 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full z-10 shadow-md"
+      >
+        Out of Stock
+      </span>
+
+      <!-- صورة المنتج -->
       <img
         [src]="data.imageUrl"
         alt="Product Image"
@@ -9,7 +21,6 @@
       />
     </div>
   </div>
-
   <div class="flex flex-row items-center justify-between mb-6 pl-5 pr-5">
     <p class="text-[#3B3B3B] font-medium text-2xl text-center">
       {{ data.name.split(" ").slice(0, 2).join(" ") }}
@@ -20,7 +31,7 @@
   </div>
 
   <div class="flex items-center w-full px-4 gap-x-2 mt-6 pt-2">
-    <button
+    <!-- <button
       class="flex-1 rounded-xl p-2 px-4 transition-all cursor-pointer"
       [ngClass]="{
         'bg-mainColor text-white': !isAdded,
@@ -31,7 +42,20 @@
       (click)="addToCart()"
     >
       {{ isAdded ? "✔ Added!" : "Add to cart" }}
-    </button>
+    </button> -->
+<button
+  class="flex-1 rounded-xl p-2 px-4 transition-all cursor-pointer"
+  [ngClass]="{
+    'bg-mainColor text-white': !isAdded && !isOutOfStock(),
+    'bg-green-500 text-white': isAdded,
+    'bg-gray-300 text-gray-500': isOutOfStock(),
+    'opacity-50 cursor-not-allowed': isAdded || isOutOfStock()
+  }"
+  [disabled]="isAdded || isOutOfStock()"
+  (click)="addToCart()"
+>
+  {{ isOutOfStock() ? "Out of stock" : (isAdded ? "✔ Added!" : "Add to cart") }}
+</button>
 
     <div (click)="toggleFav()">
       <div

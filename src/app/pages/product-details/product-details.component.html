@@ -151,12 +151,24 @@
         </div>
 
         <div class="flex gap-3 mt-4">
-          <button
+          <!-- <button
             class="bg-mainColor text-cart rounded-lg p-2 px-4 w-3/4 lg:w-1/2 text-lg cursor-pointer"
             (click)="addToCart()"
           >
             add to cart
-          </button>
+          </button> -->
+<button
+  class="text-cart rounded-lg p-2 px-4 w-3/4 lg:w-1/2 text-lg"
+  (click)="addToCart()"
+  [disabled]="isOutOfStock()"
+  [ngClass]="{
+    'bg-gray-400 cursor-not-allowed': isOutOfStock(),
+    'bg-mainColor cursor-pointer': !isOutOfStock()
+  }"
+>
+  {{ isOutOfStock() ? 'Out of stock' : 'Add to cart' }}
+</button>
+
 
           <div
             class="rounded-lg border-2 border-gold w-10 h-10 flex justify-center items-center cursor-pointer"

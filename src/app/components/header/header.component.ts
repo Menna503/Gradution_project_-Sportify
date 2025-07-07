@@ -14,17 +14,16 @@ import { FavoritesService } from '../../services/favorites/favorites.service';
 })
 
 export class HeaderComponent implements OnInit {
-  fname:string |null='' ;
-  email:string |null='';
-  show:string='hidden'
-  ishidden:boolean=false;
-   token:string|null=null;
-   data:any;
- showLoginPrompt: boolean = false;
+  fname: string | null = '';
+  email: string | null = '';
+  show: string = 'hidden';
+  ishidden: boolean = false;
+  token: string | null = null;
+  data: any;
+  showLoginPrompt: boolean = false;
 
- cartItemCount: number = 0;
- favoriteItemCount: number = 0;
-
+  cartItemCount: number = 0;
+  favoriteItemCount: number = 0;
 
 
   constructor(
@@ -71,26 +70,22 @@ export class HeaderComponent implements OnInit {
     return localStorage.getItem('role') === 'admin';
   }
 
-navigateToLogin() {
-  this.router.navigate(['/login']);
-}
-checkLoginBeforeNavigate(category: string, event: Event) {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    event.preventDefault();
-    this.showLoginPrompt = true;
-    return;
+  navigateToLogin() {
+    this.router.navigate(['/login']);
+  }
+  checkLoginBeforeNavigate(category: string, event: Event) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      event.preventDefault();
+      this.showLoginPrompt = true;
+      return;
+    }
+
+    this.show = 'hidden';
   }
 
-  // ✅ مش لازم نستخدم router.navigate هنا
-  this.show = 'hidden';
-}
-
-
-
-goHome() {
+  goHome() {
     console.log('Navigating to home...');
     this.router.navigate(['/home']);
   }
-
 }

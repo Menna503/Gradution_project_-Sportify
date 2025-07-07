@@ -114,19 +114,29 @@ toggleFav() {
     this.router.navigate(['/login']);
   }
   handleImageError(event: Event) {
-    const imgElement = event.target as HTMLImageElement;
-    imgElement.src = 'assets/images/image.png';
-  }
-  onImageClick(event?: MouseEvent) {
-    event?.stopPropagation();
-    event?.preventDefault();
-
-    const token = localStorage.getItem('token');
-    if (!token) {
-      this.showLoginPrompt = true;
-      return;
-    }
-
-    this.router.navigate(['/product', this.data._id]);
-  }
+  const imgElement = event.target as HTMLImageElement;
+  imgElement.src = 'assets/images/image.png'; 
 }
+onImageClick(event?: MouseEvent) {
+  event?.stopPropagation();
+  event?.preventDefault();
+
+  const token = localStorage.getItem('token');
+  if (!token) {
+    this.showLoginPrompt = true;
+    return;
+  }
+
+  this.router.navigate(['/product', this.data._id]);
+}
+
+isOutOfStock(): boolean {
+  return this.data?.stock === 0;
+}
+
+
+
+
+
+}
+
