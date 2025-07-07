@@ -135,7 +135,12 @@ isOutOfStock(): boolean {
 }
 
 
-
+getLowStockMessage(): string | null {
+  if (this.data?.stock > 0 && this.data?.stock <= 5) {
+    return `Hurry! Only ${this.data.stock} left in stock`;
+  }
+  return null;
+}
 
 
 }
