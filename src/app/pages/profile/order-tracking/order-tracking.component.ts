@@ -23,6 +23,8 @@ export class OrderTrackingComponent {
   { id: 3, name: 'Hodes N33', price: 200, size: 'XL', color: 'Red', qty: 2, total: 400 },
   { id: 4, name: 'Hodes N33', price: 200, size: 'XL', color: 'Red', qty: 2, total: 400 },
   { id: 5, name: 'Hodes N33', price: 200, size: 'XL', color: 'Red', qty: 2, total: 400 },
+  { id: 6, name: 'Hodes N33', price: 200, size: 'XL', color: 'Red', qty: 2, total: 400 },
+
   
 ];
 }
