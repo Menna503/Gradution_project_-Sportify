@@ -24,6 +24,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { OrderTrackingComponent } from './pages/profile/order-tracking/order-tracking.component';
 import { AllOrdersComponent } from './pages/profile/all-orders/all-orders.component';
 import { PersonalInfoComponent } from './pages/profile/personal-info/personal-info.component';
+import { OrderDtailsComponent } from './pages/profile/all-orders/order-dtails/order-dtails.component';
 
 export const routes: Routes = [
     {path:'',redirectTo:'home',pathMatch:'full'},
@@ -37,6 +38,7 @@ export const routes: Routes = [
       children: [
         { path: 'order-tracking', component: OrderTrackingComponent },
         { path: 'all-orders', component: AllOrdersComponent },
+        { path: 'all-orders/:id', component: OrderDtailsComponent},
         { path: 'personal-info', component: PersonalInfoComponent },
         { path: '', redirectTo: 'order-tracking', pathMatch: 'full' }
       ]

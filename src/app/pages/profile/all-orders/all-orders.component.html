@@ -1,1 +1,33 @@
-<p>all-orders works!</p>
+<div class="flex flex-col">    
+
+    <div>
+        <div class="overflow-x-auto rounded-box border border-base-content/4 bg-base-100 overflow-y-auto max-h-120">
+  <table class="table">
+    <!-- head -->
+    <thead class="bg-gray-100">
+      <tr class="sticky top-0 bg-gray-100 z-10">
+        <th>Order No.</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>No. of Items</th>
+        <th>Total</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+
+        <tr *ngFor="let order of orders">
+            <th>{{ order.id }}</th>
+            <td>{{ order.date }}</td>
+            <td>{{ order.status }}</td>
+            <td>{{ order.items }}</td>
+            <td>{{ order.total }}</td>
+            <td><button class="btn bg-mainColor" [routerLink]="['/profile/all-orders', order.id]">View</button></td>
+        </tr>
+   
+     
+    </tbody>
+  </table>
+</div>
+    </div>
+</div>

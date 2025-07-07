@@ -1,56 +1,11 @@
-<div class="w-full text-textColor">
-
-    <!-- tracking no -->
-    <div class="pb-4">
-       <span class="font-display font-bold text-xl"> Tracking No.  : </span>
-      <span class="font-inter font-bold text-gold">#32688665</span>
-   </div>
-
-   <hr class="w-full  border border-gray-200">
-
-   <!-- order status and data -->
-   <div class="flex justify-between pr-10 my-5 font-display">
-   
-    <!-- left part -->
-     <div class="flex  flex-col gap-4">
-        <h2 class="font-inter">Your Order is in</h2>
-        <span class="font-bold text-4xl text-gold">Processing</span>
-        <p class="text-ternaryText font-inter">It was placed on 27 Aug 2025 , Sunday</p>
-     </div>
-     
-
-    
-        <!-- line -->
-       <div class="w-px h-auto bg-gray-300 mx-4"></div>
-
-       <!-- right part -->
-     <div class="flex flex-col gap-3">
-     <div *ngFor="let detail of userDetails" class="flex gap-3">
-        <span class="font-bold">{{ detail.label }} : </span>
-        <span class="font-inter">{{ detail.value }}</span>
-    </div>
-   </div>
-   </div>
-  
-   <hr class="w-full  border border-gray-200">
-
-
-   <div class="my-10 flex flex-col gap-15">    
-    <span class="font-bold text-xl font-display">Order Tracking </span>
-    <div class="flex justify-center items-center gap-10">
-        <ul class="steps font-inter font-bold">
-            <li class="step step-neutral w-50">Order Placed</li>
-            <li class="step step-neutral w-50">Processing</li>
-            <li class="step  w-50">Shipped</li>
-            <li class="step w-50">Delivered</li>
-        </ul>
-    </div>
-  </div>
-
-     <hr class="w-full  border border-gray-200">
-
- <div class="my-10 flex flex-col">    
-    <span class="font-bold text-xl font-display">Item List</span>
+<div class=" flex flex-col">
+    <div class="flex justify-between items-center mb-5"> 
+        <div class="flex flex-col gap-2">
+         <span class="text-md font-inter text-gray-700">Order <span class=" font-bold text-gold">#32688665 </span>was placed on <span class=" font-bold text-gold">11/2/2025</span> and is currently <span class=" font-bold text-gold">completed</span></span>
+         <span class="font-inter font-bold text-gold">Address : <span class="text-gray-700 font-normal">1234 Elm Street Los Angeles, CA 90001 United States</span></span>
+        </div> 
+     <button class="btn bg-mainColor font-inter" [routerLink]="['/profile/all-orders']">Back to Orders</button>
+    </div>  
     <div>
       <div class="overflow-x-auto rounded-box border border-base-content/4 bg-base-100 overflow-y-auto max-h-120">
             <table class="table w-full border-collapse" >
@@ -101,6 +56,4 @@
                     </tfoot>
             </table>
             </div>
-    </div>
-  </div>
-</div>
+

@@ -2,13 +2,24 @@
 
 <div class="flex">
   <!-- Sidebar -->
-  <aside class="menu font-display border-r border-gray-300 text-lg ml-5 bg-white text-base-content min-h-screen w-60 p-4">
+  <aside class="menu font-display border-r border-gray-300 text-lg ml-4 bg-white text-base-content min-h-screen w-60 p-4">
     <h1 class="text-3xl font-bold py-3">My Account</h1>
     <hr class="w-full mb-3 border border-gray-200">
     <li routerLinkActive="active-icon"><a [routerLink]="'order-tracking'">Order Tracking</a></li>
     <li routerLinkActive="active-icon"><a [routerLink]="'all-orders'">All Orders</a></li>
     <li routerLinkActive="active-icon"><a [routerLink]="'personal-info'">Personal Info</a></li>
-    <li><a>Log Out</a></li>
+    <li><a class="btn bg-black text-white mt-5" onclick="my_modal_1.showModal()">Log Out</a></li>
+        <dialog id="my_modal_1" class="modal">
+        <div class="modal-box">
+            <p class="py-4">Are You Sure You Want To Log Out</p>
+            <div class="modal-action">
+            <form method="dialog" class="flex gap-2">
+                <button  class="btn btn-error" (click)="logout()">Log Out</button>
+                <button class="btn">Cancel</button>
+            </form>
+            </div>
+        </div>
+        </dialog>
   </aside>
 
   <!--content area -->
