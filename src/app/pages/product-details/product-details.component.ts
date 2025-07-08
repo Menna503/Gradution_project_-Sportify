@@ -160,7 +160,17 @@ export class ProductDetailsComponent implements OnInit {
     }
   }
 
-  selectSize(size: string) {
+selectSize(size: string) {
+if (this.selectedSize === size) {
+  this.selectedSize = null;
+  this.availableStock = this.products?.data?.product?.stock ?? 0;
+  this.originalStock = this.availableStock;
+  this.quantity = 1;
+  localStorage.removeItem(`selectedSize_${this.ID}`);
+  localStorage.removeItem(`quantity_${this.ID}`);
+}
+
+  else {
     this.selectedSize = size;
     this.showSizeMessage = false;
     this.quantity = 1;
@@ -172,29 +182,38 @@ export class ProductDetailsComponent implements OnInit {
     localStorage.setItem(`selectedSize_${this.ID}`, size);
     localStorage.setItem(`quantity_${this.ID}`, this.quantity.toString());
   }
+}
 
-  increaseQuantity() {
-    if (this.originalStock !== null && this.quantity < this.originalStock) {
-      this.quantity++;
-      this.availableStock = (this.availableStock ?? 0) - 1;
-      localStorage.setItem(`quantity_${this.ID}`, this.quantity.toString());
-    } else {
-      alert('Out of stock for this size.');
-    }
+getColorText(): string {
+  const color = this.products?.data?.product?.color;
+
+  if (Array.isArray(color)) {
+   
+    return color.join('');
   }
 
-  decreaseQuantity() {
-    if (this.quantity > 1) {
-      this.quantity--;
-      if (
-        this.availableStock !== null &&
-        this.availableStock < (this.originalStock ?? 0)
-      ) {
-        this.availableStock++;
-      }
-      localStorage.setItem(`quantity_${this.ID}`, this.quantity.toString());
-    }
+  return color ?? '';
+}
+
+
+
+increaseQuantity() {
+  if (this.originalStock !== null && this.quantity < this.originalStock) {
+    this.quantity++;
+    localStorage.setItem(`quantity_${this.ID}`, this.quantity.toString());
+  } else {
+    alert('Out of stock for this size.');
   }
+}
+
+
+decreaseQuantity() {
+  if (this.quantity > 1) {
+    this.quantity--;
+    localStorage.setItem(`quantity_${this.ID}`, this.quantity.toString());
+  }
+}
+
 
   // get NameValid(): boolean {
   //   return this.Form.controls['user'].valid;
