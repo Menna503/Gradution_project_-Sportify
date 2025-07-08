@@ -7,7 +7,7 @@
         <button
             class="rounded-md px-4 py-1 text-md text-ternaryText md:px-10 md:py-1 md:text-xl cursor-pointer"
             (click)="display('pants')" [ngClass]="subCategory === 'pants' ? 'bg-mainColor' : 'bg-secondColor'">trousers</button>
-<div class="sticky z-20000">
+<div class="sticky">
   <app-filter [infoBrand]="infoBrand" (filterChanged)="updateFilters($event)"></app-filter>
 </div>
     </div>
