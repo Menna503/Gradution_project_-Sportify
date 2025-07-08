@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormGroup, FormBuilder, Validators, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/authservice/auth.service';
 import { Router,RouterModule,ActivatedRoute, } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-signin',
@@ -24,7 +25,7 @@ export class SigninComponent {
   submitted = false;  
   errorMsg:string='';
 isLoading = false;
-  constructor(private authService: AuthService ,private router: Router ,private route: ActivatedRoute,) {}
+  constructor(private authService: AuthService ,private router: Router ,private route: ActivatedRoute,  private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -110,10 +111,14 @@ isLoading = false;
         }
       },
       error: (error: any) => {
-        this.isLoading = false; // ⬅️ وقف التحميل
-        console.error('failed', error);
-        this.errorMsg = error.error.message || 'unexpected error';
-      },
+  this.isLoading = false;
+  console.error('failed', error);
+  this.toastr.error(
+    error.error.message || 'Unexpected error',
+    'Login Failed'
+  );
+}
+
     });
   } else {
     console.log('form invalid');
