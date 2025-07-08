@@ -104,78 +104,79 @@
 
     <li class="transition-all duration-300 hover:text-zinc-600 hover:scale-105 hover:underline underline-offset-4">
 
-      <a
-        [routerLink]="token ? ['/men'] : null"
-        routerLinkActive="router-link-active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="checkLoginBeforeNavigate('men', $event)"
-        class="cursor-pointer block"
-      >
-        men
-      </a>
+
+ <a
+  [routerLink]="token ? ['/men'] : null"
+  (click)="checkLoginBeforeNavigate('men', $event)"
+  [ngClass]="{ 'router-link-active': isLinkActive('/men') }"
+  class="cursor-pointer block"
+>
+  Men
+</a>
+
     </li>
 
     <li
       class="transition-all duration-300 hover:text-zinc-600 hover:scale-105 hover:underline underline-offset-4"
     >
       <a
-        [routerLink]="token ? ['/women'] : null"
-        routerLinkActive="router-link-active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="checkLoginBeforeNavigate('men', $event)"
-        class="cursor-pointer block"
-      >
-        Women
-      </a>
+  [routerLink]="token ? ['/women'] : null"
+  (click)="checkLoginBeforeNavigate('women', $event)"
+  [ngClass]="{ 'router-link-active': isLinkActive('/women') }"
+  class="cursor-pointer block"
+>
+  Women
+</a>
+
     </li>
 
     <li class="transition-all duration-300 hover:text-zinc-600 hover:scale-105 hover:underline underline-offset-4">
     <a
-        [routerLink]="token ? ['/equipment'] : null"
-        routerLinkActive="router-link-active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="checkLoginBeforeNavigate('men', $event)"
-        class="cursor-pointer block"
-      >
-        Equipment
-      </a>
+  [routerLink]="token ? ['/equipment'] : null"
+  (click)="checkLoginBeforeNavigate('equipment', $event)"
+  [ngClass]="{ 'router-link-active': isLinkActive('/equipment') }"
+  class="cursor-pointer block"
+>
+  Equipment
+</a>
+
   </li>
    
 
   <li class="transition-all duration-300 hover:text-zinc-600 hover:scale-105 hover:underline underline-offset-4">
-      <a
-        [routerLink]="token ? ['/shoes'] : null"
-        routerLinkActive="router-link-active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="checkLoginBeforeNavigate('men', $event)"
-        class="cursor-pointer block"
-      >
-        Shoes
-      </a>
+     <a
+  [routerLink]="token ? ['/shoes'] : null"
+  (click)="checkLoginBeforeNavigate('shoes', $event)"
+  [ngClass]="{ 'router-link-active': isLinkActive('/shoes') }"
+  class="cursor-pointer block"
+>
+  Shoes
+</a>
+
   </li>
 
   <li class="transition-all duration-300 hover:text-zinc-600 hover:scale-105 hover:underline underline-offset-4">
-     <a
-        [routerLink]="token ? ['/supplements'] : null"
-        routerLinkActive="router-link-active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="checkLoginBeforeNavigate('men', $event)"
-        class="cursor-pointer block"
-      >
-        Supplements
-      </a>
+    <a
+  [routerLink]="token ? ['/supplements'] : null"
+  (click)="checkLoginBeforeNavigate('supplements', $event)"
+  [ngClass]="{ 'router-link-active': isLinkActive('/supplements') }"
+  class="cursor-pointer block"
+>
+  Supplements
+</a>
+
   </li>
 
   <li class="transition-all duration-300 hover:text-zinc-600 hover:scale-105 hover:underline underline-offset-4">
 <a
-        [routerLink]="token ? ['/allProduct'] : null"
-        routerLinkActive="router-link-active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="checkLoginBeforeNavigate('men', $event)"
-        class="cursor-pointer block"
-      >
-        All Products
-      </a>
+  [routerLink]="token ? ['/allProduct'] : null"
+  (click)="checkLoginBeforeNavigate('allProduct', $event)"
+  [ngClass]="{ 'router-link-active': isLinkActive('/allProduct') }"
+  class="cursor-pointer block"
+>
+  All Products
+</a>
+
   </li>
 
     <li

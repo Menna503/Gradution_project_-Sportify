@@ -90,4 +90,12 @@ export class HeaderComponent implements OnInit {
     console.log('Navigating to home...');
     this.router.navigate(['/home']);
   }
+  isLinkActive(path: string): boolean {
+  return this.router.isActive(path, {
+    paths: 'exact',
+    matrixParams: 'ignored',
+    queryParams: 'ignored',
+    fragment: 'ignored'
+  });
+}
 }
