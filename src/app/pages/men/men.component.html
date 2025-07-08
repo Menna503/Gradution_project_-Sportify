@@ -9,9 +9,11 @@
     <button
       class="rounded-md px-4 py-1 text-md text-ternaryText md:px-10 md:py-1 md:text-xl cursor-pointer"
       (click)="display('pants')" [ngClass]="subCategory === 'pants' ? 'bg-mainColor' : 'bg-secondColor'">trousers</button>
-<div class="sticky">
-  <app-filter [infoBrand]="infoBrand" (filterChanged)="updateFilters($event)"></app-filter>
-</div>
+
+    <div class=" flex justify-center items-center ">
+    
+         <app-filter [infoBrand]="infoBrand" (filterChanged)="updateFilters($event)"></app-filter>
+    </div>
   </div>
   <!-- md:min-h-[2550px] lg:min-h-[1900px] -->
   <div class=" ">
