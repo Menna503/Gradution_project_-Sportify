@@ -294,16 +294,26 @@ export class ProductCardComponent implements OnChanges {
     );
   }
 
-  checkUserSpecificOutOfStock() {
-    const stored = localStorage.getItem('userOutOfStockItems');
-    const outOfStockItems = stored ? JSON.parse(stored) : [];
+checkUserSpecificOutOfStock() {
+  const stored = localStorage.getItem('userOutOfStockItems');
+  const outOfStockItems = stored ? JSON.parse(stored) : [];
 
-    console.log('📦 Checking OutOfStock for:', this.data._id);
-    console.log('📦 Stored List:', outOfStockItems);
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  const cartItem = cart.find(
+    (item: any) =>
+      item.product?._id === this.data._id &&
+      (!item.size || item.size === this.selectedSize)
+  );
 
-    this.isOutForUser =
-      this.data?.stock === 0 || outOfStockItems.includes(this.data._id);
-  }
+  const cartQuantity = cartItem?.quantity || 0;
+  const availableStock = this.data?.stock || 0;
+
+  this.isOutForUser =
+    this.data?.stock === 0 ||
+    outOfStockItems.includes(this.data._id) ||
+    cartQuantity >= availableStock;
+}
+
 
   isOutOfStock(): boolean {
     return this.isOutForUser;
