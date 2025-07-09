@@ -1,8 +1,10 @@
+
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../../services/products/cart.service';
 import { ProductService } from '../../services/products/product.service';
+import { ToastrService } from 'ngx-toastr';
 
 export interface Product {
   _id: string;
@@ -13,6 +15,7 @@ export interface Product {
     name: string;
   };
   size_range: string[];
+  stock: number; 
 }
 
 export interface CartProduct {
@@ -46,27 +49,33 @@ export class CartComponent {
 
   constructor(
     private cartService: CartService,
-    private productService: ProductService
+    private productService: ProductService,
+    private toastr: ToastrService
   ) {}
 
   ngOnInit() {
     this.originalSize = this.product.size;
     this.originalQuantity = this.product.quantity;
   }
+
   increaseQuantity() {
-    console.log(this.product.quantity, 88888888);
+if (this.product.quantity >= this.product.product.stock) {
+  this.toastr.warning(
+    `Only ${this.product.product.stock} items available in stock`,
+    'Cannot increase quantity'
+  );
+  return;
+}
 
     this.product.quantity++;
     this.updateQuantity();
   }
 
   decreaseQuantity() {
-    console.log(this.product.quantity, 88888888);
-
     if (this.product.quantity > 1) {
       this.product.quantity--;
+      this.updateQuantity();
     }
-    this.updateQuantity();
   }
 
   onQuantityInputBlur() {
@@ -76,8 +85,6 @@ export class CartComponent {
   }
 
   updateQuantity() {
-    console.log(this.product.quantity, 88888888);
-
     this.cartService
       .updateQuantity(
         this.product.product._id,
@@ -94,7 +101,6 @@ export class CartComponent {
   }
 
   selectSize(newSize: string) {
-    console.log(22222222);
     if (newSize !== this.originalSize) {
       const update = {
         productId: this.product.product._id,

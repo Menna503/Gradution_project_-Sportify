@@ -115,22 +115,47 @@ export class CartService {
     );
   }
 
+  // removeFromCart(productId: string, size: string): Observable<any> {
+  //   const body = { productId, size };
+  //   return this.http
+  //     .request('DELETE', this.apiUrl, {
+  //       headers: this.getHeaders().headers,
+  //       body,
+  //     })
+  //     .pipe(
+  //       tap((res: any) => {
+  //         if (res?.data?.cart) {
+  //           this.updateCartState(res.data.cart);
+  //         }
+  //       }),
+  //       catchError((error) => this.handleError(error))
+  //     );
+  // }
+
   removeFromCart(productId: string, size: string): Observable<any> {
-    const body = { productId, size };
-    return this.http
-      .request('DELETE', this.apiUrl, {
-        headers: this.getHeaders().headers,
-        body,
-      })
-      .pipe(
-        tap((res: any) => {
-          if (res?.data?.cart) {
-            this.updateCartState(res.data.cart);
+  const body = { productId, size };
+  return this.http
+    .request('DELETE', this.apiUrl, {
+      headers: this.getHeaders().headers,
+      body,
+    })
+    .pipe(
+      tap((res: any) => {
+        if (res?.data?.cart) {
+          this.updateCartState(res.data.cart);
+
+          // 🟢 حذف المنتج من قائمة out-of-stock الخاصة بالمستخدم
+          const stored = localStorage.getItem('userOutOfStockItems');
+          if (stored) {
+            const outOfStockItems = JSON.parse(stored);
+            const updatedList = outOfStockItems.filter((id: string) => id !== productId);
+            localStorage.setItem('userOutOfStockItems', JSON.stringify(updatedList));
           }
-        }),
-        catchError((error) => this.handleError(error))
-      );
-  }
+        }
+      }),
+      catchError((error) => this.handleError(error))
+    );
+}
 
   getCartProducts(): Observable<any[]> {
     return this.http.get<any[]>(this.apiUrl, this.getHeaders()).pipe(

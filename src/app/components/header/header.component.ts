@@ -75,19 +75,33 @@ export class HeaderComponent implements OnInit {
   navigateToLogin() {
     this.router.navigate(['/login']);
   }
-  checkLoginBeforeNavigate(category: string, event: Event) {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      event.preventDefault();
-      this.showLoginPrompt = true;
-      return;
-    }
-
-    this.show = 'hidden';
+checkLoginBeforeNavigate(category: string, event: Event) {
+  const token = localStorage.getItem('token');
+  if (!token) {
+    event.preventDefault();
+    this.showLoginPrompt = true;
+    return;
   }
+  this.show = 'hidden'; 
+  this.router.navigate(['/' + category]);
+}
+
 
   goHome() {
     console.log('Navigating to home...');
     this.router.navigate(['/home']);
   }
+  isLinkActive(path: string): boolean {
+  return this.router.isActive(path, {
+    paths: 'exact',
+    matrixParams: 'ignored',
+    queryParams: 'ignored',
+    fragment: 'ignored'
+  });
+}
+navigateTo(path: string) {
+  this.show = 'hidden'; 
+  this.router.navigate([path]);
+}
+
 }

@@ -1,9 +1,9 @@
 <div class="hidden md:block sticky top-0 z-50 bg-white shadow-md">
   <div
-    (click)="goHome()"
+   
     class="text-2xl capitalize flex justify-evenly items-center py-3 cursor-pointer"
   >
-    <div class="flex items-center text-loginText font-[AbhayaLibreMedium]">
+    <div class="flex items-center text-loginText font-[AbhayaLibreMedium]" (click)="goHome()" >
       <p class="text-3xl text-center font-ternaryText">Sportify</p>
       <img src="assets/icons/logo_yellow.svg" alt="" class="mt-2.5" />
     </div>
@@ -104,78 +104,79 @@
 
     <li class="transition-all duration-300 hover:text-zinc-600 hover:scale-105 hover:underline underline-offset-4">
 
-      <a
-        [routerLink]="token ? ['/men'] : null"
-        routerLinkActive="router-link-active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="checkLoginBeforeNavigate('men', $event)"
-        class="cursor-pointer block"
-      >
-        men
-      </a>
+
+ <a
+  [routerLink]="token ? ['/men'] : null"
+  (click)="checkLoginBeforeNavigate('men', $event)"
+  [ngClass]="{ 'router-link-active': isLinkActive('/men') }"
+  class="cursor-pointer block"
+>
+  Men
+</a>
+
     </li>
 
     <li
       class="transition-all duration-300 hover:text-zinc-600 hover:scale-105 hover:underline underline-offset-4"
     >
       <a
-        [routerLink]="token ? ['/women'] : null"
-        routerLinkActive="router-link-active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="checkLoginBeforeNavigate('men', $event)"
-        class="cursor-pointer block"
-      >
-        Women
-      </a>
+  [routerLink]="token ? ['/women'] : null"
+  (click)="checkLoginBeforeNavigate('women', $event)"
+  [ngClass]="{ 'router-link-active': isLinkActive('/women') }"
+  class="cursor-pointer block"
+>
+  Women
+</a>
+
     </li>
 
     <li class="transition-all duration-300 hover:text-zinc-600 hover:scale-105 hover:underline underline-offset-4">
     <a
-        [routerLink]="token ? ['/equipment'] : null"
-        routerLinkActive="router-link-active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="checkLoginBeforeNavigate('men', $event)"
-        class="cursor-pointer block"
-      >
-        Equipment
-      </a>
+  [routerLink]="token ? ['/equipment'] : null"
+  (click)="checkLoginBeforeNavigate('equipment', $event)"
+  [ngClass]="{ 'router-link-active': isLinkActive('/equipment') }"
+  class="cursor-pointer block"
+>
+  Equipment
+</a>
+
   </li>
    
 
   <li class="transition-all duration-300 hover:text-zinc-600 hover:scale-105 hover:underline underline-offset-4">
-      <a
-        [routerLink]="token ? ['/shoes'] : null"
-        routerLinkActive="router-link-active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="checkLoginBeforeNavigate('men', $event)"
-        class="cursor-pointer block"
-      >
-        Shoes
-      </a>
+     <a
+  [routerLink]="token ? ['/shoes'] : null"
+  (click)="checkLoginBeforeNavigate('shoes', $event)"
+  [ngClass]="{ 'router-link-active': isLinkActive('/shoes') }"
+  class="cursor-pointer block"
+>
+  Shoes
+</a>
+
   </li>
 
   <li class="transition-all duration-300 hover:text-zinc-600 hover:scale-105 hover:underline underline-offset-4">
-     <a
-        [routerLink]="token ? ['/supplements'] : null"
-        routerLinkActive="router-link-active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="checkLoginBeforeNavigate('men', $event)"
-        class="cursor-pointer block"
-      >
-        Supplements
-      </a>
+    <a
+  [routerLink]="token ? ['/supplements'] : null"
+  (click)="checkLoginBeforeNavigate('supplements', $event)"
+  [ngClass]="{ 'router-link-active': isLinkActive('/supplements') }"
+  class="cursor-pointer block"
+>
+  Supplements
+</a>
+
   </li>
 
   <li class="transition-all duration-300 hover:text-zinc-600 hover:scale-105 hover:underline underline-offset-4">
 <a
-        [routerLink]="token ? ['/allProduct'] : null"
-        routerLinkActive="router-link-active"
-        [routerLinkActiveOptions]="{ exact: true }"
-        (click)="checkLoginBeforeNavigate('men', $event)"
-        class="cursor-pointer block"
-      >
-        All Products
-      </a>
+  [routerLink]="token ? ['/allProduct'] : null"
+  (click)="checkLoginBeforeNavigate('allProduct', $event)"
+  [ngClass]="{ 'router-link-active': isLinkActive('/allProduct') }"
+  class="cursor-pointer block"
+>
+  All Products
+</a>
+
   </li>
 
     <li
@@ -247,6 +248,8 @@
       <p>men</p>
     </li>
 
+
+
     <li
       class="flex gap-4 hover:bg-mainColor p-2 rounded-md hover:text-black cursor-pointer"
       (click)="checkLoginBeforeNavigate('women', $event)"
@@ -282,39 +285,45 @@
     @if(token){
     
 
-    <li
-      class="flex gap-4 hover:bg-mainColor p-2 rounded-md hover:text-black cursor-pointer items-center"
+ <!-- Favorite -->
+<li
+  class="flex gap-4 hover:bg-mainColor p-2 rounded-md hover:text-black cursor-pointer items-center"
+  (click)="navigateTo('/fav')"
+>
+  <div class="relative flex items-center">
+    <i
+      class="fa-heart text-xl"
+      [ngClass]="{
+        'fa-solid text-red-600': favoriteItemCount > 0,
+        'fa-regular text-black': favoriteItemCount === 0
+      }"
+    ></i>
+    <span
+      *ngIf="favoriteItemCount > 0"
+      class="absolute -top-3 -right-4 bg-mainColor text-textColor text-xs w-5 h-5 flex items-center justify-center rounded-full border border-textColor z-[9999]"
     >
-      <a [routerLink]="['/fav']" class="relative flex items-center">
-        <i
-          class="fa-heart text-xl"
-          [ngClass]="{
-            'fa-solid text-red-600': favoriteItemCount > 0,
-            'fa-regular text-black': favoriteItemCount === 0
-          }"
-        ></i>
-        <span
-          *ngIf="favoriteItemCount > 0"
-          class="absolute -top-3 -right-4 bg-mainColor text-textColor text-xs w-5 h-5 flex items-center justify-center rounded-full border border-textColor z-[9999]"
-        >
-          {{ favoriteItemCount }}
-        </span>
-      </a>
-      <p>Favorite</p>
-    </li>
+      {{ favoriteItemCount }}
+    </span>
+  </div>
+  <p>Favorite</p>
+</li>
 
-    <li class="flex gap-4 hover:bg-mainColor p-2 rounded-md hover:text-black">
-      <a [routerLink]="['/cart']" class="relative">
-        <img src="assets/icons/cart.svg" class="w-[23px]" />
-        <span
-          [hidden]="cartItemCount === 0"
-          class="absolute -top-4 -right-3 w-5 h-5 bg-mainColor text-textColor text-xs flex items-center justify-center rounded-full border border-textColor z-[9999]"
-        >
-          {{ cartItemCount }}
-        </span>
-      </a>
-      <p>Cart</p>
-    </li>
+<!-- Cart -->
+<li
+  class="flex gap-4 hover:bg-mainColor p-2 rounded-md hover:text-black cursor-pointer items-center"
+  (click)="navigateTo('/cart')"
+>
+  <div class="relative">
+    <img src="assets/icons/cart.svg" class="w-[23px]" />
+    <span
+      [hidden]="cartItemCount === 0"
+      class="absolute -top-4 -right-3 w-5 h-5 bg-mainColor text-textColor text-xs flex items-center justify-center rounded-full border border-textColor z-[9999]"
+    >
+      {{ cartItemCount }}
+    </span>
+  </div>
+  <p>Cart</p>
+</li>
 
     <li
       class="flex gap-4 hover:bg-mainColor p-2 rounded-md hover:text-black items-center"

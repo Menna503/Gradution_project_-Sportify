@@ -163,7 +163,17 @@ export class ProductDetailsComponent implements OnInit {
     }
   }
 
-  selectSize(size: string) {
+selectSize(size: string) {
+if (this.selectedSize === size) {
+  this.selectedSize = null;
+  this.availableStock = this.products?.data?.product?.stock ?? 0;
+  this.originalStock = this.availableStock;
+  this.quantity = 1;
+  localStorage.removeItem(`selectedSize_${this.ID}`);
+  localStorage.removeItem(`quantity_${this.ID}`);
+}
+
+  else {
     this.selectedSize = size;
     this.showSizeMessage = false;
     this.quantity = 1;
@@ -175,29 +185,38 @@ export class ProductDetailsComponent implements OnInit {
     localStorage.setItem(`selectedSize_${this.ID}`, size);
     localStorage.setItem(`quantity_${this.ID}`, this.quantity.toString());
   }
+}
 
-  increaseQuantity() {
-    if (this.originalStock !== null && this.quantity < this.originalStock) {
-      this.quantity++;
-      this.availableStock = (this.availableStock ?? 0) - 1;
-      localStorage.setItem(`quantity_${this.ID}`, this.quantity.toString());
-    } else {
-      alert('Out of stock for this size.');
-    }
+getColorText(): string {
+  const color = this.products?.data?.product?.color;
+
+  if (Array.isArray(color)) {
+   
+    return color.join('');
   }
 
-  decreaseQuantity() {
-    if (this.quantity > 1) {
-      this.quantity--;
-      if (
-        this.availableStock !== null &&
-        this.availableStock < (this.originalStock ?? 0)
-      ) {
-        this.availableStock++;
-      }
-      localStorage.setItem(`quantity_${this.ID}`, this.quantity.toString());
-    }
+  return color ?? '';
+}
+
+
+
+increaseQuantity() {
+  if (this.originalStock !== null && this.quantity < this.originalStock) {
+    this.quantity++;
+    localStorage.setItem(`quantity_${this.ID}`, this.quantity.toString());
+  } else {
+    alert('Out of stock for this size.');
   }
+}
+
+
+decreaseQuantity() {
+  if (this.quantity > 1) {
+    this.quantity--;
+    localStorage.setItem(`quantity_${this.ID}`, this.quantity.toString());
+  }
+}
+
 
   // get NameValid(): boolean {
   //   return this.Form.controls['user'].valid;
@@ -211,42 +230,7 @@ export class ProductDetailsComponent implements OnInit {
     return this.Form.controls['rating'].valid;
   }
 
-  //  submit() {
-  //   this.submitted = true;
 
-  //   if (this.Form.valid) {
-  //     const productId = this.ID;
-  //     const newReview = {
-  //       review: this.Form.get('review')?.value,
-  //       rating: this.Form.get('rating')?.value,
-  //     };
-
-  //     this.productService.addNewReview(productId, newReview).subscribe({
-  //       next: (response: any) => {
-  //         this.myEvent.emit(newReview);
-  //         this.reviews.unshift(response.data);
-  //         this.Form.reset();
-  //         this.submitted = false;
-  //         this.loadReviews();
-  //         this.toastr.success('Review added successfully!', 'Success');
-  //       },
-  //       error: (err) => {
-  //         console.error('Review submission error:', err);
-
-  //         const errorMessage =
-  //           err?.error?.message ||  // لو الباك بيرجع { message: "..." }
-  //           err?.error?.error ||    // لو الباك بيرجع { error: "..." }
-  //           err?.error?.errors?.[0]?.msg || // لو في array من الأخطاء
-  //           err?.message ||          // Fallback من Angular
-  //           'Error adding review.';  // رسالة عامة
-
-  //         this.toastr.error(errorMessage, 'Error');
-  //       },
-  //     });
-  //   } else {
-  //     this.Form.markAllAsTouched();
-  //   }
-  // }
   submit() {
     this.submitted = true;
 
@@ -374,19 +358,48 @@ export class ProductDetailsComponent implements OnInit {
     imgElement.src = 'assets/images/image.png';
   }
 
+// isOutOfStock(): boolean {
+//   const product = this.products?.data?.product;
+
+//   // لو المنتج من الملابس أو الأحذية، نستخدم stock_by_size
+//   if (product?.category?.name === 'clothes' || product?.category?.name === 'shoes') {
+//     const stockBySize = product?.stock_by_size;
+//     if (!stockBySize) return false;
+
+//     return Object.values(stockBySize).every(val => Number(val) === 0);
+//   }
+
+//   // لباقي المنتجات (equipment, supplement مثلاً)
+//   return Number(product?.stock) === 0;
+// }
 isOutOfStock(): boolean {
   const product = this.products?.data?.product;
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
-  // لو المنتج من الملابس أو الأحذية، نستخدم stock_by_size
+  if (!product) return false;
+
+  // للملابس والأحذية
   if (product?.category?.name === 'clothes' || product?.category?.name === 'shoes') {
     const stockBySize = product?.stock_by_size;
-    if (!stockBySize) return false;
+    if (!stockBySize || !this.selectedSize) return false;
 
-    return Object.values(stockBySize).every(val => Number(val) === 0);
+    const cartItem = cart.find(
+      (item: any) =>
+        item.product?._id === product._id && item.size === this.selectedSize
+    );
+
+    const cartQuantity = cartItem?.quantity || 0;
+    const availableStock = stockBySize[this.selectedSize];
+
+    return cartQuantity >= availableStock;
   }
 
-  // لباقي المنتجات (equipment, supplement مثلاً)
-  return Number(product?.stock) === 0;
+  // للمكملات أو الأجهزة
+  const cartItem = cart.find((item: any) => item.product?._id === product._id);
+  const cartQuantity = cartItem?.quantity || 0;
+  const availableStock = product?.stock;
+
+  return cartQuantity >= availableStock;
 }
 
 

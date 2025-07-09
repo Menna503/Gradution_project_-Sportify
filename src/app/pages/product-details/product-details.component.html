@@ -54,7 +54,14 @@
             <div class="flex gap-5">
               <span class="lg:w-32">Color</span>
               <span class="lg:w-12">:</span>
-              <span class="font-abhaya text-textcolor">{{products?.data?.product?.color}}</span>
+<!-- <span class="font-abhaya text-textcolor">
+  {{ isArray(products?.data?.product?.color) ? products?.data?.product?.color.join(', ') : products?.data?.product?.color }}
+</span> -->
+<span class="font-abhaya text-textcolor">{{ getColorText() }}</span>
+
+
+
+
             </div>
 
             <ng-container *ngIf="products?.data?.product?.category?.name !== 'equipment'">
@@ -91,19 +98,25 @@
             <span class="lg:w-12">:</span>
 <ng-container *ngIf="availableStock !== null; else noSizeSelected">
 
-  <span *ngIf="availableStock === 0 || quantity >= (originalStock ?? 0)" class="font-abhaya text-red-600">
-    Out of stock for this size.
+  <span *ngIf="availableStock === 0" class="font-abhaya text-red-600">
+    {{
+      products?.data?.product?.category?.name === 'supplement' ||
+      products?.data?.product?.category?.name === 'equipment'
+        ? 'Out of stock'
+        : 'Out of stock for this size.'
+    }}
   </span>
 
-  <span *ngIf="availableStock > 0 && availableStock <= 3 && quantity < (originalStock ?? 0)" class="font-abhaya text-orange-500">
+  <span *ngIf="availableStock > 0 && availableStock <= 3" class="font-abhaya text-orange-500">
     Only {{ availableStock }} left in stock!
   </span>
 
-  <span *ngIf="availableStock > 3 && quantity < (originalStock ?? 0)" class="font-abhaya text-textcolor">
+  <span *ngIf="availableStock > 3" class="font-abhaya text-textcolor">
     {{ availableStock }} in stock
   </span>
 
 </ng-container>
+
 
 <ng-template #noSizeSelected>
   <span class="font-abhaya">
@@ -144,19 +157,12 @@
             </div>
           </div>
 
-          <!-- Out of stock message -->
-          <!-- <span *ngIf="quantity >= (originalStock ?? 0)" class="text-red-600 mt-1 block">
-            Out of stock for this size.
-          </span> -->
+
+
         </div>
 
         <div class="flex gap-3 mt-4">
-          <!-- <button
-            class="bg-mainColor text-cart rounded-lg p-2 px-4 w-3/4 lg:w-1/2 text-lg cursor-pointer"
-            (click)="addToCart()"
-          >
-            add to cart
-          </button> -->
+<!--           
 <button
   class="text-cart rounded-lg p-2 px-4 w-3/4 lg:w-1/2 text-lg"
   (click)="addToCart()"
@@ -167,6 +173,17 @@
   }"
 >
   {{ isOutOfStock() ? 'Out of stock' : 'Add to cart' }}
+</button> -->
+<button
+  class="text-cart rounded-lg p-2 px-4 w-3/4 lg:w-1/2 text-lg"
+  (click)="addToCart()"
+  [disabled]="availableStock === 0 || isOutOfStock()"
+  [ngClass]="{
+    'bg-gray-400 cursor-not-allowed': availableStock === 0 || isOutOfStock(),
+    'bg-mainColor cursor-pointer': !(availableStock === 0 || isOutOfStock())
+  }"
+>
+  {{ availableStock === 0 ? 'Add to cart' : isOutOfStock() ? 'Out of stock' : 'Add to cart' }}
 </button>
 
 

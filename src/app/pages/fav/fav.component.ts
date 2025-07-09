@@ -16,23 +16,38 @@ export class FavComponent {
     favorites:any[]=[];
     isLoading: boolean = false; 
     constructor(private favoritesService:FavoritesService){}
-    ngOnInit(){
-      this.isLoading=true;
-      this.favoritesService.getfavourite().subscribe({
-         next:(data)=>{
+    // ngOnInit(){
+    //   this.isLoading=true;
+    //   this.favoritesService.getfavourite().subscribe({
+    //      next:(data)=>{
   
-          console.log("Fetched Favorites:", data); 
-      this.favorites = data ;
-      console.log(this.favorites);
-      this.isLoading=false;
-         },
-         error:(err)=>{
-          console.log(err);
+    //       console.log("Fetched Favorites:", data); 
+    //   this.favorites = data ;
+    //   console.log(this.favorites);
+    //   this.isLoading=false;
+    //      },
+    //      error:(err)=>{
+    //       console.log(err);
           
-         }
-      });
-    }
+    //      }
+    //   });
+    // }
+ngOnInit() {
+    // نستمع للتحديثات اللحظية للفافوريت
+    this.favoritesService.favoriteItems$.subscribe({
+      next: (items) => {
+        this.favorites = items;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.isLoading = false;
+      }
+    });
 
+    // تحميل الفافوريت في حال الدخول المباشر
+    this.favoritesService.loadFavorites();
+  }
     removeFromFavorites(itemId: string) {
       this.favoritesService.removeFavorite(itemId).subscribe({
         next: () => {

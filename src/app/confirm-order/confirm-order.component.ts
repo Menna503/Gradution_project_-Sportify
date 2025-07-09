@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from '../components/header/header.component';
 import { FooterComponent } from '../components/footer/footer.component';
 import { PaymentService } from '../services/payment.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -28,6 +28,7 @@ export class ConfirmOrderComponent implements OnInit {
   constructor(
     private paymentService: PaymentService,
     private router: Router,
+    private route: ActivatedRoute,
     private toastr: ToastrService,
     private cartService: CartService
   ) {}

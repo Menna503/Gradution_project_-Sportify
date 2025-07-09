@@ -1,5 +1,5 @@
 <div
-  class="bg-secondColor rounded-xl pb-4 capitalize mt-3 mb-3 h-auto w-fit transition-opacity"
+  class="bg-secondColor rounded-xl pb-4  capitalize mt-3 mb-3 h-auto w-fit transition-opacity"
   [ngClass]="{ 'opacity-50': isOutOfStock() }"
 >
   <div class="flex justify-center my-5">
@@ -7,7 +7,7 @@
 <!-- Badge حسب حالة المخزون -->
 <span
   *ngIf="isOutOfStock() || getLowStockMessage()"
-  class="absolute top-2 left-2 text-xs font-semibold px-8 py-3 rounded-full shadow-md z-10"
+  class="absolute top-2 left-2 text-xs font-semibold px-8 py-3 rounded-full shadow-md "
   [ngClass]="{
     'bg-red-600 text-white font-bold': isOutOfStock(),
     'bg-yellow-200 text-yellow-950': !isOutOfStock() && getLowStockMessage()
