@@ -82,7 +82,10 @@ export class ProductDetailsComponent implements OnInit {
   ngOnInit(): void {
     
     this.isLoading = true;
-
+this.router.events.subscribe(() => {
+    this.isOutOfStock(); 
+  });
+  
     this.productService.getProductById(this.ID).subscribe({
       next: (data) => {
         this.products = data;
@@ -200,22 +203,22 @@ getColorText(): string {
 
 
 
-increaseQuantity() {
-  if (this.originalStock !== null && this.quantity < this.originalStock) {
-    this.quantity++;
-    localStorage.setItem(`quantity_${this.ID}`, this.quantity.toString());
-  } else {
-    alert('Out of stock for this size.');
-  }
-}
+// increaseQuantity() {
+//   if (this.originalStock !== null && this.quantity < this.originalStock) {
+//     this.quantity++;
+//     localStorage.setItem(`quantity_${this.ID}`, this.quantity.toString());
+//   } else {
+//     alert('Out of stock for this size.');
+//   }
+// }
 
 
-decreaseQuantity() {
-  if (this.quantity > 1) {
-    this.quantity--;
-    localStorage.setItem(`quantity_${this.ID}`, this.quantity.toString());
-  }
-}
+// decreaseQuantity() {
+//   if (this.quantity > 1) {
+//     this.quantity--;
+//     localStorage.setItem(`quantity_${this.ID}`, this.quantity.toString());
+//   }
+// }
 
 
   // get NameValid(): boolean {
@@ -378,7 +381,7 @@ isOutOfStock(): boolean {
 
   if (!product) return false;
 
-  // للملابس والأحذية
+  // للملابس أو الأحذية
   if (product?.category?.name === 'clothes' || product?.category?.name === 'shoes') {
     const stockBySize = product?.stock_by_size;
     if (!stockBySize || !this.selectedSize) return false;
@@ -394,7 +397,7 @@ isOutOfStock(): boolean {
     return cartQuantity >= availableStock;
   }
 
-  // للمكملات أو الأجهزة
+  // لباقي التصنيفات
   const cartItem = cart.find((item: any) => item.product?._id === product._id);
   const cartQuantity = cartItem?.quantity || 0;
   const availableStock = product?.stock;
@@ -402,5 +405,26 @@ isOutOfStock(): boolean {
   return cartQuantity >= availableStock;
 }
 
+increaseQuantity() {
+  if (this.originalStock !== null && this.quantity < this.originalStock) {
+    this.quantity++;
+    localStorage.setItem(`quantity_${this.ID}`, this.quantity.toString());
+    this.isOutOfStock(); // ✅ تحديث الحالة مباشرة
+  } else {
+    alert('Out of stock for this size.');
+  }
+}
 
+decreaseQuantity() {
+  if (this.quantity > 1) {
+    this.quantity--;
+    localStorage.setItem(`quantity_${this.ID}`, this.quantity.toString());
+    this.isOutOfStock(); // ✅ تحديث الحالة مباشرة
+  }
+}
+
+
+get remainingStock(): number {
+  return (this.originalStock ?? 0) - this.quantity;
+}
 }
