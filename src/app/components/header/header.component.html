@@ -248,6 +248,8 @@
       <p>men</p>
     </li>
 
+
+
     <li
       class="flex gap-4 hover:bg-mainColor p-2 rounded-md hover:text-black cursor-pointer"
       (click)="checkLoginBeforeNavigate('women', $event)"
@@ -283,39 +285,45 @@
     @if(token){
     
 
-    <li
-      class="flex gap-4 hover:bg-mainColor p-2 rounded-md hover:text-black cursor-pointer items-center"
+ <!-- Favorite -->
+<li
+  class="flex gap-4 hover:bg-mainColor p-2 rounded-md hover:text-black cursor-pointer items-center"
+  (click)="navigateTo('/fav')"
+>
+  <div class="relative flex items-center">
+    <i
+      class="fa-heart text-xl"
+      [ngClass]="{
+        'fa-solid text-red-600': favoriteItemCount > 0,
+        'fa-regular text-black': favoriteItemCount === 0
+      }"
+    ></i>
+    <span
+      *ngIf="favoriteItemCount > 0"
+      class="absolute -top-3 -right-4 bg-mainColor text-textColor text-xs w-5 h-5 flex items-center justify-center rounded-full border border-textColor z-[9999]"
     >
-      <a [routerLink]="['/fav']" class="relative flex items-center">
-        <i
-          class="fa-heart text-xl"
-          [ngClass]="{
-            'fa-solid text-red-600': favoriteItemCount > 0,
-            'fa-regular text-black': favoriteItemCount === 0
-          }"
-        ></i>
-        <span
-          *ngIf="favoriteItemCount > 0"
-          class="absolute -top-3 -right-4 bg-mainColor text-textColor text-xs w-5 h-5 flex items-center justify-center rounded-full border border-textColor z-[9999]"
-        >
-          {{ favoriteItemCount }}
-        </span>
-      </a>
-      <p>Favorite</p>
-    </li>
+      {{ favoriteItemCount }}
+    </span>
+  </div>
+  <p>Favorite</p>
+</li>
 
-    <li class="flex gap-4 hover:bg-mainColor p-2 rounded-md hover:text-black">
-      <a [routerLink]="['/cart']" class="relative">
-        <img src="assets/icons/cart.svg" class="w-[23px]" />
-        <span
-          [hidden]="cartItemCount === 0"
-          class="absolute -top-4 -right-3 w-5 h-5 bg-mainColor text-textColor text-xs flex items-center justify-center rounded-full border border-textColor z-[9999]"
-        >
-          {{ cartItemCount }}
-        </span>
-      </a>
-      <p>Cart</p>
-    </li>
+<!-- Cart -->
+<li
+  class="flex gap-4 hover:bg-mainColor p-2 rounded-md hover:text-black cursor-pointer items-center"
+  (click)="navigateTo('/cart')"
+>
+  <div class="relative">
+    <img src="assets/icons/cart.svg" class="w-[23px]" />
+    <span
+      [hidden]="cartItemCount === 0"
+      class="absolute -top-4 -right-3 w-5 h-5 bg-mainColor text-textColor text-xs flex items-center justify-center rounded-full border border-textColor z-[9999]"
+    >
+      {{ cartItemCount }}
+    </span>
+  </div>
+  <p>Cart</p>
+</li>
 
     <li
       class="flex gap-4 hover:bg-mainColor p-2 rounded-md hover:text-black items-center"
