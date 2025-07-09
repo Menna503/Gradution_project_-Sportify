@@ -13,7 +13,7 @@ export class ConfirmOrderGuard implements CanActivate {
     if (address && totalPrice) {
       return true;
     }
-    this.router.navigate(['/checkout']);
+    this.router.navigate(['/payment']);
     return false;
   }
 }

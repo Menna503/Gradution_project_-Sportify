@@ -20,8 +20,8 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
   selectedMethod: 'cash' | 'visa' | null = null;
   cartSub!: Subscription;
   showCashConfirmation = false;
-isPlacingOrder = false;
-isRedirectingToStripe = false;
+  isPlacingOrder = false;
+  isRedirectingToStripe = false;
 
   constructor(
     private cartService: CartService,
@@ -60,7 +60,7 @@ isRedirectingToStripe = false;
   }
 
   payCash(): void {
-     this.isPlacingOrder = true;
+    this.isPlacingOrder = true;
     const address = this.getShippingDetailsFromLocalStorage();
     if (!address) {
       this.toastr.error('Missing shipping details.', 'Error');
@@ -98,11 +98,11 @@ isRedirectingToStripe = false;
       this.router.navigate(['/']);
       return;
     }
-  this.isRedirectingToStripe = true;
+    this.isRedirectingToStripe = true;
 
     this.paymentService.checkout('visa').subscribe({
       next: (res) => {
-              this.isRedirectingToStripe = false;
+        this.isRedirectingToStripe = false;
 
         if (res.checkoutSessionUrl) {
           window.location.href = res.checkoutSessionUrl;
@@ -113,7 +113,7 @@ isRedirectingToStripe = false;
       },
       error: (err) => {
         console.error(err);
-              this.isRedirectingToStripe = false;
+        this.isRedirectingToStripe = false;
 
         this.toastr.error('Stripe Checkout failed.', 'Error');
         this.router.navigate(['/decline-order']);
