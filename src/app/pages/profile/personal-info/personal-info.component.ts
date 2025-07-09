@@ -40,13 +40,32 @@ constructor(private userService: UserService ,private authService : AuthService)
   });
 }
 
- updateUserInfo() {
-  
+updateUserInfo() {
   const userId = localStorage.getItem('UserId') || '';
-  this.authService.updateUser(userId, this.editData).subscribe(
+  const updatedFields: any = {};
+  if (
+    this.editData.firstName &&  this.editData.firstName !== this.userData.firstName) {
+    updatedFields.firstName = this.editData.firstName;
+  }
+  if (
+    this.editData.lastName && this.editData.lastName !== this.userData.lastName) {
+    updatedFields.lastName = this.editData.lastName;
+  }
+
+  if (Object.keys(updatedFields).length === 0) {
+    this.showToast('Please update at least one field.', 'error');
+    return;
+  }
+
+  this.authService.updateUser(userId, updatedFields).subscribe(
     () => {
-      this.userData.firstName = this.editData.firstName;
-      this.userData.lastName = this.editData.lastName;
+      if (updatedFields.firstName) {
+        this.userData.firstName = updatedFields.firstName;
+      }
+      if (updatedFields.lastName) {
+        this.userData.lastName = updatedFields.lastName;
+      }
+
       this.showToast('Updated Successfully!', 'success');
     },
     (error) => {
@@ -55,6 +74,21 @@ constructor(private userService: UserService ,private authService : AuthService)
   );
 }
 
+isSomethingChanged(): boolean {
+  return (
+    (this.editData.firstName && this.editData.firstName !== this.userData.firstName) ||
+    (this.editData.lastName && this.editData.lastName !== this.userData.lastName)
+  );
+}
+
+hasInvalidInputs(): boolean {
+  const pattern = /^[A-Za-z][A-Za-z0-9\-]{2,29}$/;
+
+  return (
+    (this.editData.firstName && !pattern.test(this.editData.firstName)) ||
+    (this.editData.lastName && !pattern.test(this.editData.lastName))
+  );
+}
 showToast(message: string, type: 'success' | 'error') {
   this.toastMessage = message;
   this.toastType = type;
