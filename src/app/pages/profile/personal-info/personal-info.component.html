@@ -5,32 +5,17 @@
         <p class="font-bold text-gold mb-5 text-2xl">Personal Information :</p>
         <div class="flex gap-2 mt-3 items-center">
             <p class="font-bold text-xl">Name : </p>
-            <p class="text-lg">Ghada Elsayed Abo Elfetouh</p>
+            <p class="text-lg">{{ userData?.firstName}} {{ userData?.lastName }}</p>
         </div>
            <div class="flex gap-2 mt-3 items-center">
             <p class="font-bold text-xl">Email : </p>
-            <p class="text-lg"> ghadaelsayedgmail.com </p>
+            <p class="text-lg"> {{ userData?.email }} </p>
         </div>
     </div>
-   
+
+<form (ngSubmit)="updateUserInfo()" #formRef="ngForm">   
 <div class="font-inter flex flex-col gap-3">  
 <p class="font-bold text-gold  mb-5 text-2xl">Edit Personal Information :</p>
-<label class="input validator"> 
-  <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-    <g
-      stroke-linejoin="round"
-      stroke-linecap="round"
-      stroke-width="2.5"
-      fill="none"
-      stroke="currentColor"
-    >
-      <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-    </g>
-  </svg>
-  <input type="email" placeholder="mail@site.com" required />
-</label>
-<div class="validator-hint hidden">Enter valid email address</div>
 
 <label class="input validator">
   <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -53,14 +38,56 @@
     minlength="3"
     maxlength="30"
     title="Only letters, numbers or dash"
+    [(ngModel)]="editData.firstName"
+     name="firstName"
+    #firstNameModel="ngModel"
   />
 </label>
-<button class="btn bg-mainColor">Update</button>
-<p class="validator-hint">
-  Must be 3 to 30 characters
-  <br />containing only letters, numbers or dash
+
+<label class="input validator">
+  <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+    <g
+      stroke-linejoin="round"
+      stroke-linecap="round"
+      stroke-width="2.5"
+      fill="none"
+      stroke="currentColor"
+    >
+      <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+      <circle cx="12" cy="7" r="4"></circle>
+    </g>
+  </svg>
+  <input
+    type="text"
+    required
+    placeholder="Last Name"
+    pattern="[A-Za-z][A-Za-z0-9\-]*"
+    minlength="3"
+    maxlength="30"
+    title="Only letters, numbers or dash"
+    [(ngModel)]="editData.lastName"
+     name="lastName"
+     #lastNameModel="ngModel"
+   
+  />
+</label>
+<button class="btn bg-mainColor" [disabled]="formRef.invalid">Update</button>
+<p class="validator-hint text-sm text-red-600" *ngIf="(firstNameModel.invalid && firstNameModel.touched) || (lastNameModel.invalid && lastNameModel.touched)">
+  Name Must be 3 to 30 characters<br />
+  containing only letters, numbers or dash
 </p>
 
 </div>
+</form>
 </div> 
 </div>
+
+<div
+  *ngIf="toastMessage"
+  class="toast toast-top toast-end z-50"
+>
+  <div class="alert" [ngClass]="toastType === 'success' ? 'alert-success' : 'alert-error'">
+    <span>{{ toastMessage }}</span>
+  </div>
+</div>
+
