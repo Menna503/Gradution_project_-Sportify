@@ -33,6 +33,8 @@ export class ConfirmPaymentComponent {
   }
   successPayment() {
     this.router.navigate(['/home']);
-    // this.router.navigate(['/orders']);
+  }
+    TrackMyOrder() {
+    this.router.navigate(['/profile']);
   }
 }
