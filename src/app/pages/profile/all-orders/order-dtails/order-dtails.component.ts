@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { UserService } from '../../../../services/auth/user.service';
 
 @Component({
   selector: 'app-order-dtails',
@@ -9,19 +10,22 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
   styleUrl: './order-dtails.component.css'
 })
 export class OrderDtailsComponent {
-constructor(private route: ActivatedRoute) {}
+  userData: any = {};
+  orderId: string | null = null;
+  selectedOrder: any;
 
-ngOnInit() {
-  const orderId = this.route.snapshot.paramMap.get('id');
-  console.log('Order ID:', orderId);
+  constructor(private userService: UserService, private route: ActivatedRoute) {}
 
-}
-  rows = [
-  { id: 1, name: 'Hodes N33', price: 200, size: 'XL', color: 'Red', qty: 2, total: 400 },
-  { id: 2, name: 'Hodes N33', price: 200, size: 'XL', color: 'Red', qty: 2, total: 400 },
-  { id: 3, name: 'Hodes N33', price: 200, size: 'XL', color: 'Red', qty: 2, total: 400 },
-  { id: 4, name: 'Hodes N33', price: 200, size: 'XL', color: 'Red', qty: 2, total: 400 },
-  { id: 5, name: 'Hodes N33', price: 200, size: 'XL', color: 'Red', qty: 2, total: 400 },
-  
-];
+   ngOnInit(): void {
+    this.orderId = this.route.snapshot.paramMap.get('id');
+
+    this.userService.getUserData().subscribe((data: any) => {
+      if (data) {
+        this.userData = data;
+
+        this.selectedOrder = this.userData.orders.find((order: any) => order._id === this.orderId);
+        console.log('Selected Order:', this.selectedOrder);
+      }
+    });
+  }
 }
