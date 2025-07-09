@@ -59,6 +59,8 @@
     <a [routerLink]="'/profile'" routerLinkActive="active-icon" >
       <i class="fa-regular fa-user relative cursor-pointer text-ternaryText"></i>
     </a>
+
+ 
     </div>
 
 
@@ -282,6 +284,13 @@
       <p>supplements</p>
     </li>
 
+     <li
+      class="flex gap-4 hover:bg-mainColor p-2 rounded-md hover:text-black cursor-pointer"
+      (click)="checkLoginBeforeNavigate('profile', $event)"
+    >
+      <img src="assets/icons/profile.svg" />
+      <p>Profile</p>
+    </li>
     @if(token){
     
 

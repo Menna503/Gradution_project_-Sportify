@@ -14,6 +14,7 @@ import { UserService } from '../../../services/auth/user.service';
 export class OrderTrackingComponent {
  orders: any[] = [];
  userData: any = {}; 
+ isLoading = true;
  statusSteps = ['placed', 'processing', 'shipped', 'delivered'];
 
  constructor(private orderService: OrderService ,private userService: UserService) {}
@@ -24,9 +25,11 @@ ngOnInit(): void {
     next: (res) => {
       console.log('Full Orders Response:', res);
       this.orders =  res.orders; 
+      this.isLoading = false;
     },
     error: (err) => {
       console.error('Failed to load orders', err);
+      this.isLoading = false;
     },
   });
 

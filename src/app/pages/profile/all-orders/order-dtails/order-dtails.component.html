@@ -1,7 +1,7 @@
 <div class=" flex flex-col">
     <div class="flex justify-between items-center mb-5"> 
         <div class="flex flex-col gap-2">
-         <span class="text-md font-inter text-gray-700">Order <span class=" font-bold text-gold">#{{ selectedOrder?.orderNumber }} </span>was placed on <span class=" font-bold text-gold">{{ selectedOrder?.createdAt }}</span> and is currently <span class=" font-bold text-gold">{{ selectedOrder?.status }}</span></span>
+         <span class="text-md font-inter text-gray-700">Order <span class=" font-bold text-gold">#{{ selectedOrder?.orderNumber }} </span>was placed on <span class=" font-bold text-gold">{{ selectedOrder?.createdAt | date: 'medium' }}</span> and is currently <span class=" font-bold text-gold">{{ selectedOrder?.status }}</span></span>
          <span class="font-inter font-bold text-gold">Address : <span class="text-gray-700 font-normal">{{ selectedOrder?.shippingAddress.address }} , {{ selectedOrder?.shippingAddress.city }} , {{ selectedOrder?.shippingAddress.country }}  </span></span>
         </div> 
      <button class="btn bg-mainColor font-inter" [routerLink]="['/profile/all-orders']">Back to Orders</button>
