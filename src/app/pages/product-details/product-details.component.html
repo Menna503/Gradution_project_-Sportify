@@ -162,7 +162,7 @@
         </div>
 
         <div class="flex gap-3 mt-4">
-          
+<!--           
 <button
   class="text-cart rounded-lg p-2 px-4 w-3/4 lg:w-1/2 text-lg"
   (click)="addToCart()"
@@ -173,6 +173,17 @@
   }"
 >
   {{ isOutOfStock() ? 'Out of stock' : 'Add to cart' }}
+</button> -->
+<button
+  class="text-cart rounded-lg p-2 px-4 w-3/4 lg:w-1/2 text-lg"
+  (click)="addToCart()"
+  [disabled]="availableStock === 0 || isOutOfStock()"
+  [ngClass]="{
+    'bg-gray-400 cursor-not-allowed': availableStock === 0 || isOutOfStock(),
+    'bg-mainColor cursor-pointer': !(availableStock === 0 || isOutOfStock())
+  }"
+>
+  {{ availableStock === 0 ? 'Add to cart' : isOutOfStock() ? 'Out of stock' : 'Add to cart' }}
 </button>
 
 

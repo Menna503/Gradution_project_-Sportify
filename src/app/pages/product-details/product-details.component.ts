@@ -230,42 +230,7 @@ decreaseQuantity() {
     return this.Form.controls['rating'].valid;
   }
 
-  //  submit() {
-  //   this.submitted = true;
 
-  //   if (this.Form.valid) {
-  //     const productId = this.ID;
-  //     const newReview = {
-  //       review: this.Form.get('review')?.value,
-  //       rating: this.Form.get('rating')?.value,
-  //     };
-
-  //     this.productService.addNewReview(productId, newReview).subscribe({
-  //       next: (response: any) => {
-  //         this.myEvent.emit(newReview);
-  //         this.reviews.unshift(response.data);
-  //         this.Form.reset();
-  //         this.submitted = false;
-  //         this.loadReviews();
-  //         this.toastr.success('Review added successfully!', 'Success');
-  //       },
-  //       error: (err) => {
-  //         console.error('Review submission error:', err);
-
-  //         const errorMessage =
-  //           err?.error?.message ||  // لو الباك بيرجع { message: "..." }
-  //           err?.error?.error ||    // لو الباك بيرجع { error: "..." }
-  //           err?.error?.errors?.[0]?.msg || // لو في array من الأخطاء
-  //           err?.message ||          // Fallback من Angular
-  //           'Error adding review.';  // رسالة عامة
-
-  //         this.toastr.error(errorMessage, 'Error');
-  //       },
-  //     });
-  //   } else {
-  //     this.Form.markAllAsTouched();
-  //   }
-  // }
   submit() {
     this.submitted = true;
 
