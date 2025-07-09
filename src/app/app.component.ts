@@ -55,6 +55,7 @@ import { ProductDetailsComponent } from './pages/product-details/product-details
     CommonModule,
   ],
 
+
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })

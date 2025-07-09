@@ -16,12 +16,12 @@
     </thead>
     <tbody>
 
-        <tr *ngFor="let order of orders">
-            <th>{{ order.id }}</th>
-            <td>{{ order.date }}</td>
+        <tr *ngFor="let order of userData?.orders">
+            <th>#{{ order.orderNumber }}</th>
+            <td>{{ order.createdAt }}</td>
             <td>{{ order.status }}</td>
-            <td>{{ order.items }}</td>
-            <td>{{ order.total }}</td>
+            <td>{{ order.items.length }}</td>
+            <td>{{ order.totalPrice }}</td>
             <td><button class="btn bg-mainColor" [routerLink]="['/profile/all-orders', order.id]">View</button></td>
         </tr>
    
