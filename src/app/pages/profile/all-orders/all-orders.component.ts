@@ -11,12 +11,14 @@ import { UserService } from '../../../services/auth/user.service';
 })
 export class AllOrdersComponent {
  userData: any = {}; 
+ isLoading = true;
 constructor(private userService: UserService) {}
 
 ngOnInit(): void {
     this.userService.getUserData().subscribe((data :any) => {
       if (data) {
         this.userData = data;
+        this.isLoading = false;
       }
     });
   }

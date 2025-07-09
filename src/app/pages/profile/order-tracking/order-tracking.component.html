@@ -1,4 +1,9 @@
-@if (orders[0].items.length > 0) {
+@if (isLoading) {
+  <div class="w-full h-96 flex items-center justify-center">
+    <span class="loading loading-spinner loading-lg text-black"></span>
+  </div>
+}
+@else if (orders[0]?.items?.length > 0) {
 <div class="w-full text-textColor">
 
     <!-- tracking no -->
@@ -16,7 +21,7 @@
      <div class="flex  flex-col gap-4">
         <h2 class="font-inter">Your Order is in</h2>
         <span class="font-bold text-4xl text-gold">{{orders[0]?.status}}</span>
-        <p class="text-ternaryText font-inter">It was placed on {{orders[0]?.updatedAt}}</p>
+        <p class="text-ternaryText font-inter">It was placed on {{orders[0]?.updatedAt | date: 'medium'}}</p>
      </div>
      
 
