@@ -1,8 +1,8 @@
 <div class=" flex flex-col">
     <div class="flex justify-between items-center mb-5"> 
         <div class="flex flex-col gap-2">
-         <span class="text-md font-inter text-gray-700">Order <span class=" font-bold text-gold">#32688665 </span>was placed on <span class=" font-bold text-gold">11/2/2025</span> and is currently <span class=" font-bold text-gold">completed</span></span>
-         <span class="font-inter font-bold text-gold">Address : <span class="text-gray-700 font-normal">1234 Elm Street Los Angeles, CA 90001 United States</span></span>
+         <span class="text-md font-inter text-gray-700">Order <span class=" font-bold text-gold">#{{ selectedOrder?.orderNumber }} </span>was placed on <span class=" font-bold text-gold">{{ selectedOrder?.createdAt }}</span> and is currently <span class=" font-bold text-gold">{{ selectedOrder?.status }}</span></span>
+         <span class="font-inter font-bold text-gold">Address : <span class="text-gray-700 font-normal">{{ selectedOrder?.shippingAddress.address }} , {{ selectedOrder?.shippingAddress.city }} , {{ selectedOrder?.shippingAddress.country }}  </span></span>
         </div> 
      <button class="btn bg-mainColor font-inter" [routerLink]="['/profile/all-orders']">Back to Orders</button>
     </div>  
@@ -17,29 +17,27 @@
                     <th>Item Name</th>
                     <th>Base Price</th>
                     <th>Size</th>
-                    <th>Color</th>
                     <th>Quantity</th>
                     <th>Total</th>
                 </tr>
                 </thead>
         
      <tbody class=" overflow-y-auto w-full">
-        <tr *ngFor="let row of rows; let i = index" >
+        <tr *ngFor="let row of selectedOrder?.items; let i = index" >
             <th class="font-normal">{{ i + 1 }}</th>
             <td>
             <div class="mask mask-squircle h-12 w-12">
                 <img
-                src="https://img.daisyui.com/images/profile/demo/2@94.webp"
+                 [src]="row.product.imageUrl"
                 alt="Avatar"
                 />
             </div>
             </td>
-            <td>{{ row.name }}</td>
-            <td>$ {{ row.price }}</td>
+            <td>{{ row.product.name }}</td>
+            <td>$ {{ row.product.price }}</td>
             <td>{{ row.size }}</td>
-            <td>{{ row.color }}</td>
-            <td>{{ row.qty }}</td>
-            <td>$ {{ row.total }}</td>
+            <td>{{ row.quantity }}</td>
+            <td>$ {{ row.totalPriceItems }}</td>
         </tr>
         </tbody>
                  <tfoot class="bg-gray-100">
@@ -50,8 +48,7 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th></th>
-                        <th>$2300.00</th>
+                        <th>${{selectedOrder?.totalPrice}}</th>
                     </tr>
                     </tfoot>
             </table>

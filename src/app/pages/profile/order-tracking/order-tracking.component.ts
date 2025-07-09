@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { OrderService } from '../../../services/order.service';
+import { UserService } from '../../../services/auth/user.service';
 
 @Component({
   selector: 'app-order-tracking',
@@ -10,21 +12,35 @@ import { Component } from '@angular/core';
   ]
 })
 export class OrderTrackingComponent {
-  userDetails = [
-    { label: 'Name', value: 'Ghada Elsayed Abo Elfetouh' },
-    { label: 'Phone', value: '+20 123 456 789' },
-    { label: 'Address', value: 'Cairo, Egypt' },
-    { label: 'Email', value: 'ghada@example.com' },
-     { label: 'Payment Method', value: 'Visa Card' }
-  ];
-  rows = [
-  { id: 1, name: 'Hodes N33', price: 200, size: 'XL', color: 'Red', qty: 2, total: 400 },
-  { id: 2, name: 'Hodes N33', price: 200, size: 'XL', color: 'Red', qty: 2, total: 400 },
-  { id: 3, name: 'Hodes N33', price: 200, size: 'XL', color: 'Red', qty: 2, total: 400 },
-  { id: 4, name: 'Hodes N33', price: 200, size: 'XL', color: 'Red', qty: 2, total: 400 },
-  { id: 5, name: 'Hodes N33', price: 200, size: 'XL', color: 'Red', qty: 2, total: 400 },
-  { id: 6, name: 'Hodes N33', price: 200, size: 'XL', color: 'Red', qty: 2, total: 400 },
+ orders: any[] = [];
+ userData: any = {}; 
+ statusSteps = ['placed', 'processing', 'shipped', 'delivered'];
 
-  
-];
+ constructor(private orderService: OrderService ,private userService: UserService) {}
+ 
+
+ngOnInit(): void {
+  this.orderService.getMyOrders().subscribe({
+    next: (res) => {
+      console.log('Full Orders Response:', res);
+      this.orders =  res.orders; 
+    },
+    error: (err) => {
+      console.error('Failed to load orders', err);
+    },
+  });
+
+   this.userService.getUserData().subscribe((data :any) => {
+      if (data) {
+        this.userData = data;
+      }
+    });
 }
+
+  getStepClass(currentStatus: string, step: string): string {
+    const currentIndex = this.statusSteps.indexOf(currentStatus?.toLowerCase());
+    const stepIndex = this.statusSteps.indexOf(step.toLowerCase());
+    return stepIndex <= currentIndex ? 'step step-neutral w-50' : 'step w-50';
+  }
+}
+
