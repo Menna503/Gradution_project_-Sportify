@@ -358,19 +358,48 @@ decreaseQuantity() {
     imgElement.src = 'assets/images/image.png';
   }
 
+// isOutOfStock(): boolean {
+//   const product = this.products?.data?.product;
+
+//   // لو المنتج من الملابس أو الأحذية، نستخدم stock_by_size
+//   if (product?.category?.name === 'clothes' || product?.category?.name === 'shoes') {
+//     const stockBySize = product?.stock_by_size;
+//     if (!stockBySize) return false;
+
+//     return Object.values(stockBySize).every(val => Number(val) === 0);
+//   }
+
+//   // لباقي المنتجات (equipment, supplement مثلاً)
+//   return Number(product?.stock) === 0;
+// }
 isOutOfStock(): boolean {
   const product = this.products?.data?.product;
+  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
-  // لو المنتج من الملابس أو الأحذية، نستخدم stock_by_size
+  if (!product) return false;
+
+  // للملابس والأحذية
   if (product?.category?.name === 'clothes' || product?.category?.name === 'shoes') {
     const stockBySize = product?.stock_by_size;
-    if (!stockBySize) return false;
+    if (!stockBySize || !this.selectedSize) return false;
 
-    return Object.values(stockBySize).every(val => Number(val) === 0);
+    const cartItem = cart.find(
+      (item: any) =>
+        item.product?._id === product._id && item.size === this.selectedSize
+    );
+
+    const cartQuantity = cartItem?.quantity || 0;
+    const availableStock = stockBySize[this.selectedSize];
+
+    return cartQuantity >= availableStock;
   }
 
-  // لباقي المنتجات (equipment, supplement مثلاً)
-  return Number(product?.stock) === 0;
+  // للمكملات أو الأجهزة
+  const cartItem = cart.find((item: any) => item.product?._id === product._id);
+  const cartQuantity = cartItem?.quantity || 0;
+  const availableStock = product?.stock;
+
+  return cartQuantity >= availableStock;
 }
 
 
