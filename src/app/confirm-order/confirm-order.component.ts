@@ -66,13 +66,13 @@ export class ConfirmOrderComponent implements OnInit {
           this.isSessionValid = true;
           localStorage.setItem('stripePaid', 'true');
         } else {
-          this.toastr.error('Stripe payment incomplete.', 'Error');
+          this.toastr.error('Payment incomplete.', 'Error');
           this.router.navigate(['/decline-order']);
         }
         this.isLoading = false;
       },
       error: () => {
-        this.toastr.error('Stripe session invalid.', 'Error');
+        this.toastr.error('Payment information invalid.', 'Error');
         this.router.navigate(['/decline-order']);
         this.isLoading = false;
       },
