@@ -100,7 +100,10 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
         error: (err) => {
           console.error(err);
           console.log(err);
-          this.toastr.error(`Order failed ${err.message}`, 'Error');
+          this.toastr.error(
+            `Your Order Couldn't be placed.Please try again`,
+            'Error'
+          );
           this.showCashConfirmation = false;
           this.isPlacingOrder = false;
           this.router.navigate(['/decline-order']);
@@ -132,13 +135,16 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
         if (res.checkoutSessionUrl) {
           window.location.href = res.checkoutSessionUrl;
         } else {
-          this.toastr.error('Failed to initiate Stripe Checkout.', 'Error');
+          this.toastr.error('Failed to initiate Checkout.', 'Error');
           this.router.navigate(['/decline-order']);
         }
       },
       error: () => {
         this.isRedirectingToStripe = false;
-        this.toastr.error('Stripe Checkout failed.', 'Error');
+        this.toastr.error(
+          `Your Order Couldn't be placed.Please try again`,
+          'Error'
+        );
         this.router.navigate(['/decline-order']);
       },
     });
