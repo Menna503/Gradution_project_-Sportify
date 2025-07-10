@@ -98,36 +98,33 @@
 //   this.isOutForUser = this.data?.stock === 0 || outOfStockItems.includes(this.data._id);
 // }
 
+// addToCart() {
+//   const token = localStorage.getItem('token');
+//   if (!token) {
+//     this.showLoginPrompt = true; // 👈 يظهر المودال
+//     return;
+//   }
 
-  // addToCart() {
-  //   const token = localStorage.getItem('token');
-  //   if (!token) {
-  //     this.showLoginPrompt = true; // 👈 يظهر المودال
-  //     return;
-  //   }
-
-  //   this.cartService.addToCart(this.data._id, 1, this.selectedSize).subscribe(
-  //     (response) => {
-  //       console.log('Product added successfully:', response);
-  //       this.isAdded = true;
-  //       setTimeout(() => {
-  //         this.isAdded = false;
-  //       }, 1000);
-  //     },
-  //     (error) => {
-  //       console.error('Error adding product:', error);
-  //     }
-  //   );
-  // }
-
-
+//   this.cartService.addToCart(this.data._id, 1, this.selectedSize).subscribe(
+//     (response) => {
+//       console.log('Product added successfully:', response);
+//       this.isAdded = true;
+//       setTimeout(() => {
+//         this.isAdded = false;
+//       }, 1000);
+//     },
+//     (error) => {
+//       console.error('Error adding product:', error);
+//     }
+//   );
+// }
 
 //   navigateToLogin() {
 //     this.router.navigate(['/login']);
 //   }
 //   handleImageError(event: Event) {
 //   const imgElement = event.target as HTMLImageElement;
-//   imgElement.src = 'assets/images/image.png'; 
+//   imgElement.src = 'assets/images/image.png';
 // }
 // onImageClick(event?: MouseEvent) {
 //   event?.stopPropagation();
@@ -146,17 +143,12 @@
 //   return this.data?.stock === 0;
 // }
 
-
-
-
-
 // getLowStockMessage(): string | null {
 //   if (this.data?.stock > 0 && this.data?.stock <= 5) {
 //     return `Hurry! Only ${this.data.stock} left in stock`;
 //   }
 //   return null;
 // }
-
 
 // }
 
@@ -275,13 +267,13 @@ export class ProductCardComponent implements OnChanges {
               JSON.stringify(outOfStockItems)
             );
           }
-
-          // 🟢 تحديث الحالة
           this.isOutForUser = false;
           setTimeout(() => {
-            this.isOutForUser = true;
+            this.checkUserSpecificOutOfStock();
             this.cdr.detectChanges();
           }, 0);
+        } else {
+          this.checkUserSpecificOutOfStock();
         }
 
         setTimeout(() => {
@@ -294,35 +286,130 @@ export class ProductCardComponent implements OnChanges {
     );
   }
 
-checkUserSpecificOutOfStock() {
-  const stored = localStorage.getItem('userOutOfStockItems');
-  const outOfStockItems = stored ? JSON.parse(stored) : [];
+  // checkUserSpecificOutOfStock() {
+  //   const stored = localStorage.getItem('userOutOfStockItems');
+  //   const outOfStockItems = stored ? JSON.parse(stored) : [];
 
-  const cart = JSON.parse(localStorage.getItem('cart') || '[]');
-  const cartItem = cart.find(
-    (item: any) =>
-      item.product?._id === this.data._id &&
-      (!item.size || item.size === this.selectedSize)
-  );
+  //   const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  //   const cartItem = cart.find(
+  //     (item: any) =>
+  //       item.product?._id === this.data._id &&
+  //       (!item.size || item.size === this.selectedSize)
+  //   );
 
-  const cartQuantity = cartItem?.quantity || 0;
-  const availableStock = this.data?.stock || 0;
+  //   const cartQuantity = cartItem?.quantity || 0;
+  //   const availableStock = this.data?.stock || 0;
 
-  this.isOutForUser =
-    this.data?.stock === 0 ||
-    outOfStockItems.includes(this.data._id) ||
-    cartQuantity >= availableStock;
-}
+  //   this.isOutForUser =
+  //     this.data?.stock === 0 ||
+  //     outOfStockItems.includes(this.data._id) ||
+  //     cartQuantity >= availableStock;
+  // }
+  checkUserSpecificOutOfStock() {
+    const stored = localStorage.getItem('userOutOfStockItems');
+    const outOfStockItems = stored ? JSON.parse(stored) : [];
 
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const category = this.data?.category?.name;
+    const isSizeBased = ['men', 'women', 'shoes'].includes(category);
+
+    let isOut = false;
+
+    if (isSizeBased) {
+      const stockBySize = this.data?.stock_by_size || {};
+      const sizeKeys = Object.keys(stockBySize);
+
+      const allSizesOut = sizeKeys.every((size) => {
+        const available = stockBySize[size] || 0;
+
+        const cartItem = cart.find(
+          (item: any) =>
+            item.product?._id === this.data._id && item.size === size
+        );
+        const cartQty = cartItem?.quantity || 0;
+
+        return available === 0 || cartQty >= available;
+      });
+
+      isOut = allSizesOut;
+    } else {
+      const availableStock = this.data?.stock || 0;
+      const cartItem = cart.find(
+        (item: any) => item.product?._id === this.data._id
+      );
+      const cartQuantity = cartItem?.quantity || 0;
+
+      isOut = availableStock === 0 || cartQuantity >= availableStock;
+    }
+
+    this.isOutForUser = isOut || outOfStockItems.includes(this.data._id);
+  }
 
   isOutOfStock(): boolean {
     return this.isOutForUser;
   }
 
+  // getLowStockMessage(): string | null {
+  //   if (this.data?.stock > 0 && this.data?.stock <= 5 && !this.isOutForUser) {
+  //     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+  //     const cartItem = cart.find(
+  //       (item: any) =>
+  //         item.product?._id === this.data._id &&
+  //         (!item.size || item.size === this.selectedSize)
+  //     );
+
+  //     const cartQuantity = cartItem?.quantity || 0;
+
+  //     if (cartQuantity < this.data.stock) {
+  //       const remaining = this.data.stock - cartQuantity;
+  //       return `Hurry! Only ${remaining} left in stock`;
+  //     }
+  //   }
+  //   return null;
+  // }
   getLowStockMessage(): string | null {
-    if (this.data?.stock > 0 && this.data?.stock <= 5) {
-      return `Hurry! Only ${this.data.stock} left in stock`;
+    const category = this.data?.category?.name;
+    const isSizeBased = ['men', 'women', 'shoes'].includes(category);
+
+    let availableStock = 0;
+    let cartQuantity = 0;
+
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+
+    if (isSizeBased && this.selectedSize) {
+      const stockBySize = this.data?.stock_by_size || {};
+      availableStock = stockBySize[this.selectedSize] || 0;
+
+      const cartItem = cart.find(
+        (item: any) =>
+          item.product?._id === this.data._id && item.size === this.selectedSize
+      );
+      cartQuantity = cartItem?.quantity || 0;
+
+      const tempQuantity = +(
+        localStorage.getItem(`quantity_${this.data._id}`) ?? '0'
+      );
+      cartQuantity += tempQuantity;
+    } else {
+      availableStock = this.data?.stock || 0;
+
+      const cartItem = cart.find(
+        (item: any) => item.product?._id === this.data._id
+      );
+      cartQuantity = cartItem?.quantity || 0;
+
+      const tempQuantity = +(
+        localStorage.getItem(`quantity_${this.data._id}`) ?? '0'
+      );
+      cartQuantity += tempQuantity;
     }
+
+    const remaining = availableStock - cartQuantity;
+
+    if (remaining > 0 && remaining <= 5 && !this.isOutForUser) {
+      return `Hurry! Only ${remaining} left in stock`;
+    }
+
     return null;
   }
 
