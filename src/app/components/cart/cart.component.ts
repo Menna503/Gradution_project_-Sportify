@@ -1,4 +1,3 @@
-
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -15,7 +14,8 @@ export interface Product {
     name: string;
   };
   size_range: string[];
-  stock: number; 
+  stock: number;
+  stock_by_size: Record<string, number>;
 }
 
 export interface CartProduct {
@@ -57,17 +57,42 @@ export class CartComponent {
     this.originalSize = this.product.size;
     this.originalQuantity = this.product.quantity;
   }
+  get availableStock(): number {
+    const product = this.product.product;
+    const size = this.product.size;
+
+    if (product.stock_by_size && size && product.stock_by_size[size] != null) {
+      return product.stock_by_size[size];
+    }
+
+    return product.stock ?? 0;
+  }
 
   increaseQuantity() {
-if (this.product.quantity >= this.product.product.stock) {
-  this.toastr.warning(
-    `Only ${this.product.product.stock} items available in stock`,
-    'Cannot increase quantity'
-  );
-  return;
-}
+    if (this.product.quantity >= this.availableStock) {
+      this.toastr.warning(
+        `Only ${this.availableStock} item(s) available in stock.`,
+        'Cannot increase quantity'
+      );
+      return;
+    }
 
     this.product.quantity++;
+    this.updateQuantity();
+  }
+  onInputChange(value: number) {
+    if (value < 1) {
+      this.product.quantity = 1;
+    } else if (value > this.availableStock) {
+      this.product.quantity = this.availableStock;
+      this.toastr.warning(
+        `Only ${this.availableStock} item(s) available in stock.`,
+        'Cannot exceed stock'
+      );
+    } else {
+      this.product.quantity = value;
+    }
+
     this.updateQuantity();
   }
 
