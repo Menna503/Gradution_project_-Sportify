@@ -59,55 +59,16 @@ export class SigninComponent {
   signUpWithGoogle() {
     window.location.href = 'http://localhost:8000/auth/google';
   }
-  // onSubmit() {
 
-  //   this.submitted=true
-  //   if(this.signInPage.valid){
-
-  //     console.log("done");
-  //     this.authService.signin(this.signInPage.value).subscribe({
-  //       next:(response:any)=>{
-  //         if(response.token){
-
-  //           this.authService.saveTokenRole(response.token , response.data.user.role,response.data.user._id ,response.data.user.firstName ,response.data.user.email);
-  //           console.log("user authenticated successfully");
-  //           console.log(response);
-  //           console.log(response.data.user);
-
-  //           if (response.data.user.role === 'admin') {
-  //             this.router.navigate(['/admin'], { replaceUrl: true });
-  //           } else if (response.data.user.role === 'customer') {
-  //             this.router.navigate(['/home'], { replaceUrl: true });
-  //           } else {
-  //             this.router.navigate(['/login']), { replaceUrl: true };
-  //           }
-  //           console.log(response.token , response.data.user.role);
-
-  //         }else{
-  //           console.log("invalid||missung token");
-  //         }
-  //       },
-  //       error:(error:any)=>{
-  //         console.error("faild" , error);
-
-  //       this.errorMsg= error.error.message || "unexpected error";
-
-  //       }
-  //     });
-
-  //   }else{
-  //     console.log("empty");
-  //   }
-  // }
   onSubmit() {
     this.submitted = true;
 
     if (this.signInPage.valid) {
-      this.isLoading = true; // ⬅️ يبدأ التحميل
+      this.isLoading = true; 
 
       this.authService.signin(this.signInPage.value).subscribe({
         next: (response: any) => {
-          this.isLoading = false; // ⬅️ وقف التحميل
+          this.isLoading = false; 
 
           if (response.token) {
             this.authService.saveTokenRole(
