@@ -102,7 +102,7 @@
               <img [src]="row.product.imageUrl" alt="Product" />
             </div>
           </td>
-          <td class="px-2 sm:px-4 whitespace-nowrap">{{ row.product.name }}</td>
+          <td class="px-2 sm:px-4 whitespace-nowrap">  {{ row.product.name.slice(0, 20) }}{{ row.product.name.length > 20 ? '...' : '' }}</td>
           <td class="px-2 sm:px-4">$ {{ row.product.price }}</td>
           <td class="px-2 sm:px-4">{{ row.size || "--"}} </td>
           <td class="px-2 sm:px-4">{{ row.quantity }}</td>

@@ -47,14 +47,14 @@
               <img [src]="row.product.imageUrl" alt="Avatar" />
             </div>
           </td>
-          <td>{{ row.product.name }}</td>
+          <td>{{ row.product.name.slice(0, 20) }}{{ row.product.name.length > 20 ? '...' : '' }}</td>
           <td class="hidden sm:table-cell">$ {{ row.product.price }}</td>
           <td class="hidden md:table-cell">{{ row.size }}</td>
           <td>{{ row.quantity }}</td>
           <td>$ {{ row.totalPriceItems }}</td>
         </tr>
       </tbody>
-
+    
       <!-- Footer -->
       <tfoot class="bg-gray-100">
         <tr class="sticky bottom-0 bg-gray-100 z-10">
