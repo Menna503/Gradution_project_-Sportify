@@ -12,7 +12,7 @@ export class GuardService {
   canActivate():boolean{
      const role =this.authService.getRole();
      if(!role){
-      this.router.navigate(['/login'])
+      this.router.navigate(['/login'], { replaceUrl: true }); // ✅ هنا
       return false;
      }
 
@@ -21,7 +21,7 @@ export class GuardService {
     } else if (role === 'customer') {
       return true;
     } else {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/login'], { replaceUrl: true }); // ✅ وهنا برضو
       return false;
     }
 
