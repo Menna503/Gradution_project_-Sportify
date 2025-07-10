@@ -1,0 +1,45 @@
+@if (isLoading) {
+  <div class="w-full h-96 flex items-center justify-center">
+    <span class="loading loading-spinner loading-lg text-black"></span>
+  </div>
+}
+@else if (userData.orders?.length > 0) {
+<div class="flex flex-col">    
+
+    <div>
+        <div class="overflow-x-auto rounded-box border border-base-content/4 bg-base-100 overflow-y-auto max-h-120">
+  <table class="table">
+    <!-- head -->
+    <thead class="bg-gray-100">
+      <tr class="sticky top-0 bg-gray-100 z-10">
+        <th>Order No.</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>No. of Items</th>
+        <th>Total</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+
+        <tr *ngFor="let order of userData?.orders">
+            <th>#{{ order.orderNumber }}</th>
+           <td>{{ order.createdAt | date: 'medium' }}</td>
+            <td>{{ order.status }}</td>
+            <td>{{ order.items.length }}</td>
+            <td>${{ order.totalPrice }}</td>
+            <td><button class="btn bg-mainColor" [routerLink]="['/profile/all-orders', order.id]">View</button></td>
+        </tr>
+   
+     
+    </tbody>
+  </table>
+</div>
+    </div>
+</div>
+}
+@else {
+        <div class="w-full h-96 flex m-auto items-center justify-center">
+          <p class="text-center font-bold text-4xl text-secandaryText">No Orders to Track</p>
+        </div>
+      }

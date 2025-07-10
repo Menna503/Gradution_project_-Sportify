@@ -1,0 +1,130 @@
+@if (isLoading) {
+  <div class="w-full h-96 flex items-center justify-center">
+    <span class="loading loading-spinner loading-lg text-black"></span>
+  </div>
+}
+@else if (orders[0]?.items?.length > 0) {
+<div class="w-full text-textColor">
+
+    <!-- tracking no -->
+    <div class="pb-4">
+       <span class="font-display font-bold text-xl"> Tracking No.  : </span>
+      <span class="font-inter font-bold text-gold">#{{orders[0]?.orderNumber}}</span>
+   </div>
+
+   <hr class="w-full  border border-gray-200">
+
+   <!-- order status and data -->
+   <div class="flex justify-between pr-10 my-5 font-display">
+   
+    <!-- left part -->
+     <div class="flex  flex-col gap-4">
+        <h2 class="font-inter">Your Order is in</h2>
+        <span class="font-bold text-4xl text-gold">{{orders[0]?.status}}</span>
+        <p class="text-ternaryText font-inter">It was placed on {{orders[0]?.updatedAt | date: 'medium'}}</p>
+     </div>
+     
+
+    
+        <!-- line -->
+       <div class="w-px h-auto bg-gray-300 mx-4"></div>
+
+       <!-- right part -->
+     <div class="flex flex-col gap-3">
+     <div  class="flex gap-3">
+        <span class="font-bold">Name : </span>
+        <span class="font-inter">{{ userData?.firstName}} {{ userData?.lastName }}</span>
+    </div>
+    <div  class="flex gap-3">
+        <span class="font-bold">Phone : </span>
+        <span class="font-inter">{{orders[0]?.shippingAddress.phone}} </span>
+    </div>
+    <div  class="flex gap-3">
+        <span class="font-bold">Address : </span>
+        <span class="font-inter">{{orders[0]?.shippingAddress.address}} , {{orders[0]?.shippingAddress.country}}</span>
+    </div>
+    <div  class="flex gap-3">
+        <span class="font-bold">Email : </span>
+        <span class="font-inter">{{ userData?.email }} </span>
+    </div>
+    <div  class="flex gap-3">
+        <span class="font-bold">Payment Method : </span>
+        <span class="font-inter">{{orders[0]?.paymentMethod}}</span>
+    </div>
+   </div>
+   </div>
+  
+   <hr class="w-full  border border-gray-200">
+
+
+   <div class="my-10 flex flex-col gap-15">    
+    <span class="font-bold text-xl font-display">Order Tracking </span>
+    <div class="flex justify-center items-center gap-10">
+        <ul class="steps font-inter font-bold">
+      <li [ngClass]="getStepClass(orders[0].status, 'placed')">Order Placed</li>
+      <li [ngClass]="getStepClass(orders[0].status, 'processing')">Processing</li>
+      <li [ngClass]="getStepClass(orders[0].status, 'shipped')">Shipped</li>
+      <li [ngClass]="getStepClass(orders[0].status, 'delivered')">Delivered</li>
+        </ul>
+    </div>
+  </div>
+
+     <hr class="w-full  border border-gray-200">
+
+ <div class="my-10 flex flex-col">    
+    <span class="font-bold text-xl font-display">Item List</span>
+    <div>
+      <div class="overflow-x-auto rounded-box border border-base-content/4 bg-base-100 overflow-y-auto max-h-120">
+            <table class="table w-full border-collapse" >
+                <!-- head -->
+                <thead class="bg-gray-100">
+                <tr class="sticky top-0 bg-gray-100 z-10">
+                    <th >No.</th>
+                    <th>Item Image</th>
+                    <th>Item Name</th>
+                    <th>Base Price</th>
+                    <th>Size</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+                </thead>
+        
+     <tbody class=" overflow-y-auto w-full">
+        <tr *ngFor="let row of orders[0].items; let i = index" >
+            <th class="font-normal">{{ i + 1 }}</th>
+            <td>
+            <div class="mask mask-squircle h-12 w-12">
+                <img
+                [src]="row.product.imageUrl"
+                alt="Avatar"
+                />
+            </div>
+            </td>
+            <td>{{ row.product.name }}</td>
+            <td>$ {{ row.product.price }}</td>
+            <td>{{ row.size }}</td>
+            <td>{{ row.quantity }}</td>
+            <td>$ {{ row.totalPriceItems }}</td>
+        </tr>
+        </tbody>
+                 <tfoot class="bg-gray-100">
+                    <tr class="sticky bottom-0 bg-gray-100 z-10" >
+                        <th>Total</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>$2300.00</th>
+                    </tr>
+                    </tfoot>
+            </table>
+            </div>
+    </div>
+  </div>
+</div>}
+@else {
+        <div class="w-full h-96 flex m-auto items-center justify-center">
+          <p class="text-center font-bold text-4xl text-secandaryText">No Orders to Track</p>
+        </div>
+      }

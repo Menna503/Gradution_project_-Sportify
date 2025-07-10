@@ -22,7 +22,6 @@ export class AuthService {
   signout():void{
     localStorage.clear();
     this.router.navigate(['/home']);
-
   }
   
 
@@ -53,5 +52,10 @@ export class AuthService {
      getuser(userId: string) {
       const Token =this.getToken();
       return this.http.get(`${this.baseUrl}/${userId}`,{headers:{'Authorization':`Bearer ${Token}`}})
+    }
+
+    updateUser(userId: string, updatedData: any) {
+      const headers = this.getAuthHeaders();
+      return this.http.patch(`${this.baseUrl}/${userId}`, updatedData, { headers });
     }
 }

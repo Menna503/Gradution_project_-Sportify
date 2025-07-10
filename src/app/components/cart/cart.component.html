@@ -1,4 +1,4 @@
-<div class="flex items-center border-b last:border-b-0 pb-4 border-productBorder">
+<!-- <div class="flex items-center border-b last:border-b-0 pb-4 border-productBorder">
     <div class="w-fit bg-gradient-to-b from-[#F0F0F0] via-[#FCFBFB] to-[#F0F0F0] rounded-md flex justify-center items-center">
         <img [src]="product.product.imageUrl" class="rounded-md w-30 h-30" [alt]="product.product.name">
     </div>                
@@ -32,6 +32,80 @@
 
       <div class="flex items-center gap-5 ml-auto text-cart">
         <div class="flex items-center gap-1 cursor-pointer" (click)="deleteProduct()">
+          <i class="fa-solid fa-trash text-lg text-[#EC4967]"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> -->
+<div
+  class="flex items-center border-b last:border-b-0 pb-4 border-productBorder"
+>
+  <!-- Product Image -->
+  <div
+    class="w-fit bg-gradient-to-b from-[#F0F0F0] via-[#FCFBFB] to-[#F0F0F0] rounded-md flex justify-center items-center"
+  >
+    <img
+      [src]="product.product.imageUrl"
+      [alt]="product.product.name"
+      class="rounded-md w-30 h-30"
+    />
+  </div>
+
+  <!-- Product Info & Controls -->
+  <div class="ml-4 flex-1">
+    <!-- Product Name -->
+    <h2 class="text-lg font-bold font-inria text-cart">
+      {{ product.product.name }} 
+    </h2>
+
+    <!-- Product Price -->
+    <p class="text-gray-600 font-inria">${{ product.product.price }}</p>
+
+    <!-- Size & Quantity Controls -->
+    <div class="flex gap-2 mt-5 flex-wrap">
+      <!-- Size Selector (Hidden for supplements & equipment) -->
+      <select
+        *ngIf="
+          product.product.category?.name !== 'supplement' &&
+          product.product.category?.name !== 'equipment'
+        "
+        [(ngModel)]="product.size"
+        (ngModelChange)="selectSize($event)"
+        class="border px-3 h-8 rounded text-gray-700 border-inputColor w-full md:w-auto"
+      >
+        <option *ngFor="let size of product.product.size_range" [value]="size">
+          {{ size }}
+        </option>
+      </select>
+
+      <!-- Quantity Controls -->
+      <div
+        class="w-full md:w-20 h-8 border text-center rounded flex justify-between items-center p-2 border-inputColor text-textColor"
+      >
+        <i
+          class="fa-solid fa-minus text-xs cursor-pointer"
+          (click)="decreaseQuantity()"
+        ></i>
+        <input
+          type="number"
+          [(ngModel)]="product.quantity"
+          min="1"
+          class="w-10 text-center outline-none no-arrows"
+        />
+
+        <i
+          class="fa-solid fa-plus text-xs cursor-pointer"
+          (click)="increaseQuantity()"
+        ></i>
+      </div>
+
+      <!-- Delete Button -->
+      <div class="flex items-center gap-5 ml-auto text-cart">
+        <div
+          class="flex items-center gap-1 cursor-pointer"
+          (click)="deleteProduct()"
+        >
           <i class="fa-solid fa-trash text-lg text-[#EC4967]"></i>
         </div>
       </div>

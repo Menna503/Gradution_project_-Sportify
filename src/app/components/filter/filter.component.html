@@ -1,10 +1,11 @@
-<div class="relative">
+<div class="sticky top-24 z-10 ">
     <button 
-        class="rounded-md bg-secondColor px-7 py-1  text-md md:px-10 md:py-1 md:text-xl text-ternaryText flex justify-center gap-2 cursor-pointer"
+        class="rounded-md  bg-secondColor px-7 py-1  text-md md:px-10 md:py-1 md:text-xl text-ternaryText flex justify-center gap-2 cursor-pointer"
         (click)="toggelFilter()"><img src="assets/icons/filter.svg">
         <p>filter</p>
     </button>
-    <div class="  bg-white shadow-2xl shadow-gray-500 rounded-xl md:w-[180%] w-[200%] absolute right-0 md:left-0  p-2 "
+    <div 
+    class="  bg-white shadow-2xl shadow-gray-500 rounded-xl md:w-[180%] w-[200%] absolute right-0 md:left-0  p-2 "
         [ngClass]="{'hidden': isHidden}">
         <p class="text-md text-[#3B3B3B] ml-2">filter</p>
         <div class="flex  gap-2 text-[#3B3B3B]">
@@ -23,16 +24,24 @@
             <button
                 class="rounded-xl  text-[#3B3B3B]  hover:bg-[#F0F4BC] w-[100%] text-start p-2 flex justify-between items-center "
               (click)="priceChecked(1,'hight')">
-                <p>hight to low</p>
+                <p>high to low</p>
                 <div [ngClass]="{'hidden':priceindex!==1}"><i class="fa-solid fa-check"></i></div>
             </button>
             <button
                 class="rounded-xl  text-[#3B3B3B]  hover:bg-[#F0F4BC] w-[100%] text-start p-2 flex justify-between items-center"
                 (click)="priceChecked(2,'low')"
                 >
-                <p>low to hight</p>
+                <p>low to high</p>
                 <div [ngClass]="{'hidden': priceindex!==2}"><i class="fa-solid fa-check"></i></div>
             </button>
+            <div class="flex justify-end mt-3">
+  <!-- <button 
+    class="bg-gray-200 text-[#3B3B3B] px-4 py-1 rounded-md hover:bg-gray-300 transition-all duration-300"
+    (click)="resetFilters()">
+    Reset Filters
+  </button> -->
+</div>
+
         </div>
 
 

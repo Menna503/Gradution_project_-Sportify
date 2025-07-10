@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-categories',
   imports: [CommonModule, RouterModule],
@@ -23,8 +23,9 @@ export class CategoriesComponent {
   itemsPerPage: number = this.calculateItemsPerPage(); // Calculate items per page based on screen size
   disableLeft: boolean = true;
 disableRight: boolean = false;
+showLoginPrompt = false;
 
-  constructor() {
+  constructor(private router: Router) {
     this.updateDisplayedCategories();
     window.addEventListener('resize', () => {
       this.itemsPerPage = this.calculateItemsPerPage();
@@ -77,4 +78,19 @@ disableRight: boolean = false;
     }
     
   }
+navigateToCategory(path: string) {
+  console.log('Navigating to:', path); 
+  const token = localStorage.getItem('token');
+  if (token) {
+    this.router.navigate([path]);
+  } else {
+    this.showLoginPrompt = true;
+  }
+}
+
+
+navigateToLogin() {
+  this.showLoginPrompt = false;
+  this.router.navigate(['/login']);
+}
 }
