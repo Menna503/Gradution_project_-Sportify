@@ -40,4 +40,12 @@ export class PaymentService {
       headers: this.getHeader(),
     });
   }
+  getStripeSessionStatus(sessionId: string): Observable<any> {
+    return this.http.get(
+      `${this.apiUrl}/stripe-session-status?session_id=${sessionId}`,
+      {
+        headers: this.getHeader(),
+      }
+    );
+  }
 }
