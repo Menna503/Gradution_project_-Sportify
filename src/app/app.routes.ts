@@ -44,7 +44,7 @@ export const routes: Routes = [
         { path: 'all-orders', component: AllOrdersComponent , canActivate: [GuardService]  },
         { path: 'all-orders/:id', component: OrderDtailsComponent , canActivate: [GuardService] },
         { path: 'personal-info', component: PersonalInfoComponent , canActivate: [GuardService]  },
-        { path: '', redirectTo: 'order-tracking', pathMatch: 'full' , canActivate: [GuardService]  }
+        { path: '', redirectTo: 'order-tracking', pathMatch: 'full'  }
       ]
     },
   { path: 'products', component: AllProductsComponent  , canActivate: [GuardService] },
