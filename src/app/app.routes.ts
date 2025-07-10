@@ -40,17 +40,17 @@ export const routes: Routes = [
       component: ProfileComponent,
       canActivate: [GuardService],
       children: [
-        { path: 'order-tracking', component: OrderTrackingComponent },
-        { path: 'all-orders', component: AllOrdersComponent },
-        { path: 'all-orders/:id', component: OrderDtailsComponent},
-        { path: 'personal-info', component: PersonalInfoComponent },
-        { path: '', redirectTo: 'order-tracking', pathMatch: 'full' }
+        { path: 'order-tracking', component: OrderTrackingComponent , canActivate: [GuardService]  },
+        { path: 'all-orders', component: AllOrdersComponent , canActivate: [GuardService]  },
+        { path: 'all-orders/:id', component: OrderDtailsComponent , canActivate: [GuardService] },
+        { path: 'personal-info', component: PersonalInfoComponent , canActivate: [GuardService]  },
+        { path: '', redirectTo: 'order-tracking', pathMatch: 'full' , canActivate: [GuardService]  }
       ]
     },
-  { path: 'products', component: AllProductsComponent },
-  { path: 'men', component: MenComponent },
-  { path: 'women', component: WomenComponent },
-  { path: 'equipment', component: EquipmentComponent },
+  { path: 'products', component: AllProductsComponent  , canActivate: [GuardService] },
+  { path: 'men', component: MenComponent , canActivate: [GuardService]  },
+  { path: 'women', component: WomenComponent , canActivate: [GuardService]  },
+  { path: 'equipment', component: EquipmentComponent , canActivate: [GuardService]  },
   {
     path: 'product/:id',
     component: ProductDetailsComponent,
@@ -66,24 +66,24 @@ export const routes: Routes = [
     component: CheckOutComponent,
     canActivate: [GuardService],
   },
-  { path: 'shoes', component: ShoesComponent },
-  { path: 'allProduct', component: AllProductsComponent },
-  { path: 'supplements', component: SuplementsComponent },
+  { path: 'shoes', component: ShoesComponent  ,canActivate: [GuardService]},
+  { path: 'allProduct', component: AllProductsComponent ,canActivate: [GuardService] },
+  { path: 'supplements', component: SuplementsComponent ,canActivate: [GuardService] },
   { path: 'cart', component: CartPageComponent, canActivate: [GuardService] },
-  { path: 'confirmPayment', component: ConfirmPaymentComponent },
+  { path: 'confirmPayment', component: ConfirmPaymentComponent , canActivate: [GuardService]},
   {
     path: 'confirm-order',
     component: ConfirmOrderComponent,
     canActivate: [ConfirmOrderGuard],
   },
-  { path: 'decline-order', component: FailedPaymentComponent },
+  { path: 'decline-order', component: FailedPaymentComponent , canActivate: [GuardService] },
   {
     path: 'admin',
     component: AdminAddProductComponent,
     canActivate: [GuardService],
   },
-  { path: 'admin-edit/:id', component: AdminEditProductComponent },
-  { path: 'error', component: ErrorComponent },
+  { path: 'admin-edit/:id', component: AdminEditProductComponent , canActivate: [GuardService]},
+  { path: 'error', component: ErrorComponent , canActivate: [GuardService] },
   {
     path: 'login',
     component: SigninComponent,
@@ -94,7 +94,7 @@ export const routes: Routes = [
     component: SignupPageComponent,
     canActivate: [NoAuthGuard],
   },
-   { path: '**', component: NotFoundComponent }  
+   { path: '**', component: NotFoundComponent , canActivate: [GuardService] }  
 
 ];
 @NgModule({
