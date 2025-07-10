@@ -7,10 +7,17 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../services/products/cart.service';
+import { LoadingComponent } from '../components/loading/loading.component';
 
 @Component({
   selector: 'app-confirm-order',
-  imports: [HeaderComponent, FooterComponent, CommonModule, FormsModule],
+  imports: [
+    HeaderComponent,
+    FooterComponent,
+    CommonModule,
+    FormsModule,
+    LoadingComponent,
+  ],
   templateUrl: './confirm-order.component.html',
   styleUrl: './confirm-order.component.css',
 })
@@ -24,6 +31,9 @@ export class ConfirmOrderComponent implements OnInit {
   } | null;
 
   showFinalConfirmation = false;
+  isSessionValid = false;
+  sessionId = '';
+  isLoading = true;
 
   constructor(
     private paymentService: PaymentService,
@@ -34,16 +44,39 @@ export class ConfirmOrderComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.sessionId = this.route.snapshot.queryParamMap.get('session_id') || '';
     const storedAddress = localStorage.getItem('shippingAddress');
-    if (storedAddress) {
-      this.address = JSON.parse(storedAddress);
-    } else {
-      this.toastr.error(
-        'Missing shipping details. Redirecting to checkout.',
-        'Error'
-      );
-      this.router.navigate(['/checkout']);
+
+    if (this.sessionId) {
+      localStorage.setItem('session_id', this.sessionId);
     }
+
+    if (!storedAddress || !this.sessionId) {
+      this.toastr.error('Missing payment method or address.', 'Error');
+      this.isLoading = false;
+      this.router.navigate(['/payment']);
+      return;
+    }
+
+    this.address = JSON.parse(storedAddress);
+
+    this.paymentService.getStripeSessionStatus(this.sessionId).subscribe({
+      next: (res) => {
+        if (res.status === 'paid') {
+          this.isSessionValid = true;
+          localStorage.setItem('stripePaid', 'true');
+        } else {
+          this.toastr.error('Stripe payment incomplete.', 'Error');
+          this.router.navigate(['/decline-order']);
+        }
+        this.isLoading = false;
+      },
+      error: () => {
+        this.toastr.error('Stripe session invalid.', 'Error');
+        this.router.navigate(['/decline-order']);
+        this.isLoading = false;
+      },
+    });
   }
 
   confirmPayment(): void {
@@ -51,8 +84,8 @@ export class ConfirmOrderComponent implements OnInit {
   }
 
   placeOrder(): void {
-    if (!this.address) {
-      this.toastr.error('Shipping address missing.', 'Error');
+    if (!this.address || !this.isSessionValid) {
+      this.toastr.error('Cannot confirm unpaid order.', 'Error');
       return;
     }
 
@@ -66,16 +99,13 @@ export class ConfirmOrderComponent implements OnInit {
           this.toastr.success('Order placed successfully!', 'Success');
           localStorage.removeItem('totalPrice');
           localStorage.removeItem('cart');
+          localStorage.removeItem('stripePaid');
+          localStorage.removeItem('shippingAddress');
           this.cartService.setCart([]);
-          // this.router.navigate(['/orders']);
           this.router.navigate(['/confirmPayment']);
         },
-        error: (err) => {
-          console.error(err);
-          this.toastr.error(
-            'Failed to confirm order. Please contact support.',
-            'Error'
-          );
+        error: () => {
+          this.toastr.error('Order confirmation failed.', 'Error');
         },
       });
   }

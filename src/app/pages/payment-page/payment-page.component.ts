@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { CartService } from '../../services/products/cart.service';
 import { PaymentService } from '../../services/payment.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FooterComponent } from '../../components/footer/footer.component';
 import { HeaderComponent } from '../../components/header/header.component';
 import { CommonModule } from '@angular/common';
@@ -28,10 +28,16 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
     private paymentService: PaymentService,
     private cdr: ChangeDetectorRef,
     public router: Router,
+    public route: ActivatedRoute,
     private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
+    const sessionId = this.route.snapshot.queryParamMap.get('session_id');
+    if (sessionId) {
+      localStorage.setItem('stripeSessionId', sessionId);
+    }
+
     this.cartSub = this.cartService.cartItems$.subscribe((updatedCart) => {
       this.cartProducts = updatedCart;
       this.cdr.detectChanges();
@@ -60,6 +66,15 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
   }
 
   payCash(): void {
+    if (localStorage.getItem('stripePaid') === 'true') {
+      this.toastr.warning('You already completed payment. Confirm the order.');
+
+      this.router.navigate([`/confirm-order`], {
+        queryParams: { session_id: localStorage.getItem('session_id') },
+      });
+
+      return;
+    }
     this.isPlacingOrder = true;
     const address = this.getShippingDetailsFromLocalStorage();
     if (!address) {
@@ -98,12 +113,22 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
       this.router.navigate(['/']);
       return;
     }
+
+    if (localStorage.getItem('stripePaid') === 'true') {
+      this.toastr.warning('You already completed payment. Confirm the order.');
+
+      this.router.navigate([`/confirm-order`], {
+        queryParams: { session_id: localStorage.getItem('session_id') },
+      });
+
+      return;
+    }
+
     this.isRedirectingToStripe = true;
 
     this.paymentService.checkout('visa').subscribe({
       next: (res) => {
         this.isRedirectingToStripe = false;
-
         if (res.checkoutSessionUrl) {
           window.location.href = res.checkoutSessionUrl;
         } else {
@@ -111,10 +136,8 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
           this.router.navigate(['/decline-order']);
         }
       },
-      error: (err) => {
-        console.error(err);
+      error: () => {
         this.isRedirectingToStripe = false;
-
         this.toastr.error('Stripe Checkout failed.', 'Error');
         this.router.navigate(['/decline-order']);
       },
