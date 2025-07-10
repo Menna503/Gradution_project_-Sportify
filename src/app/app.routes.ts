@@ -28,7 +28,7 @@ import { OrderDtailsComponent } from './pages/profile/all-orders/order-dtails/or
 import { ConfirmOrderComponent } from './confirm-order/confirm-order.component';
 import { FailedPaymentComponent } from './failed-payment/failed-payment.component';
 import { ConfirmOrderGuard } from './guards/confirm-order.guard';
-
+import { NotFoundComponent } from './not-found/not-found.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -94,6 +94,7 @@ export const routes: Routes = [
     component: SignupPageComponent,
     canActivate: [NoAuthGuard],
   },
+   { path: '**', component: NotFoundComponent }  
 
 ];
 @NgModule({
