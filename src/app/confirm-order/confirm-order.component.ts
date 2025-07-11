@@ -97,11 +97,14 @@ export class ConfirmOrderComponent implements OnInit {
       .subscribe({
         next: () => {
           this.toastr.success('Order placed successfully!', 'Success');
+
           localStorage.removeItem('totalPrice');
           localStorage.removeItem('cart');
           localStorage.removeItem('stripePaid');
           localStorage.removeItem('shippingAddress');
-          this.cartService.setCart([]);
+
+          this.cartService.clearCart();
+
           this.router.navigate(['/confirmPayment']);
         },
         error: () => {

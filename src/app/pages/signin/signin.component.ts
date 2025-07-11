@@ -10,6 +10,8 @@ import {
 import { AuthService } from '../../services/auth/authservice/auth.service';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { CartService } from '../../services/products/cart.service';
+import { FavoritesService } from '../../services/favorites/favorites.service';
 
 @Component({
   selector: 'app-signin',
@@ -42,7 +44,9 @@ export class SigninComponent {
     private authService: AuthService,
     private router: Router,
     private route: ActivatedRoute,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private cartService: CartService,
+    private favoritesService: FavoritesService
   ) {}
 
   ngOnInit(): void {
@@ -64,11 +68,11 @@ export class SigninComponent {
     this.submitted = true;
 
     if (this.signInPage.valid) {
-      this.isLoading = true; 
+      this.isLoading = true;
 
       this.authService.signin(this.signInPage.value).subscribe({
         next: (response: any) => {
-          this.isLoading = false; 
+          this.isLoading = false;
 
           if (response.token) {
             this.authService.saveTokenRole(
@@ -78,7 +82,8 @@ export class SigninComponent {
               response.data.user.firstName,
               response.data.user.email
             );
-
+            this.cartService.refreshCartCount();
+            this.favoritesService.initializeFavorites();
             const role = response.data.user.role;
             this.router.navigate([role === 'admin' ? '/admin' : '/home'], {
               replaceUrl: true,
