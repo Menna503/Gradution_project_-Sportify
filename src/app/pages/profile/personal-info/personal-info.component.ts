@@ -3,10 +3,11 @@ import { AuthService } from '../../../services/auth/authservice/auth.service';
 import { UserService } from '../../../services/auth/user.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-personal-info',
-  imports: [CommonModule , FormsModule],
+  imports: [CommonModule , FormsModule , RouterModule],
   templateUrl: './personal-info.component.html',
   styleUrl: './personal-info.component.css'
 })
@@ -15,30 +16,42 @@ export class PersonalInfoComponent {
   editData: any = {};
  toastMessage: string = '';
  toastType: 'success' | 'error' = 'success';
-constructor(private userService: UserService ,private authService : AuthService) {}
+constructor(private userService: UserService ,private authService : AuthService ,private router: Router) {}
 
  ngOnInit(): void {
-    this.userService.getUserData().subscribe((data: any) => {
-      if (data) {
+    this.userService.getUserData().subscribe({
+      next: (data: any) => {
+        if (data) {
+          this.userData = data;
+          this.editData = {
+            firstName: data.firstName,
+            lastName: data.lastName
+          };
+        }
+      },
+      error: (err) => {
+        console.error('Error loading user data', err);
+        this.router.navigate(['/error'], { replaceUrl: true }); 
+      }
+    });
+  }
+
+fetchUserData() {
+    const userId = localStorage.getItem('UserId') || '';
+    this.authService.getuser(userId).subscribe({
+      next: (data: any) => {
         this.userData = data;
         this.editData = {
           firstName: data.firstName,
           lastName: data.lastName
         };
+      },
+      error: (err) => {
+        console.error('Error fetching user', err);
+        this.router.navigate(['/error'], { replaceUrl: true }); 
       }
     });
   }
-
-  fetchUserData() {
-  const userId = localStorage.getItem('UserId') || '';
-  this.authService.getuser(userId).subscribe((data: any) => {
-    this.userData = data;
-    this.editData = {
-      firstName: data.firstName,
-      lastName: data.lastName
-    };
-  });
-}
 
 updateUserInfo() {
   const userId = localStorage.getItem('UserId') || '';
@@ -70,6 +83,7 @@ updateUserInfo() {
     },
     (error) => {
       this.showToast('Failed to update. Try again.', 'error');
+       this.router.navigate(['/error'], { replaceUrl: true }); 
     }
   );
 }

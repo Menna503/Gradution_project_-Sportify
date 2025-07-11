@@ -83,7 +83,7 @@ export const routes: Routes = [
     canActivate: [GuardService],
   },
   { path: 'admin-edit/:id', component: AdminEditProductComponent , canActivate: [GuardService]},
-  { path: 'error', component: ErrorComponent , canActivate: [GuardService] },
+  { path: 'error', component: ErrorComponent  },
   {
     path: 'login',
     component: SigninComponent,
