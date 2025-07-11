@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { OrderService } from '../../../services/order.service';
 import { UserService } from '../../../services/auth/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-order-tracking',
@@ -17,7 +18,7 @@ export class OrderTrackingComponent {
  isLoading = true;
  statusSteps = ['placed', 'processing', 'shipped', 'delivered'];
 
- constructor(private orderService: OrderService ,private userService: UserService) {}
+ constructor(private orderService: OrderService ,private userService: UserService ,private router: Router) {}
  
 
 ngOnInit(): void {
@@ -30,15 +31,24 @@ ngOnInit(): void {
     error: (err) => {
       console.error('Failed to load orders', err);
       this.isLoading = false;
+      this.router.navigate(['/error'], { replaceUrl: true });
     },
   });
 
-   this.userService.getUserData().subscribe((data :any) => {
-      if (data) {
-        this.userData = data;
+   
+    this.userService.getUserData().subscribe({
+      next: (data: any) => {
+        if (data) {
+          this.userData = data;
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load user data', err);
+        this.router.navigate(['/error'], { replaceUrl: true }); 
       }
     });
-}
+  }
+
 
   getStepClass(currentStatus: string, step: string): string {
     const currentIndex = this.statusSteps.indexOf(currentStatus?.toLowerCase());

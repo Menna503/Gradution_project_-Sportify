@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../../services/auth/user.service';
 
 @Component({
@@ -12,13 +12,20 @@ import { UserService } from '../../../services/auth/user.service';
 export class AllOrdersComponent {
  userData: any = {}; 
  isLoading = true;
-constructor(private userService: UserService) {}
+constructor(private userService: UserService ,private router: Router) {}
 
-ngOnInit(): void {
-    this.userService.getUserData().subscribe((data :any) => {
-      if (data) {
-        this.userData = data;
+  ngOnInit(): void {
+    this.userService.getUserData().subscribe({
+      next: (data: any) => {
+        if (data) {
+          this.userData = data;
+          this.isLoading = false;
+        }
+      },
+      error: (err) => {
+        console.error('Failed to load user data', err);
         this.isLoading = false;
+        this.router.navigate(['/error'], { replaceUrl: true }); 
       }
     });
   }

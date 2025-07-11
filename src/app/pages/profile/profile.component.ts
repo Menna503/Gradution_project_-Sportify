@@ -39,8 +39,11 @@ export class ProfileComponent {
       },
       error: (err) => {
         console.error('Error fetching user data', err);
+        this.router.navigate(['/error'], { replaceUrl: true }); 
       }
     });
-  }
+  } else {
+      this.router.navigate(['/error'], { replaceUrl: true }); 
+    }
 }
 }
