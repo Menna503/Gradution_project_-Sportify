@@ -35,7 +35,7 @@
           <a [routerLink]="'personal-info'">Personal Info</a>
         </li>
         <li>
-          <a class="btn bg-black text-white mt-5" onclick="my_modal_1.showModal()">Log Out</a>
+          <a class="btn bg-black text-white mt-5"  (click)="openLogoutModal()">Log Out</a>
         </li>
       </ul>
     </aside>
@@ -43,16 +43,6 @@
 </div>
 
 <!-- Logout Modal -->
-<dialog id="my_modal_1" class="modal">
-  <div class="modal-box">
-    <p class="py-4">Are You Sure You Want To Log Out?</p>
-    <div class="modal-action">
-      <form method="dialog" class="flex gap-2">
-        <button class="btn bg-black text-white" (click)="logout()">Log Out</button>
-        <button class="btn">Cancel</button>
-      </form>
-    </div>
-  </div>
-</dialog>
+<app-logout-modal (confirmLogout)="handleLogout()"  />
 
 <app-footer></app-footer>
