@@ -216,7 +216,6 @@ export class CartService {
   private cartCount = new BehaviorSubject<number>(0);
   cartCount$ = this.cartCount.asObservable();
 
-  // ✅ New: لإشعار باقي المكونات إن الكارت اتغير
   private cartChangedSource = new BehaviorSubject<void>(undefined);
   cartChanged$ = this.cartChangedSource.asObservable();
 
@@ -228,7 +227,7 @@ export class CartService {
     this.loadCartFromStorage();
   }
 
-  private loadCartFromStorage(): void {
+public loadCartFromStorage(): void {
     const storedCart = localStorage.getItem('cart');
     if (storedCart) {
       const cart = JSON.parse(storedCart);
@@ -262,7 +261,6 @@ export class CartService {
     this.cartCount.next(updatedCart.length);
   }
 
-  // ✅ New: إشعار لما الكارت يتغير
   notifyCartChanged() {
     this.cartChangedSource.next();
   }
@@ -281,7 +279,7 @@ export class CartService {
       tap((res: any) => {
         if (res?.data?.cart) {
           this.updateCartState(res.data.cart);
-          this.notifyCartChanged(); // ✅
+          this.notifyCartChanged(); 
         }
       }),
       catchError((error) => this.handleError(error))
@@ -315,7 +313,7 @@ export class CartService {
       tap((res: any) => {
         if (res?.data?.cart) {
           this.updateCartState(res.data.cart);
-          this.notifyCartChanged(); // ✅
+          this.notifyCartChanged(); 
         }
       }),
       catchError((error) => this.handleError(error))
@@ -333,9 +331,8 @@ export class CartService {
         tap((res: any) => {
           if (res?.data?.cart) {
             this.updateCartState(res.data.cart);
-            this.notifyCartChanged(); // ✅
+            this.notifyCartChanged(); 
 
-            // 🟢 حذف المنتج من قائمة out-of-stock الخاصة بالمستخدم
             const stored = localStorage.getItem('userOutOfStockItems');
             if (stored) {
               const outOfStockItems = JSON.parse(stored);
@@ -358,7 +355,7 @@ export class CartService {
       tap((res: any) => {
         if (res?.data) {
           this.updateCartState(res.data);
-          this.notifyCartChanged(); // ✅
+          this.notifyCartChanged(); 
         }
       }),
       catchError((error) => this.handleError(error))
@@ -371,7 +368,7 @@ export class CartService {
       tap((res: any) => {
         if (res?.data?.cart) {
           this.updateCartState(res.data.cart);
-          this.notifyCartChanged(); // ✅
+          this.notifyCartChanged(); 
         }
       }),
       catchError((error) => this.handleError(error))
@@ -390,4 +387,5 @@ export class CartService {
       .post(`${this.apiUrl}/checkout`, {}, this.getHeaders())
       .pipe(catchError((error) => this.handleError(error)));
   }
+  
 }

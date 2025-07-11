@@ -37,29 +37,34 @@ export class CartPageComponent implements OnInit, OnDestroy {
     private cdr: ChangeDetectorRef,
     private router: Router
   ) {}
+ngOnInit() {
+  this.isLoading = true;
 
-  ngOnInit() {
-    this.isLoading = true;
-    this.cartSub = this.cartService.cartItems$.subscribe((updatedCart) => {
-      this.cartProducts = updatedCart;
-      this.calculateTotal();
-      this.cdr.detectChanges();
-      if (this.cartProducts.length === 0) {
-        console.log('Cart is empty!');
-      }
-    });
-    this.authservice.getuser(this.user_id).subscribe({
-      next: (data: any) => {
-        (this.cartProducts = data.data.user.cart),
-          this.calculateTotal(),
-          console.log(this.cartProducts),
-          (this.isLoading = false);
-      },
+  this.cartSub = this.cartService.cartItems$.subscribe((updatedCart) => {
+    this.cartProducts = updatedCart;
+    this.calculateTotal();
+    this.cdr.detectChanges();
+    if (this.cartProducts.length === 0) {
+      console.log('Cart is empty!');
+    }
+  });
+ this.authservice.getuser(this.user_id).subscribe({
+    next: (data: any) => {
+      const userCart = data?.data?.user?.cart ?? [];
 
-      error: (err) => console.log(err),
-      complete: () => console.log('completed'),
-    });
-  }
+      // ✨ استخدمي updateCartState علطول عشان يعمل next للـ BehaviorSubject
+      this.cartService.setCart(userCart);
+
+      // ✨ دلوقتي cartItems$ هي اللي هتعمل update فوق في subscribe
+      // ✅ مش محتاجة تكتبي calculateTotal() هنا تاني
+      this.isLoading = false;
+    },
+    error: (err) => console.log(err),
+    complete: () => console.log('completed'),
+  });
+}
+
+
 
   ngOnDestroy() {
     if (this.cartSub) {

@@ -59,13 +59,31 @@ export class HeaderComponent implements OnInit {
 //     this.ishidden = !this.ishidden;
 //   }
 
-  logout() {
-    this.authService.signout();
-    this.router.navigate(['/home'], { replaceUrl: true });
-    this.token = '';
-    this.ishidden = false;
-    localStorage.removeItem('cart');
-  }
+  // logout() {
+  //   this.authService.signout();
+  //   this.router.navigate(['/home'], { replaceUrl: true });
+  //   this.token = '';
+  //   this.ishidden = false;
+  //   localStorage.removeItem('cart');
+  // }
+logout() {
+  this.authService.signout();
+  this.router.navigate(['/home'], { replaceUrl: true });
+  this.token = '';
+  this.ishidden = false;
+
+  // 🧹 مسح كل بيانات المستخدم
+  localStorage.removeItem('token');
+  localStorage.removeItem('cart');
+  localStorage.removeItem('UserId');
+  localStorage.removeItem('Fname');
+  localStorage.removeItem('Email');
+  localStorage.removeItem('role');
+
+  // 🧼 تفريغ الكارت فعليًا من الخدمة نفسها
+  this.cartService.clearCart(); 
+  // this.favoritesService.clearFavorites(); 
+}
 
 
   isAdmin(): boolean {
