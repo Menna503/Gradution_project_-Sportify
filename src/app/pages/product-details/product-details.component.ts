@@ -51,12 +51,13 @@ export class ProductDetailsComponent implements OnInit {
   selectedSize: string | null = null;
   // availableStock: number | null = null;
   availableStock: number = 0;
-requiresSize: boolean = false;
+  requiresSize: boolean = false;
   originalStock: number | null = null;
 
   showSizeMessage = false;
   isAdded = false;
   submitted = false;
+  hasReviewed = false;
 
   Form = new FormGroup({
     review: new FormControl(null, [
@@ -88,10 +89,10 @@ requiresSize: boolean = false;
     this.productService.getProductById(this.ID).subscribe({
       next: (data) => {
         this.products = data;
-const category = this.products?.data?.product?.category?.name?.toLowerCase();
-this.requiresSize = ['clothes', 'shoes'].includes(category);
+        const category =
+          this.products?.data?.product?.category?.name?.toLowerCase();
+        this.requiresSize = ['clothes', 'shoes'].includes(category);
 
-   
         this.checkIfFavorite();
 
         const savedSize = localStorage.getItem(`selectedSize_${this.ID}`);
@@ -305,6 +306,11 @@ this.requiresSize = ['clothes', 'shoes'].includes(category);
     this.productService.getReviewsById(this.ID).subscribe({
       next: (data: any) => {
         this.reviews = data?.data?.reviews || [];
+
+        const currentUserId = localStorage.getItem('UserId');
+        this.hasReviewed = this.reviews.some(
+          (review: any) => review.user?._id === currentUserId
+        );
       },
       error: (err) => console.error(err),
     });
