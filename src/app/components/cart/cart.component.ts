@@ -125,24 +125,67 @@ export class CartComponent {
       });
   }
 
-  selectSize(newSize: string) {
-    if (newSize !== this.originalSize) {
-      const update = {
-        productId: this.product.product._id,
-        currentSize: this.originalSize,
-        newSize,
-        quantity: this.product.quantity,
-      };
+  // selectSize(newSize: string) {
+  //   if (newSize !== this.originalSize) {
+  //     const update = {
+  //       productId: this.product.product._id,
+  //       currentSize: this.originalSize,
+  //       newSize,
+  //       quantity: this.product.quantity,
+  //     };
 
-      this.cartService.updateCart([update]).subscribe({
-        next: () => {
-          this.product.size = newSize;
-          this.originalSize = newSize;
-        },
-        error: (err) => console.error('Size update failed', err),
+  //     this.cartService.updateCart([update]).subscribe({
+  //       next: () => {
+  //         this.product.size = newSize;
+  //         this.originalSize = newSize;
+  //       },
+  //       error: (err) => console.error('Size update failed', err),
+  //     });
+  //   }
+  // }
+  selectSize(newSize: string) {
+  if (newSize !== this.originalSize) {
+    const product = this.product.product;
+    const newAvailableStock =
+      product.stock_by_size?.[newSize] ?? product.stock ?? 0;
+
+    if (this.product.quantity > newAvailableStock) {
+      // نمنع التغيير ونرجّع السلكت للمقاس الأصلي
+      setTimeout(() => {
+        this.product.size = this.originalSize; // نرجّع السلكت
       });
+
+      this.toastr.warning(
+        `Only ${newAvailableStock} item(s) available in size "${newSize}". Cannot switch.`,
+        'Size not available'
+      );
+
+      return;
     }
+
+    // لو الكمية مناسبة نسمح بتغيير المقاس
+    const update = {
+      productId: product._id,
+      currentSize: this.originalSize,
+      newSize,
+      quantity: this.product.quantity,
+    };
+
+    this.cartService.updateCart([update]).subscribe({
+      next: () => {
+        this.product.size = newSize;
+        this.originalSize = newSize;
+        this.emitProductUpdate({ quantity: this.product.quantity });
+        this.toastr.success('Size updated successfully');
+      },
+      error: (err) => {
+        console.error('Size update failed', err);
+        this.toastr.error('Failed to update size. Please try again.', 'Error');
+      },
+    });
   }
+}
+
 
   deleteProduct() {
     this.cartService
