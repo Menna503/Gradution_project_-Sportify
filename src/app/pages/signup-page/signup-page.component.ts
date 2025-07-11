@@ -40,8 +40,22 @@ export class SignupPageComponent {
     
     // إنشاء الفورم
     this.signUpPage = this.fb.group({
-      firstName: ['', [Validators.minLength(3), Validators.required]],
-      lastName: ['', [Validators.minLength(3), Validators.required]],
+firstName: [
+    '',
+    [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.pattern(/^[A-Za-z\s]+$/)  
+    ],
+  ],
+  lastName: [
+    '',
+    [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.pattern(/^[A-Za-z\s]+$/)  
+    ],
+  ],
       email: ['', [
         Validators.required,
         Validators.pattern(/^[a-zA-Z0-9._%+-]+@gmail\.com$/)
@@ -143,4 +157,6 @@ export const confirmPasswordValidator = (passwordControl: FormControl): Validato
       ? null
       : { passwordsDoNotMatch: true };
   };
+
+
 };

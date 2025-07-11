@@ -31,6 +31,9 @@
   }">
   <small class="text-red-600 text-[11px]" *ngIf="signUpPage.get('firstName')?.errors?.['required']">First Name is required</small>
   <small class="text-red-600 text-[11px]" *ngIf="signUpPage.get('firstName')?.errors?.['minlength']">You should write 3 letters or more</small>
+  <small class="text-red-600 text-[11px]" *ngIf="signUpPage.get('firstName')?.errors?.['pattern']">
+  Only letters are allowed
+</small>
 </div>
 
           </div>
@@ -52,6 +55,9 @@
             }">
               <small class="text-red-600 text-[11px]" *ngIf="signUpPage.get('lastName')?.errors?.['required']">Last Name is required</small>
               <small class="text-red-600 text-[11px]" *ngIf="signUpPage.get('lastName')?.errors?.['minlength']">You should write 3 letters or more</small>
+                <small class="text-red-600 text-[11px]" *ngIf="signUpPage.get('lastName')?.errors?.['pattern']">
+              Only letters are allowed
+             </small>
             </div>
           </div>
         </div>
