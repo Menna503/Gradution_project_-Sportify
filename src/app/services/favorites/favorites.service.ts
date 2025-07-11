@@ -1,15 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Observable, throwError, BehaviorSubject, of } from 'rxjs';
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { map, catchError } from 'rxjs/operators';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+} from '@angular/common/http';
+import { map, catchError, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class FavoritesService {
   private favUrl = 'http://127.0.0.1:8000/favorites';
-  private favoriteItems: any[] = [];
+
   private favoriteItemsSubject = new BehaviorSubject<any[]>([]);
   favoriteItems$ = this.favoriteItemsSubject.asObservable();
 
@@ -17,7 +21,7 @@ export class FavoritesService {
   favoriteCount$ = this.favoriteCountSubject.asObservable();
 
   constructor(private http: HttpClient, private router: Router) {
-    this.loadFavorites();
+    this.initializeFavorites();
   }
 
   private getHeader(): HttpHeaders {
@@ -29,59 +33,64 @@ export class FavoritesService {
   }
 
   private handleError(error: HttpErrorResponse) {
-    console.error('Error occurred:', error);
+    console.error('Favorites error:', error);
     const errorMessage = error.message || 'Something went wrong!';
-    this.router.navigate(['/error'], {
-      state: { errorMessage },
-    });
+    this.clearFavorites();
     return throwError(() => new Error(errorMessage));
   }
 
-  loadFavorites() {
+  initializeFavorites(): void {
     const token = localStorage.getItem('token');
-    if (!token) return;
+    if (!token) {
+      this.clearFavorites();
+      return;
+    }
 
     this.getfavourite().subscribe({
       next: (items) => {
-        this.favoriteItems = items;
         this.favoriteItemsSubject.next(items);
         this.favoriteCountSubject.next(items.length);
       },
-      error: (err) => console.error(err)
+      error: (err) => {
+        this.clearFavorites();
+      },
     });
   }
 
-  getfavourite(): Observable<any[]> {
-    const token = localStorage.getItem('token');
-    if (!token) return of([]);
+  clearFavorites(): void {
+    this.favoriteItemsSubject.next([]);
+    this.favoriteCountSubject.next(0);
+  }
 
-    return this.http.get<{ status: string; results: number; data: any[] }>(this.favUrl, {
-      headers: this.getHeader(),
-    })
-    .pipe(
-      map((res) => res.data),
-      catchError((error) => this.handleError(error))
-    );
+  getfavourite(): Observable<any[]> {
+    return this.http
+      .get<{ status: string; results: number; data: any[] }>(this.favUrl, {
+        headers: this.getHeader(),
+      })
+      .pipe(
+        map((res) => res.data || []),
+        catchError((error) => this.handleError(error))
+      );
   }
 
   addFavorite(productId: string): Observable<any> {
-    return this.http.patch<any>(`${this.favUrl}/add`, { productId }, { headers: this.getHeader() })
+    return this.http
+      .patch(`${this.favUrl}/add`, { productId }, { headers: this.getHeader() })
       .pipe(
-        map((res) => {
-          this.loadFavorites();
-          return res;
-        }),
+        tap(() => this.initializeFavorites()),
         catchError((error) => this.handleError(error))
       );
   }
 
   removeFavorite(productId: string): Observable<any> {
-    return this.http.patch<any>(`${this.favUrl}/remove`, { productId }, { headers: this.getHeader() })
+    return this.http
+      .patch(
+        `${this.favUrl}/remove`,
+        { productId },
+        { headers: this.getHeader() }
+      )
       .pipe(
-        map((res) => {
-          this.loadFavorites();
-          return res;
-        }),
+        tap(() => this.initializeFavorites()),
         catchError((error) => this.handleError(error))
       );
   }

@@ -12,7 +12,6 @@ import { FavoritesService } from '../../services/favorites/favorites.service';
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
-
 export class HeaderComponent implements OnInit {
   fname: string | null = '';
   email: string | null = '';
@@ -25,7 +24,6 @@ export class HeaderComponent implements OnInit {
   cartItemCount: number = 0;
   favoriteItemCount: number = 0;
 
-
   constructor(
     private authService: AuthService,
     private router: Router,
@@ -33,18 +31,20 @@ export class HeaderComponent implements OnInit {
     private favoritesService: FavoritesService
   ) {
     this.token = localStorage.getItem('token');
-    console.log(this.token);
   }
+
   ngOnInit() {
     this.token = localStorage.getItem('token');
-    console.log(this.token);
     this.fname = localStorage.getItem('Fname');
     this.email = localStorage.getItem('Email');
 
+    this.cartService.refreshCartCount();
+    this.favoritesService.initializeFavorites();
+
     this.cartService.cartCount$.subscribe((count) => {
-      console.log('Updated cart count:', count);
       this.cartItemCount = count;
     });
+
     this.favoritesService.favoriteCount$.subscribe((count) => {
       this.favoriteItemCount = count;
     });
@@ -54,19 +54,15 @@ export class HeaderComponent implements OnInit {
     this.show = this.show === 'hidden' ? 'block' : 'hidden';
   }
 
-
-//   getProfile() {
-//     this.ishidden = !this.ishidden;
-//   }
-
   logout() {
     this.authService.signout();
     this.router.navigate(['/home'], { replaceUrl: true });
     this.token = '';
     this.ishidden = false;
     localStorage.removeItem('cart');
+    this.cartService.clearCart();
+    this.favoritesService.clearFavorites();
   }
-
 
   isAdmin(): boolean {
     return localStorage.getItem('role') === 'admin';
@@ -75,34 +71,33 @@ export class HeaderComponent implements OnInit {
   navigateToLogin() {
     this.router.navigate(['/login']);
   }
-checkLoginBeforeNavigate(category: string, event: Event) {
-  const token = localStorage.getItem('token');
-  if (!token) {
-    event.preventDefault();
-    this.showLoginPrompt = true;
-    return;
-  }
-  this.show = 'hidden'; 
-  this.router.navigate(['/' + category]);
-}
 
+  checkLoginBeforeNavigate(category: string, event: Event) {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      event.preventDefault();
+      this.showLoginPrompt = true;
+      return;
+    }
+    this.show = 'hidden';
+    this.router.navigate(['/' + category]);
+  }
 
   goHome() {
-    console.log('Navigating to home...');
     this.router.navigate(['/home']);
   }
+
   isLinkActive(path: string): boolean {
-  return this.router.isActive(path, {
-    paths: 'exact',
-    matrixParams: 'ignored',
-    queryParams: 'ignored',
-    fragment: 'ignored'
-  });
-}
-navigateTo(path: string) {
-  this.show = 'hidden'; 
-  this.router.navigate([path]);
-}
+    return this.router.isActive(path, {
+      paths: 'exact',
+      matrixParams: 'ignored',
+      queryParams: 'ignored',
+      fragment: 'ignored',
+    });
+  }
 
-
+  navigateTo(path: string) {
+    this.show = 'hidden';
+    this.router.navigate([path]);
+  }
 }
