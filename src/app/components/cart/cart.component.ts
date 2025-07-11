@@ -143,27 +143,49 @@ export class CartComponent {
   //     });
   //   }
   // }
-  selectSize(newSize: string) {
+selectSize(newSize: string) {
   if (newSize !== this.originalSize) {
     const product = this.product.product;
     const newAvailableStock =
       product.stock_by_size?.[newSize] ?? product.stock ?? 0;
 
+    // لو الكمية أكبر من المتاح في المقاس الجديد
     if (this.product.quantity > newAvailableStock) {
-      // نمنع التغيير ونرجّع السلكت للمقاس الأصلي
-      setTimeout(() => {
-        this.product.size = this.originalSize; // نرجّع السلكت
-      });
-
       this.toastr.warning(
         `Only ${newAvailableStock} item(s) available in size "${newSize}". Cannot switch.`,
         'Size not available'
       );
-
+      
+      // رجّع المقاس القديم بعد شوية
+      setTimeout(() => {
+        this.product.size = this.originalSize;
+      });
       return;
     }
 
-    // لو الكمية مناسبة نسمح بتغيير المقاس
+    // ✅ الحل السهل: ندور في كل الكارت (من localStorage)
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const duplicateItem = cart.find(
+      (item: any) =>
+        item.product._id === product._id &&
+        item.size === newSize &&
+        item !== this.product
+    );
+
+    if (duplicateItem) {
+      this.toastr.warning(
+        `This size already exists in your cart. Please adjust the quantity from there.`,
+        'Duplicate item'
+      );
+
+      // رجّع المقاس القديم
+      setTimeout(() => {
+        this.product.size = this.originalSize;
+      });
+      return;
+    }
+
+    // لو مفيش duplicate ومفيش مشكلة في الكمية، نكمّل التحديث
     const update = {
       productId: product._id,
       currentSize: this.originalSize,
@@ -175,8 +197,8 @@ export class CartComponent {
       next: () => {
         this.product.size = newSize;
         this.originalSize = newSize;
-        this.emitProductUpdate({ quantity: this.product.quantity });
         this.toastr.success('Size updated successfully');
+        this.emitProductUpdate({ quantity: this.product.quantity });
       },
       error: (err) => {
         console.error('Size update failed', err);
@@ -185,6 +207,7 @@ export class CartComponent {
     });
   }
 }
+
 
 
   deleteProduct() {
