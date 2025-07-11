@@ -35,6 +35,10 @@ export class FavoritesService {
   private handleError(error: HttpErrorResponse) {
     console.error('Favorites error:', error);
     const errorMessage = error.message || 'Something went wrong!';
+        // error---> nav to error page
+    this.router.navigate(['/error'], {
+    state: { errorMessage },
+  });
     this.clearFavorites();
     return throwError(() => new Error(errorMessage));
   }

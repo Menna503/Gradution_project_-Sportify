@@ -48,17 +48,23 @@ export class CartPageComponent implements OnInit, OnDestroy {
         console.log('Cart is empty!');
       }
     });
-    this.authservice.getuser(this.user_id).subscribe({
-      next: (data: any) => {
-        (this.cartProducts = data.data.user.cart),
-          this.calculateTotal(),
-          console.log(this.cartProducts),
-          (this.isLoading = false);
-      },
+this.authservice.getuser(this.user_id).subscribe({
+  next: (data: any) => {
+    this.cartProducts = data.data.user.cart;
+    this.calculateTotal();
+    this.isLoading = false;
+  },
 
-      error: (err) => console.log(err),
-      complete: () => console.log('completed'),
+  error: (err) => {
+    const errorMessage = err?.error?.message || 'Server is down!';
+    this.router.navigate(['/error'], {
+      state: { errorMessage },
     });
+  },
+
+  complete: () => console.log('completed'),
+});
+
   }
 
   ngOnDestroy() {
