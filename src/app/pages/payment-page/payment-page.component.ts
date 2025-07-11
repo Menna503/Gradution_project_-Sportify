@@ -164,7 +164,13 @@ export class PaymentPageComponent implements OnInit, OnDestroy {
     localStorage.removeItem('shippingAddress');
     this.cartService.clearCart();
   }
-
+  get totalItemsCount(): number {
+    if (!this.cartProducts || this.cartProducts.length === 0) return 0;
+    return this.cartProducts.reduce(
+      (acc: number, item: any) => acc + (item.quantity || 0),
+      0
+    );
+  }
   ngOnDestroy(): void {
     if (this.cartSub) {
       this.cartSub.unsubscribe();

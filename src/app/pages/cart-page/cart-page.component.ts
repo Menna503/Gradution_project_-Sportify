@@ -48,23 +48,22 @@ export class CartPageComponent implements OnInit, OnDestroy {
         console.log('Cart is empty!');
       }
     });
-this.authservice.getuser(this.user_id).subscribe({
-  next: (data: any) => {
-    this.cartProducts = data.data.user.cart;
-    this.calculateTotal();
-    this.isLoading = false;
-  },
+    this.authservice.getuser(this.user_id).subscribe({
+      next: (data: any) => {
+        this.cartProducts = data.data.user.cart;
+        this.calculateTotal();
+        this.isLoading = false;
+      },
 
-  error: (err) => {
-    const errorMessage = err?.error?.message || 'Server is down!';
-    this.router.navigate(['/error'], {
-      state: { errorMessage },
+      error: (err) => {
+        const errorMessage = err?.error?.message || 'Server is down!';
+        this.router.navigate(['/error'], {
+          state: { errorMessage },
+        });
+      },
+
+      complete: () => console.log('completed'),
     });
-  },
-
-  complete: () => console.log('completed'),
-});
-
   }
 
   ngOnDestroy() {
@@ -72,6 +71,13 @@ this.authservice.getuser(this.user_id).subscribe({
       this.cartSub.unsubscribe();
     }
   }
+  get totalItemsCount(): number {
+    return this.cartProducts?.reduce(
+      (acc: number, item: any) => acc + (item.quantity || 0),
+      0
+    );
+  }
+
   calculateTotal() {
     this.totalPrice = this.cartProducts.reduce((acc, item) => {
       const quantity = item.quantity || 1;
