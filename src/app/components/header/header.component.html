@@ -1,19 +1,12 @@
 <div class="hidden md:block sticky top-0 z-50 bg-white shadow-md">
-  <div
-   
-    class="text-2xl capitalize flex justify-evenly items-center py-3 cursor-pointer"
-  >
+  <div class="text-2xl capitalize flex justify-evenly items-center py-3 cursor-pointer">
     <div class="flex items-center text-loginText font-[AbhayaLibreMedium]" (click)="goHome()" >
       <p class="text-3xl text-center font-ternaryText">Sportify</p>
       <img src="assets/icons/logo_yellow.svg" alt="" class="mt-2.5" />
     </div>
 
     <div class="bg-secondColor md:w-[50%] lg:w-[60%] relative rounded-md">
-      <!-- <i class="fa-solid fa-magnifying-glass text-lg absolute left-3 top-4"></i>
-      <input
-        placeholder=" search for productes "
-        class="p-1.5 lg:w-[100%] focus:bg-white rounded-sm pl-10"
-      /> -->
+    
     </div>
 
     @if(token){
@@ -60,8 +53,13 @@
       <i class="fa-regular fa-user relative cursor-pointer text-ternaryText"></i>
     </a>
 
+   <button (click)="openLogoutModal()" 
+     class="bg-mainColor text-lg rounded-xl px-6 py-2 cursor-pointer text-gray-900">
+     Logout
+    </button>
  
     </div>
+
 
 
     } @else {
@@ -103,6 +101,16 @@
         home
       </a>
     </li>
+      <li class="transition-all duration-300 hover:text-zinc-600 hover:scale-105 hover:underline underline-offset-4">
+        <a
+          [routerLink]="token ? ['/allProduct'] : null"
+          (click)="checkLoginBeforeNavigate('allProduct', $event)"
+          [ngClass]="{ 'router-link-active': isLinkActive('/allProduct') }"
+          class="cursor-pointer block"
+        >
+          All Products
+        </a>
+  </li>
 
     <li class="transition-all duration-300 hover:text-zinc-600 hover:scale-105 hover:underline underline-offset-4">
 
@@ -129,9 +137,7 @@
 >
   Women
 </a>
-
     </li>
-
     <li class="transition-all duration-300 hover:text-zinc-600 hover:scale-105 hover:underline underline-offset-4">
     <a
   [routerLink]="token ? ['/equipment'] : null"
@@ -141,10 +147,7 @@
 >
   Equipment
 </a>
-
   </li>
-   
-
   <li class="transition-all duration-300 hover:text-zinc-600 hover:scale-105 hover:underline underline-offset-4">
      <a
   [routerLink]="token ? ['/shoes'] : null"
@@ -169,17 +172,7 @@
 
   </li>
 
-  <li class="transition-all duration-300 hover:text-zinc-600 hover:scale-105 hover:underline underline-offset-4">
-<a
-  [routerLink]="token ? ['/allProduct'] : null"
-  (click)="checkLoginBeforeNavigate('allProduct', $event)"
-  [ngClass]="{ 'router-link-active': isLinkActive('/allProduct') }"
-  class="cursor-pointer block"
->
-  All Products
-</a>
 
-  </li>
 
     <li
       *ngIf="isAdmin()"
@@ -197,18 +190,11 @@
 </div>
 
 <!-- for mobile -->
-<div class="block md:hidden fixed z-50 w-[100%]">
-  <div class="bg-mainColor flex justify-evenly items-center py-2 px-2">
+<div class="block md:hidden fixed z-10 w-[100%]">
+  <div class="bg-mainColor flex justify-evenly items-center  px-2">
     <i class="fa-solid fa-bars text-xl" (click)="toggel()"></i>
     <div class="relative w-[45%]">
-      <input
-        type="text "
-        class="bg-white rounded-sm pl-7 pt-1 w-[100%] focus:outline-none"
-        placeholder="search for product"
-      />
-      <i
-        class="fa-solid fa-magnifying-glass text-md absolute left-1 top-2 font-ternaryText"
-      ></i>
+  
     </div>
 
     <div
@@ -241,6 +227,8 @@
       <img src="assets/icons/home.svg" />
       <p>home</p>
     </li>
+
+    
 
     <li
       class="flex gap-5 hover:bg-mainColor p-2 rounded-md hover:text-black cursor-pointer"
@@ -338,8 +326,8 @@
       class="flex gap-4 hover:bg-mainColor p-2 rounded-md hover:text-black items-center"
     >
       <i class="fa-solid fa-right-from-bracket text-xl text-secandaryText"></i>
-      <p class="text-l cursor-pointer">Logout</p>
-    </li>
+      <p class="text-l cursor-pointer" (click)="openLogoutModal()">Logout</p> 
+    </li> 
     } @else{
     <li class="flex gap-2 items-center">
       <button class="bg-mainColor rounded-xl px-6 py-2 cursor-pointer text-gray-900">
@@ -380,7 +368,7 @@
     </div>
   </div>
 </div>
-
+<app-logout-modal (confirmLogout)="handleLogout()" />
 
 
 
