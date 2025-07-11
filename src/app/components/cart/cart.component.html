@@ -96,20 +96,25 @@
           [max]="availableStock"
           class="w-10 text-center outline-none no-arrows"
         />
+ <div class="relative group flex items-center justify-center">
+    <i
+      class="fa-solid fa-plus text-xs"
+      [class.text-gray-400]="product.quantity >= availableStock"
+      [class.cursor-not-allowed]="product.quantity >= availableStock"
+      [class.cursor-pointer]="product.quantity < availableStock"
+      (click)="increaseQuantity()"
+    ></i>
 
-        <i
-          class="fa-solid fa-plus text-xs cursor-pointer"
-          [class.text-gray-400]="product.quantity >= availableStock"
-          [class.cursor-not-allowed]="product.quantity >= availableStock"
-          [class.cursor-pointer]="product.quantity < availableStock"
-          (click)="increaseQuantity()"
-        ></i>
+    <!-- Tooltip -->
+    <div
+      *ngIf="product.quantity >= availableStock"
+      class="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 bg-black text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-50 whitespace-nowrap"
+    >
+      Max stock reached
+    </div>
+  </div>
       </div>
 
-      <!-- Optional small message -->
-      <small *ngIf="product.quantity >= availableStock" class="text-red-500">
-        Max stock reached
-      </small>
 
       <!-- Delete Button -->
       <div class="flex items-center gap-5 ml-auto text-cart">

@@ -51,7 +51,7 @@ export class ProductDetailsComponent implements OnInit {
   selectedSize: string | null = null;
   // availableStock: number | null = null;
   availableStock: number = 0;
-
+requiresSize: boolean = false;
   originalStock: number | null = null;
 
   showSizeMessage = false;
@@ -88,6 +88,10 @@ export class ProductDetailsComponent implements OnInit {
     this.productService.getProductById(this.ID).subscribe({
       next: (data) => {
         this.products = data;
+const category = this.products?.data?.product?.category?.name?.toLowerCase();
+this.requiresSize = ['clothes', 'shoes'].includes(category);
+
+   
         this.checkIfFavorite();
 
         const savedSize = localStorage.getItem(`selectedSize_${this.ID}`);
