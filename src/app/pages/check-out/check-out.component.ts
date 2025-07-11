@@ -124,6 +124,13 @@ export class CheckOutComponent implements OnInit, OnDestroy {
     const storedTotal = localStorage.getItem('totalPrice');
     return storedTotal ? Number(storedTotal) : 0;
   }
+  get totalItemsCount(): number {
+    if (!this.cartProducts || this.cartProducts.length === 0) return 0;
+    return this.cartProducts.reduce(
+      (acc: number, item: any) => acc + (item.quantity || 0),
+      0
+    );
+  }
 
   ngOnDestroy() {
     if (this.cartSub) {
