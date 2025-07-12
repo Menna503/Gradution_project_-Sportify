@@ -37,7 +37,7 @@ export class FilterComponent {
     this.selectedIndex = index;
     this.brand = brand;
   }
-  this.filterChanged.emit({ sort: this.sort, brand: this.brand });
+  // this.filterChanged.emit({ sort: this.sort, brand: this.brand });
 }
 
   // priceChecked(index: number, sort: string) {
@@ -55,7 +55,7 @@ export class FilterComponent {
     this.priceindex = index;
     this.sort = sort === 'hight' ? '-price' : 'price';
   }
-  this.filterChanged.emit({ sort: this.sort, brand: this.brand });
+  // this.filterChanged.emit({ sort: this.sort, brand: this.brand });
 }
 
   show(text: string) {
