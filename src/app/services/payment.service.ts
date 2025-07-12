@@ -18,34 +18,44 @@ export class PaymentService {
     });
   }
 
-  checkout(paymentMethod: 'cash' | 'visa'): Observable<any> {
+  checkout(
+    paymentMethod: 'cash' | 'visa',
+    shippingAddress?: {
+      address: string;
+      city: string;
+      country: string;
+      postalCode: string;
+      phone: string;
+    }
+  ): Observable<any> {
     return this.http.post(
       `${this.apiUrl}/checkout`,
-      { paymentMethod },
+      { paymentMethod, shippingAddress },
       { headers: this.getHeader() }
     );
   }
 
-  confirmOrder(orderData: {
-    paymentMethod: 'cash' | 'visa';
+  placeStripeOrder(
+    sessionId: string,
     shippingAddress: {
       address: string;
       city: string;
       country: string;
       postalCode: string;
       phone: string;
-    };
-  }): Observable<any> {
-    return this.http.post(`${this.apiUrl}/confirm-order`, orderData, {
-      headers: this.getHeader(),
-    });
+    }
+  ): Observable<any> {
+    return this.http.post(
+      `${this.apiUrl}/stripe/confirm`,
+      { sessionId, shippingAddress },
+      { headers: this.getHeader() }
+    );
   }
+
   getStripeSessionStatus(sessionId: string): Observable<any> {
     return this.http.get(
       `${this.apiUrl}/stripe-session-status?session_id=${sessionId}`,
-      {
-        headers: this.getHeader(),
-      }
+      { headers: this.getHeader() }
     );
   }
 }

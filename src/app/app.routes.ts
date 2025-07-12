@@ -36,21 +36,46 @@ export const routes: Routes = [
   // {path:'login' ,component:SigninComponent},
   // {path:'signup' ,component:SignupPageComponent},
   { path: 'fav', component: FavComponent, canActivate: [GuardService] },
-   {path: 'profile',
-      component: ProfileComponent,
-      canActivate: [GuardService],
-      children: [
-        { path: 'order-tracking', component: OrderTrackingComponent , canActivate: [GuardService]  },
-        { path: 'all-orders', component: AllOrdersComponent , canActivate: [GuardService]  },
-        { path: 'all-orders/:id', component: OrderDtailsComponent , canActivate: [GuardService] },
-        { path: 'personal-info', component: PersonalInfoComponent , canActivate: [GuardService]  },
-        { path: '', redirectTo: 'order-tracking', pathMatch: 'full'  }
-      ]
-    },
-  { path: 'products', component: AllProductsComponent  , canActivate: [GuardService] },
-  { path: 'men', component: MenComponent , canActivate: [GuardService]  },
-  { path: 'women', component: WomenComponent , canActivate: [GuardService]  },
-  { path: 'equipment', component: EquipmentComponent , canActivate: [GuardService]  },
+  {
+    path: 'profile',
+    component: ProfileComponent,
+    canActivate: [GuardService],
+    children: [
+      {
+        path: 'order-tracking',
+        component: OrderTrackingComponent,
+        canActivate: [GuardService],
+      },
+      {
+        path: 'all-orders',
+        component: AllOrdersComponent,
+        canActivate: [GuardService],
+      },
+      {
+        path: 'all-orders/:id',
+        component: OrderDtailsComponent,
+        canActivate: [GuardService],
+      },
+      {
+        path: 'personal-info',
+        component: PersonalInfoComponent,
+        canActivate: [GuardService],
+      },
+      { path: '', redirectTo: 'order-tracking', pathMatch: 'full' },
+    ],
+  },
+  {
+    path: 'products',
+    component: AllProductsComponent,
+    canActivate: [GuardService],
+  },
+  { path: 'men', component: MenComponent, canActivate: [GuardService] },
+  { path: 'women', component: WomenComponent, canActivate: [GuardService] },
+  {
+    path: 'equipment',
+    component: EquipmentComponent,
+    canActivate: [GuardService],
+  },
   {
     path: 'product/:id',
     component: ProductDetailsComponent,
@@ -66,24 +91,44 @@ export const routes: Routes = [
     component: CheckOutComponent,
     canActivate: [GuardService],
   },
-  { path: 'shoes', component: ShoesComponent  ,canActivate: [GuardService]},
-  { path: 'allProduct', component: AllProductsComponent ,canActivate: [GuardService] },
-  { path: 'supplements', component: SuplementsComponent ,canActivate: [GuardService] },
-  { path: 'cart', component: CartPageComponent, canActivate: [GuardService] },
-  { path: 'confirmPayment', component: ConfirmPaymentComponent , canActivate: [GuardService]},
+  { path: 'shoes', component: ShoesComponent, canActivate: [GuardService] },
   {
-    path: 'confirm-order',
-    component: ConfirmOrderComponent,
-    canActivate: [ConfirmOrderGuard],
+    path: 'allProduct',
+    component: AllProductsComponent,
+    canActivate: [GuardService],
   },
-  { path: 'decline-order', component: FailedPaymentComponent , canActivate: [GuardService] },
+  {
+    path: 'supplements',
+    component: SuplementsComponent,
+    canActivate: [GuardService],
+  },
+  { path: 'cart', component: CartPageComponent, canActivate: [GuardService] },
+  {
+    path: 'confirmPayment',
+    component: ConfirmPaymentComponent,
+    canActivate: [GuardService],
+  },
+  // {
+  //   path: 'confirm-order',
+  //   component: ConfirmOrderComponent,
+  //   canActivate: [ConfirmOrderGuard],
+  // },
+  {
+    path: 'decline-order',
+    component: FailedPaymentComponent,
+    canActivate: [GuardService],
+  },
   {
     path: 'admin',
     component: AdminAddProductComponent,
     canActivate: [GuardService],
   },
-  { path: 'admin-edit/:id', component: AdminEditProductComponent , canActivate: [GuardService]},
-  { path: 'error', component: ErrorComponent  },
+  {
+    path: 'admin-edit/:id',
+    component: AdminEditProductComponent,
+    canActivate: [GuardService],
+  },
+  { path: 'error', component: ErrorComponent },
   {
     path: 'login',
     component: SigninComponent,
@@ -94,8 +139,7 @@ export const routes: Routes = [
     component: SignupPageComponent,
     canActivate: [NoAuthGuard],
   },
-   { path: '**', component: NotFoundComponent , canActivate: [GuardService] }  
-
+  { path: '**', component: NotFoundComponent, canActivate: [GuardService] },
 ];
 @NgModule({
   imports: [

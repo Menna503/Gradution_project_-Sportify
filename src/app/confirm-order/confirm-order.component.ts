@@ -89,32 +89,32 @@ export class ConfirmOrderComponent implements OnInit {
       return;
     }
 
-    this.paymentService
-      .confirmOrder({
-        paymentMethod: 'visa',
-        shippingAddress: this.address,
-      })
-      .subscribe({
-        next: () => {
-          this.toastr.success('Order placed successfully!', 'Success');
+    // this.paymentService
+    //   .confirmOrder({
+    //     paymentMethod: 'visa',
+    //     shippingAddress: this.address,
+    //   })
+    //   .subscribe({
+    //     next: () => {
+    //       this.toastr.success('Order placed successfully!', 'Success');
 
-          localStorage.removeItem('totalPrice');
-          localStorage.removeItem('cart');
-          localStorage.removeItem('stripePaid');
-          localStorage.removeItem('shippingAddress');
+    //       localStorage.removeItem('totalPrice');
+    //       localStorage.removeItem('cart');
+    //       localStorage.removeItem('stripePaid');
+    //       localStorage.removeItem('shippingAddress');
 
-          this.cartService.clearCart();
+    //       this.cartService.clearCart();
 
-          this.router.navigate(['/confirmPayment']);
-        },
-        error: () => {
-          this.toastr.error(
-            'Order confirmation failed. Please try again.',
-            'Error'
-          );
-          this.router.navigate(['/decline-order']);
-        },
-      });
+    //       this.router.navigate(['/confirmPayment']);
+    //     },
+    //     error: () => {
+    //       this.toastr.error(
+    //         'Order confirmation failed. Please try again.',
+    //         'Error'
+    //       );
+    //       this.router.navigate(['/decline-order']);
+    //     },
+    //   });
   }
 }
 
