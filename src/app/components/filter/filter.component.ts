@@ -75,5 +75,10 @@ export class FilterComponent {
 
 //   this.filterChanged.emit({ sort: '', brand: '' });
 // }
+applyFilters() {
+  this.filterChanged.emit({ sort: this.sort, brand: this.brand });
+  this.isHidden = true;
+}
+
 
 }
