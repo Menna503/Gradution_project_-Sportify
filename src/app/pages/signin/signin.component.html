@@ -10,7 +10,7 @@
          </div>
     </div>
     <div class=" p-6 flex flex-col justify-center items-center w-full md:w-[80%] mx-auto"> 
-        <p class="lg:text-[35px] md:text-[35px] text-[35px] text-center font-abhaya">Welcom Back</p>
+        <p class="lg:text-[35px] md:text-[35px] text-[35px] text-center font-abhaya">Welcome Back</p>
         <p class="lg:text-[12px] md:text-[9px] md:w-40 lg:w-65 text-center m-auto mb-7  text-secandaryText font-abhaya">Start exploring and utilizing all the best sports gear and deals. Log In now</p>
         <form  [formGroup]="signInPage" (ngSubmit)="onSubmit()" class="w-full max-w-md">
             <input type="email" name="" id="" formControlName="email" placeholder="email" class="block rounded-[0.4vw]  p-2 border-1 border-secandaryText w-full focus:outline-none"
@@ -44,17 +44,35 @@
               'visibility-hidden opacity-0': !(signInPage.get('password')?.invalid && (signInPage.get('password')?.dirty || signInPage.get('password')?.touched || submitted))
             }">
                 <small class="text-red-600 text-[11px]" *ngIf="signInPage.get('password')?.errors?.['required']">password is required</small>
-                <small class="text-red-600 text-[11px]" *ngIf="signInPage.get('password')?.errors?.['minlength']">you should write password structure</small>
+                <small class="text-red-600 text-[11px]" *ngIf="signInPage.get('password')?.errors?.['minlength']">Password must be at least 8 characters long</small>
               </div>
                   
             
-              <button type="submit" class="bg-mainColor w-full rounded-[0.4vw] p-2 mb-2 cursor-pointer  duration-300 hover:-translate-y-2 " > log In</button>
+              <!-- <button type="submit" class="bg-mainColor w-full rounded-[0.4vw] p-2 mb-2 cursor-pointer  duration-300 hover:-translate-y-2 " > log In</button> -->
+              <button 
+  type="submit"
+  class="bg-mainColor w-full rounded-[0.4vw] p-2 mb-2 cursor-pointer duration-300 hover:-translate-y-2 flex justify-center items-center"
+  [disabled]="isLoading"
+>
+  <ng-container *ngIf="!isLoading; else loading">
+    Log In
+  </ng-container>
+  <ng-template #loading>
+    <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor"
+            d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z">
+      </path>
+    </svg>
+  </ng-template>
+</button>
+
               <div *ngIf="errorMsg">
                 <small class="text-red-600 text-[10px] mb-2">{{errorMsg}}</small>
               </div>
 
         </form>
-        <div class="flex items-center justify-center mb-4"> 
+        <!-- <div class="flex items-center justify-center mb-4"> 
             <div class="line m-auto" class="w-20 h-0.5 bg-secandaryText mr-1.5"></div>
             <p class="sm:text-[12px] text-center text-secandaryText">or Log in with</p> 
             <div class="line m-auto" class="w-20 h-0.5 bg-secandaryText ml-1.5"></div>
@@ -64,12 +82,8 @@
                 <img src="assets\images\devicon_google.svg" alt="" class="w-6 h-6" >
                 <button class="rounded" >Google</button>
             </div>
-            <div class="flex gap-1 border-1 border-secandaryText rounded-[0.4vw] p-2 w-40 lg:w-48 justify-center md:w-25 duration-300 hover:-translate-y-1">
-                <img src="assets\images\apple.svg" alt="" srcset="" class="w-6 h-6">
-                <button>Apple</button>
-            </div>
-        </div>
-        <p class="text-center font-abhaya text-ternaryText md:text-[15px]"> Havenot any Account? <a [routerLink]="['/signup']" routerLinkActive="router-link-active"  class="text-loginText hover:underline">Sign up</a></p>
+        </div> -->
+        <p class="text-center font-abhaya text-ternaryText md:text-[15px]">  Don't have an account?  <a [routerLink]="['/signup']" routerLinkActive="router-link-active"  class="text-loginText hover:underline">Sign up</a></p>
     </div>
     </div>
   

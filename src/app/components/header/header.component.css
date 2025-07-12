@@ -1,5 +1,7 @@
-.fontInter{
-    font-family: 'Inter', sans-serif;
-    
-    
-  }
+.fontInter {
+  font-family: "Inter", sans-serif;
+}
+.active-icon i {
+  /* color: #e1eb58; */
+  color:#AAA51E;
+}

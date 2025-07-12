@@ -9,6 +9,7 @@ import { FilterComponent } from '../../components/filter/filter.component';
 import { ProductService } from '../../services/products/product.service';
 import { HttpClient } from '@angular/common/http';
 import { LoadingComponent } from "../../components/loading/loading.component";
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-equipment',
@@ -37,22 +38,46 @@ export class EquipmentComponent {
       
      ];
    
-     constructor(private http: HttpClient, private productService: ProductService) {}
-   
+constructor(
+  private http: HttpClient,
+  private productService: ProductService,
+  private route: ActivatedRoute,
+  private router: Router
+) {}   
      ngOnInit() {
-      this.currentPage=1;
-      this. loadProducts();
+      // this.currentPage=1;
+      // this. loadProducts();
+      this.route.queryParams.subscribe((params) => {
+    this.brand = params['brand'] || '';
+    this.sort = params['sort'] || '';
+    this.currentPage = +params['page'] || 1;
+
+    this.loadProducts();
+  });
      
      }
    
      
      
-     updateFilters(filterData: { sort: string; brand: string }) {
-       this.sort = filterData.sort;
-       this.brand = filterData.brand;
-      
-       this.loadProducts();
-     }
+    updateFilters(filterData: { sort: string; brand: string }) {
+  this.sort = filterData.sort;
+  this.brand = filterData.brand;
+  this.currentPage = 1;
+  this.updateQueryParams();
+  this.loadProducts();
+}
+updateQueryParams() {
+  this.router.navigate([], {
+    relativeTo: this.route,
+    queryParams: {
+      sort: this.sort || null,
+      brand: this.brand || null,
+      page: this.currentPage !== 1 ? this.currentPage : null
+    },
+    queryParamsHandling: 'merge',
+  });
+}
+
      
    
    
@@ -91,12 +116,14 @@ export class EquipmentComponent {
      });
    
      }
-     changePage(page: number) {
-       if (page >= 1 && page <= this.totalPages) {
-         this.currentPage = page;
-         this.loadProducts();
-       }
-     }
+    changePage(page: number) {
+  if (page >= 1 && page <= this.totalPages) {
+    this.currentPage = page;
+    this.updateQueryParams();
+    this.loadProducts();
+  }
+}
+
      get totalPages(): number {
        return Math.ceil(this.totalItems / this.itemsPerPage);
      }

@@ -70,18 +70,22 @@ export class ProductService {
       );
   }
 
-  private handleError(error: HttpErrorResponse) {
+  // private handleError(error: HttpErrorResponse) {
   
-    console.error('Error occurred:', error);
-    const errorMessage = error.message || 'Something went wrong!';
-    this.router.navigate(['/error'], {
-      state: { errorMessage }
-    });
+  //   console.error('Error occurred:', error);
+  //   const errorMessage = error.message || 'Something went wrong!';
+  //   this.router.navigate(['/error'], {
+  //     state: { errorMessage }
+  //   });
 
 
-    return throwError(() => new Error(errorMessage));
-  }
+  //   return throwError(() => new Error(errorMessage));
+  // }
 
+  private handleError(error: HttpErrorResponse) {
+  console.error('Error occurred:', error);
+  return throwError(() => error); // ارجعي الخطأ نفسه علشان الكومبوننت تتعامل معاه
+}
   getProductById(_id: string) {
     return this.http.get<Product>(`${this.apiUrl}/${_id}`).pipe(
       catchError((error) => this.handleError(error)) 
